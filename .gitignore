@@ -1,0 +1,10 @@
+dist/
+lib/
+minjs/
+babel/
+node_modules/
+package-lock.json
+DOC.md
+OP.md
+
+.DS_Store
