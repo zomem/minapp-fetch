@@ -21,7 +21,7 @@ minapp.find().then(res => {}, err => {})
 1. **跨平台性**：js平台写法一致，一处写，处处用（个别接口除外） 
 2. **调用简单**：简化官方复杂的概念，查错、修改更加方便  
 3. **方法丰富**：除官方的方法外，还增加了许多其他实用方法  
-4. **语法提示**：不用查看文档，支持智能语法提示  
+4. **语法提示**：支持语法提示  
   
 > 下面就以最简单的and、or复杂组合查寻为例：
   
@@ -57,12 +57,12 @@ minapp.find(tableName, {
 > 还有部分官方接口没有跟进，我们会一直完善的~
   
   
-#### v2.0.0-beta1  
+#### v2.0.0  
 - 用`typescript`重写`minapp-fetch`包，现在支持**语法提示**，让开发更高效。  
 - `upload`方法参数统一命名，`pay`方法优化  
 - 修改部分用户操作相关方法的bug  
 - 其他问题修复  
-- 引入方式统一改成`const minapp = require('minapp-fetch').init('default')`，且平台必须选择，`default`为默认平台  
+- 引入方式统一改成`const minapp = require('minapp-fetch').init('default')`，且平台必须选择，`default`为默认平台(即以前的不加任何平台)  
   
 
 
