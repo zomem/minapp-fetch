@@ -12,3 +12,5 @@ minapp.set('fff', {
   geo: ['geo', [32, 32]],
   arry: ['fadf', '24']
 })
+
+minapp.getAsyncJobResult()
