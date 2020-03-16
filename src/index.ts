@@ -36,6 +36,7 @@ import upload from './fetch/file/upload'
 import invoke from './fetch/invoke/invoke'
 
 //消息
+import getAsyncJobResult from './fetch/message/getAsyncJobResult'
 import getServerDate from './fetch/message/getServerDate'
 import sendEmail from './fetch/message/sendEmail'
 import sendSmsCode from './fetch/message/sendSmsCode'
@@ -119,6 +120,7 @@ function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'w
 
     invoke: invoke(args),
 
+    getAsyncJobResult: getAsyncJobResult(args),
     getServerDate: getServerDate(args),
     sendEmail: sendEmail(args),
     sendSmsCode: sendSmsCode(args),

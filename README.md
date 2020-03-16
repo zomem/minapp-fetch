@@ -57,6 +57,12 @@ minapp.find(tableName, {
 > 还有部分官方接口没有跟进，我们会一直完善的~
   
   
+#### v2.0.1  
+- 新增获取异步任务结果的方法`getAsyncJobResult`。  
+- 更新官方sdk到3.8.0  
+  
+
+  
 #### v2.0.0  
 - 用`typescript`重写`minapp-fetch`包，现在支持**语法提示**，让开发更高效。  
 - `upload`方法参数统一命名，`pay`方法优化  

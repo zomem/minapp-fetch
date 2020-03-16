@@ -1,6 +1,6 @@
 {
   "name": "minapp-fetch",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "知晓云接口封装，js跨平台",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -17,9 +17,9 @@
     "url": "git@github.com:Mihawk-zhao/minapp-fetch.git"
   },
   "dependencies": {
-    "@types/node": "^13.1.8",
-    "axios": "^0.19.1",
-    "minapp-sdk": "^3.6.0",
+    "@types/node": "^13.9.1",
+    "axios": "^0.19.2",
+    "minapp-sdk": "^3.8.0",
     "p-limit": "^2.2.2"
   },
   "devDependencies": {
