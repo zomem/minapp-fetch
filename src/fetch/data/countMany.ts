@@ -5,9 +5,11 @@ const pLimit = require('p-limit')
 
 type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'in' | 'notIn' | 'arrayContains' |
-'contains' | 'matches' | 'hasKey' |
+'contains' | 'matches' | 'stringLength' |
+'hasKey' |
 'isNull' | 'isExists' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
+
 
 
 
@@ -17,6 +19,13 @@ function initFetchCountMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | '
       p0?: [string, methodList, ...any[]]
       p1?: [string, methodList, ...any[]]
       p2?: [string, methodList, ...any[]]
+      p3?: [string, methodList, ...any[]]
+      p4?: [string, methodList, ...any[]]
+      p5?: [string, methodList, ...any[]]
+      p6?: [string, methodList, ...any[]]
+      p7?: [string, methodList, ...any[]]
+      p8?: [string, methodList, ...any[]]
+      p9?: [string, methodList, ...any[]]
       r: string
       [propName: string]: [string, methodList, ...any[]] | string | number | boolean | string[] | undefined
     }]

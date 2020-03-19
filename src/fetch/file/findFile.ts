@@ -13,7 +13,8 @@ let ArgsObj: {
 
 type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'in' | 'notIn' | 'arrayContains' |
-'contains' | 'matches' | 'hasKey' |
+'contains' | 'matches' | 'stringLength' |
+'hasKey' |
 'isNull' | 'isExists' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
 
@@ -25,6 +26,13 @@ function fetchFindFile(params: {
   p0?: [fieldList | string, methodList, ...any[]]
   p1?: [fieldList | string, methodList, ...any[]]
   p2?: [fieldList | string, methodList, ...any[]]
+  p3?: [fieldList | string, methodList, ...any[]]
+  p4?: [fieldList | string, methodList, ...any[]]
+  p5?: [fieldList | string, methodList, ...any[]]
+  p6?: [fieldList | string, methodList, ...any[]]
+  p7?: [fieldList | string, methodList, ...any[]]
+  p8?: [fieldList | string, methodList, ...any[]]
+  p9?: [fieldList | string, methodList, ...any[]]
   r: string
   page?: number
   limit?: number
@@ -79,6 +87,15 @@ function fetchFindFile(params: {
             break
           case 'matches':
             query[ps[i]].matches(params[ps[i]][0], params[ps[i]][2])
+            break
+          case 'stringLength':
+            let reg
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            query[ps[i]].matches(params[ps[i]][0], reg)
             break
           case 'hasKey':
             query[ps[i]].hasKey(params[ps[i]][0], params[ps[i]][2])
@@ -212,6 +229,15 @@ function fetchFindFile(params: {
             break
           case 'matches':
             query[ps[i]][params[ps[i]][0]] = {"$regex": params[ps[i]][2]}
+            break
+          case 'stringLength':
+            let reg
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            query[ps[i]][params[ps[i]][0]] = {"$regex": reg}
             break
           case 'hasKey':
             query[ps[i]][params[ps[i]][0]] = {"$has_key": params[ps[i]][2]}
@@ -364,6 +390,15 @@ function fetchFindFile(params: {
             break
           case 'matches':
             query[ps[i]][params[ps[i]][0]] = {"$regex": params[ps[i]][2]}
+            break
+          case 'stringLength':
+            let reg
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            query[ps[i]][params[ps[i]][0]] = {"$regex": reg}
             break
           case 'hasKey':
             query[ps[i]][params[ps[i]][0]] = {"$has_key": params[ps[i]][2]}

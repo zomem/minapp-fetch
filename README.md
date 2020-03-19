@@ -57,6 +57,13 @@ minapp.find(tableName, {
 > 还有部分官方接口没有跟进，我们会一直完善的~
   
   
+#### v2.0.2  
+- 新增查寻类方法`stringLength`，查寻字符串长度。  
+- `p0: ['title', 'stringLength', 5]`查寻title长度为5的内容。  
+- `p0: ['title', 'stringLength', 5, 20]`查寻title长度为5~20的内容。  
+- 其他优化。  
+  
+  
 #### v2.0.1  
 - 新增获取异步任务结果的方法`getAsyncJobResult`。  
 - 更新官方sdk到3.8.0  

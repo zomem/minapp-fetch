@@ -12,7 +12,8 @@ let ArgsObj: {
 
 type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'in' | 'notIn' | 'arrayContains' |
-'contains' | 'matches' | 'hasKey' |
+'contains' | 'matches' | 'stringLength' |
+'hasKey' |
 'isNull' | 'isExists' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
 
@@ -20,6 +21,13 @@ function fetchFindContent(contentGroupID: number, params: {
   p0?: [string, methodList, ...any[]]
   p1?: [string, methodList, ...any[]]
   p2?: [string, methodList, ...any[]]
+  p3?: [string, methodList, ...any[]]
+  p4?: [string, methodList, ...any[]]
+  p5?: [string, methodList, ...any[]]
+  p6?: [string, methodList, ...any[]]
+  p7?: [string, methodList, ...any[]]
+  p8?: [string, methodList, ...any[]]
+  p9?: [string, methodList, ...any[]]
   r: string
   page?: number //默认值
   limit?: number //默认值
@@ -82,6 +90,15 @@ function fetchFindContent(contentGroupID: number, params: {
           case 'matches':
             // 
             query[ps[i]].matches(params[ps[i]][0], params[ps[i]][2])
+            break
+          case 'stringLength':
+            let reg
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            query[ps[i]].matches(params[ps[i]][0], reg)
             break
           case 'hasKey':
             // 
@@ -249,6 +266,15 @@ function fetchFindContent(contentGroupID: number, params: {
           case 'matches':
             // 
             query[ps[i]][params[ps[i]][0]] = {"$regex": params[ps[i]][2]}
+            break
+          case 'stringLength':
+            let reg
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            query[ps[i]][params[ps[i]][0]] = {"$regex": reg}
             break
           case 'hasKey':
             // 
@@ -444,6 +470,15 @@ function fetchFindContent(contentGroupID: number, params: {
           case 'matches':
             // 
             query[ps[i]][params[ps[i]][0]] = {"$regex": params[ps[i]][2]}
+            break
+          case 'stringLength':
+            let reg
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            query[ps[i]][params[ps[i]][0]] = {"$regex": reg}
             break
           case 'hasKey':
             // 

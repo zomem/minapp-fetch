@@ -4,7 +4,8 @@ import fetchFindFile from './findFile'
 
 type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'in' | 'notIn' | 'arrayContains' |
-'contains' | 'matches' | 'hasKey' |
+'contains' | 'matches' | 'stringLength' |
+'hasKey' |
 'isNull' | 'isExists' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
 
@@ -16,6 +17,13 @@ function initFetchCountFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | '
     p0?: [fieldList | string, methodList, ...any[]]
     p1?: [fieldList | string, methodList, ...any[]]
     p2?: [fieldList | string, methodList, ...any[]]
+    p3?: [fieldList | string, methodList, ...any[]]
+    p4?: [fieldList | string, methodList, ...any[]]
+    p5?: [fieldList | string, methodList, ...any[]]
+    p6?: [fieldList | string, methodList, ...any[]]
+    p7?: [fieldList | string, methodList, ...any[]]
+    p8?: [fieldList | string, methodList, ...any[]]
+    p9?: [fieldList | string, methodList, ...any[]]
     r: string
     [propName: string]: [fieldList | string, methodList, ...any[]] | string | number | boolean | string[] | undefined
   }){

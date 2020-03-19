@@ -13,4 +13,14 @@ minapp.set('fff', {
   arry: ['fadf', '24']
 })
 
-minapp.getAsyncJobResult()
+minapp.find('fff', {
+  p0: ['stin', 'stringLength', 5, 23]
+})
+
+minapp.find('faff', {
+  p4: ['3434', 'stringLength', 4]
+})
+
+minapp.find('faf', {
+  p1: ['fadf', 'stringLength', 435, 324234]
+})
