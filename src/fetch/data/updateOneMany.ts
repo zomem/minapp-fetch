@@ -56,10 +56,10 @@ function fetchUpdateOneMany(table: string | number, params: {
     return new Promise((resolve, reject)=>{
       let MyTableObject = new BaaS_F.TableObject(table)
   
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -266,10 +266,10 @@ function fetchUpdateOneMany(table: string | number, params: {
   //webapi
   if(ArgsObj.Platform === PLATFORM_NAME.WEBAPI){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -510,7 +510,7 @@ function fetchUpdateOneMany(table: string | number, params: {
 }
 
 
-function initFetchUpdateOneMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchUpdateOneMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchUpdateOneMany
 }

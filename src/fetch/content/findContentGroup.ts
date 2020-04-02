@@ -77,11 +77,10 @@ function fetchFindContentGroup(params:{
       })
     })
   }
-  
 }
 
 
-function initFetchFindContentGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchFindContentGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchFindContentGroup
 }

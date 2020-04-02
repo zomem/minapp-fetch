@@ -77,7 +77,7 @@ function fetchPay(way: 'alipay' | 'weapp' | 'qq' | 'swan', params: {
 }
 
 
-function initFetchPay(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchPay(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchPay
 }

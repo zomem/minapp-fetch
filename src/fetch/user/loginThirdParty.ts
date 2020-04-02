@@ -47,7 +47,7 @@ function fetchLoginThirdParty(provider: 'oauth-wechat-mp' | 'oauth-wechat-web' |
 }
 
 
-function initFetchLoginThirdParty(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchLoginThirdParty(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchLoginThirdParty
 }

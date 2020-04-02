@@ -56,10 +56,10 @@ function fetchUpdateUserMany(params: {
       return new Promise((resolve, reject) => {
         let User = new BaaS_F.User()
     
-        if(!params.r && !params.p1){
-          throw new Error(`The r is not defined, r default as {r : 'p1'}.`)
+        if(!params.r){
+          throw new Error(FIND_R_ERROR)
         }
-        let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+        let r = params.r.replace(/\s+/g,'')       //去掉空格
         let query: any = {}
     
         let checkR = r.replace(/[^\(\)]/g, '')
@@ -254,10 +254,10 @@ function fetchUpdateUserMany(params: {
   //op 运营后台
   if(ArgsObj.Platform === PLATFORM_NAME.OP){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -467,11 +467,10 @@ function fetchUpdateUserMany(params: {
       })
     })
   }
-  
 }
 
 
-function initFetchUpdateUserMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchUpdateUserMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchUpdateUserMany
 }

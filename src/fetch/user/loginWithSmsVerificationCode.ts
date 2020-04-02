@@ -47,7 +47,7 @@ function fetchLoginWithSmsVerificationCode(
 }
 
 
-function initFetchLoginWithSmsVerificationCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchLoginWithSmsVerificationCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchLoginWithSmsVerificationCode
 }

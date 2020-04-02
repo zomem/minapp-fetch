@@ -6,6 +6,7 @@ export const PLATFORM_NAME = {
   QQ: 'qq',                 
   SWAN: 'swan',             
   WEAPP: 'weapp',
+  TT: 'tt',
   WEB: 'web',
   WEBAPI: 'webapi',
   DEFAULT: 'default'
@@ -18,6 +19,7 @@ export const PLATFORM_NAME_ARR = [
   'qq',                 
   'swan',             
   'weapp',
+  'tt',
   'web',
   'webapi',
   'default',
@@ -30,6 +32,7 @@ export const PLATFORM_NAME_BAAS = [
   'qq',                 
   'swan',             
   'weapp',
+  'tt',
   'web',
   'default',
 ]

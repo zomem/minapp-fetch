@@ -61,7 +61,7 @@ function fetchGetUserGroupList(parentID: number | boolean, params: {
 }
 
 
-function initFetchGetUserGroupList(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchGetUserGroupList(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchGetUserGroupList
 }

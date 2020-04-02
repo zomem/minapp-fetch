@@ -9,7 +9,7 @@ let ArgsObj: {
   ClientID?: string | undefined
   RequestBase?: string | undefined
   AccessToken?: string | undefined
-}, Args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]
+}, Args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]
 
 
 
@@ -174,7 +174,7 @@ function fetchUpdateUser(...data: [number, {
 }
 
 
-function initFetchUpdateUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchUpdateUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   Args = args
   ArgsObj = setArgs(args)
   return fetchUpdateUser

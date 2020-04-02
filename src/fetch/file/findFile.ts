@@ -48,10 +48,10 @@ function fetchFindFile(params: {
   }
   if(PLATFORM_NAME_BAAS.indexOf(ArgsObj.Platform) > -1){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -190,10 +190,10 @@ function fetchFindFile(params: {
   //webapi
   if(ArgsObj.Platform === PLATFORM_NAME.WEBAPI){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -351,10 +351,10 @@ function fetchFindFile(params: {
   //op 运营后台
   if(ArgsObj.Platform === PLATFORM_NAME.OP){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
 
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -505,7 +505,7 @@ function fetchFindFile(params: {
 }
 
 
-function initFetchFindFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchFindFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchFindFile
 }

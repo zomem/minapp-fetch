@@ -59,7 +59,7 @@ function fetchGetSuperGroupList(params: {
 }
 
 
-function initFetchGetSuperGroupList(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchGetSuperGroupList(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchGetSuperGroupList
 }

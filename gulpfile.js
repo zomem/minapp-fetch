@@ -1,6 +1,4 @@
 var gulp = require('gulp');
-var concat = require('gulp-concat'); //合并文件
-var rename = require('gulp-rename'); //文件重命名
 var uglify = require('gulp-uglify'); //js压缩
 
 /**
@@ -9,12 +7,12 @@ var uglify = require('gulp-uglify'); //js压缩
  * 解出文件路径： ./js
  */
 
-let pathList = ['./babel/*.js', './babel/*/*.js', './babel/*/*/*.js']
-gulp.task('minifyjs', function() {
-  var options = {
-    mangle: false
-  }
-  return gulp.src(pathList) //压缩多个文件
-      .pipe(uglify(options))  //压缩
-      .pipe(gulp.dest('./minjs')); //输出
+let pathList = ['./dist/*.js', './dist/*/*.js', './dist/*/*/*.js', './dist/index.d.ts']
+gulp.task('copy', async function() {
+  await gulp.src(pathList) //压缩多个文件
+    // .pipe(uglify({
+    //   mangle: true,  //是否代码混淆
+    //   compress: true
+    // }))  //压缩
+    .pipe(gulp.dest('./lib')); //输出
 });

@@ -79,7 +79,7 @@ function fetchVerifySmsCode(phone: string, code: number, userID?: number){
 }
 
 
-function initFetchVerifySmsCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchVerifySmsCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchVerifySmsCode
 }

@@ -53,7 +53,7 @@ function fetchUpdateUserGroup(groupID: number, params: {
 }
 
 
-function initFetchUpdateUserGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchUpdateUserGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchUpdateUserGroup
 }

@@ -54,7 +54,7 @@ function fetchUpdateSuperGroup(superGroupID: number, params: {
 }
 
 
-function initFetchUpdateSuperGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchUpdateSuperGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchUpdateSuperGroup
 }

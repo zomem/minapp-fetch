@@ -3,7 +3,7 @@ import { ARGS_ERROR, PLATFORM_ERROR } from '../constants/error'
 
 
 //生成参数对象
-export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   if(args.length === 0){
     throw new Error(ARGS_ERROR)
   }
@@ -54,6 +54,9 @@ export function getBaaSF(ArgsObj: {
     case PLATFORM_NAME.WEAPP:
       // @ts-ignore：无法找到wx的错误
       return wx.BaaS
+    case PLATFORM_NAME.TT:
+      // @ts-ignore：无法找到tt的错误
+      return tt.BaaS
     case PLATFORM_NAME.WEB:
       let BaaS_w = require('minapp-sdk/lib/web')
       if(ArgsObj.RequestBase){

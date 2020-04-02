@@ -57,7 +57,7 @@ function fetchRemoveUserFromGroup(users: number[], groups: number[]){
 }
 
 
-function initFetchRemoveUserFromGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchRemoveUserFromGroup(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchRemoveUserFromGroup
 }

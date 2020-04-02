@@ -70,7 +70,7 @@ function fetchInvoke(invokeName: string, params: any, sync: boolean){
 }
 
 
-function initFetchInvoke(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchInvoke(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchInvoke
 }

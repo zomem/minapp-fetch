@@ -51,10 +51,10 @@ function fetchFindUser(params: {
   }
   if(PLATFORM_NAME_BAAS.indexOf(ArgsObj.Platform) > -1){
     return new Promise((resolve, reject) => {
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -204,10 +204,10 @@ function fetchFindUser(params: {
   //webapi
   if(ArgsObj.Platform === PLATFORM_NAME.WEBAPI){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')      //去掉空格
       let query: any = {}
   
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -384,10 +384,10 @@ function fetchFindUser(params: {
   //op 运营后台
   if(ArgsObj.Platform === PLATFORM_NAME.OP){
     return new Promise((resolve, reject)=>{
-      if(!params.r && !params.p1){
+      if(!params.r){
         throw new Error(FIND_R_ERROR)
       }
-      let r = params.r ? params.r.replace(/\s+/g,'') : 'p1'       //去掉空格
+      let r = params.r.replace(/\s+/g,'')       //去掉空格
       let query: any = {}
 
       let checkR = r.replace(/[^\(\)]/g, '')
@@ -557,7 +557,7 @@ function fetchFindUser(params: {
 }
 
 
-function initFetchFindUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchFindUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchFindUser
 }

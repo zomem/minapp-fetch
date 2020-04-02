@@ -63,13 +63,23 @@ function fetchLoginWith(...data: [
           reject(err)
         })
       })
+    case PLATFORM_NAME.TT:
+      return new Promise((resolve, reject)=>{
+        BaaS_F.auth.loginWithTt(...data).then((user: any) => {
+          // 登录成功
+          resolve(user)
+        }, (err: any) => {
+          // 登录失败
+          reject(err)
+        })
+      })
     default:
       throw new Error(`minapp.loginWith ${METHOD_NOT_SUPPORT}`)
   }
 }
 
 
-function initFetchLoginWith(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchLoginWith(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
   ArgsObj = setArgs(args)
   return fetchLoginWith
 }

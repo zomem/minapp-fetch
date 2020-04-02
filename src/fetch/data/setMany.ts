@@ -12,7 +12,7 @@ type dataType = string | string[] | number | number[] | boolean | boolean[] | nu
 
 
 // 同时进行多张表的查寻
-function initFetchSetMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchSetMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
 
   function fetchSetMany(setArray: {
     [index: number]: [string | number, {
