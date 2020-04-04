@@ -88,7 +88,8 @@ import updateUserGroup from './fetch/userGroup/updateUserGroup'
 import updateUserMany from './fetch/userGroup/updateUserMany'
 
 
-function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+
+function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   return {
     countContent: countContent(args),
     findCategory: findCategory(args),

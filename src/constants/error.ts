@@ -1,5 +1,6 @@
 export const ARGS_ERROR = `传入的参数(Platform/ClientID/RequestBase/AccessToken)有错。`
 export const PLATFORM_ERROR = `平台(Platform)不正确。`
+export const CLIENT_ID_ERROR = `未输入clientID。`
 
 export const UPDATE_ERROR = `参数(params)格式不对。`
 

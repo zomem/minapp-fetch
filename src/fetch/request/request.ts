@@ -5,9 +5,13 @@ import { PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 function fetchRequest(params: {
@@ -99,7 +103,7 @@ function fetchRequest(params: {
 }
 
 
-function initFetchRequest(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchRequest(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchRequest
 }

@@ -5,9 +5,13 @@ import { METHOD_NOT_SUPPORT, PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 
@@ -42,11 +46,7 @@ function fetchVerifySmsCode(phone: string, code: number, userID?: number){
       BaaS_F({
         method: 'get',
         url: `${ArgsObj.RequestBase}/hserve/v1.8/sms-verification-code/verify/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: ArgsObj.Header,
         params: {
           phone: phone,
           code: code
@@ -79,7 +79,7 @@ function fetchVerifySmsCode(phone: string, code: number, userID?: number){
 }
 
 
-function initFetchVerifySmsCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchVerifySmsCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchVerifySmsCode
 }

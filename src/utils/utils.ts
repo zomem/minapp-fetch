@@ -1,38 +1,63 @@
 import { PLATFORM_NAME_ARR, PLATFORM_NAME } from '../constants/constants'
-import { ARGS_ERROR, PLATFORM_ERROR } from '../constants/error'
+import { ARGS_ERROR, PLATFORM_ERROR, CLIENT_ID_ERROR } from '../constants/error'
 
 
 //生成参数对象
-export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   if(args.length === 0){
     throw new Error(ARGS_ERROR)
   }
-  let Platform = 'default',
-      ClientID = '',
-      RequestBase = '',
-      AccessToken = ''
-  if(args[0].length < 10){
-    if(PLATFORM_NAME_ARR.indexOf(args[0]) === -1){
-      throw new Error(PLATFORM_ERROR)
+  let Platform:string = '',
+      RequestBase:string ='',
+      options: {
+        clientID?: string, 
+        host?: string, 
+        accessToken?: string, 
+        env?: string
+      } = {},
+      Header:{
+        'Content-Type'?: string
+        'X-Hydrogen-Client-ID'?: string,
+        'Authorization'?: string,
+        'X-Hydrogen-Env-ID'?: string,
+      } = {}
+  if(PLATFORM_NAME_ARR.indexOf(args[0]) === -1){
+    throw new Error(PLATFORM_ERROR)
+  }
+  [Platform, options] = args
+  if(options){
+    if(!options.clientID){
+      throw new Error(CLIENT_ID_ERROR)
     }
-    [Platform, ClientID, RequestBase, AccessToken] = args
-  }else{
-    [ClientID, RequestBase, AccessToken] = args
+    RequestBase = options.host || `https://${options.clientID}.myminapp.com`
+    Header = {
+      'Content-Type': 'application/json',
+      'X-Hydrogen-Client-ID': options.clientID,
+    }
+    if(options.accessToken){
+      Header['Authorization'] = `Hydrogen-r1 ${options.accessToken}`
+    }
+    if(options.env){
+      Header['X-Hydrogen-Env-ID'] = options.env
+    }
   }
   return{
-    Platform: Platform,
-    ClientID: ClientID,
-    RequestBase: RequestBase,
-    AccessToken: AccessToken,
+    Platform,
+    RequestBase,
+    Header
   }
 }
 
 //根据平台，返回请求方式， BaaS/axios
 export function getBaaSF(ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }){
   switch(ArgsObj.Platform){
     case PLATFORM_NAME.ALIPAY:
@@ -58,25 +83,12 @@ export function getBaaSF(ArgsObj: {
       // @ts-ignore：无法找到tt的错误
       return tt.BaaS
     case PLATFORM_NAME.WEB:
-      let BaaS_w = require('minapp-sdk/lib/web')
-      if(ArgsObj.RequestBase){
-        BaaS_w.init(ArgsObj.ClientID, { host: ArgsObj.RequestBase })
-      }else{
-        BaaS_w.init(ArgsObj.ClientID)
-      }
-      return BaaS_w
+      // @ts-ignore：无法找到window的错误
+      return window.BaaS
     case PLATFORM_NAME.WEBAPI:
       return require('axios').create({
         withCredentials: true
       })
-    case PLATFORM_NAME.DEFAULT:
-      let BaaS_d = require('minapp-sdk')
-      if(ArgsObj.RequestBase){
-        BaaS_d.init(ArgsObj.ClientID, { host: ArgsObj.RequestBase })
-      }else{
-        BaaS_d.init(ArgsObj.ClientID)
-      }
-      return BaaS_d
     default:
       throw new Error(PLATFORM_ERROR)
   }

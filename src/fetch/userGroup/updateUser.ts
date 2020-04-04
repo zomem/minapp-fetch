@@ -6,10 +6,14 @@ import { METHOD_NOT_SUPPORT, UPDATE_ERROR, PLATFORM_ERROR } from '../../constant
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
-}, Args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
+}, Args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]
 
 
 
@@ -90,11 +94,7 @@ function fetchUpdateUser(...data: [number, {
       BaaS_F({
         method: 'put',
         url: `${ArgsObj.RequestBase}/hserve/v2.0/user/account/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: ArgsObj.Header,
         data: params
       }).then((res: any) => {
         resolve(res)
@@ -174,7 +174,7 @@ function fetchUpdateUser(...data: [number, {
 }
 
 
-function initFetchUpdateUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchUpdateUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   Args = args
   ArgsObj = setArgs(args)
   return fetchUpdateUser

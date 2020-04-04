@@ -9,7 +9,6 @@ export const PLATFORM_NAME = {
   TT: 'tt',
   WEB: 'web',
   WEBAPI: 'webapi',
-  DEFAULT: 'default'
 }
 
 export const PLATFORM_NAME_ARR = [
@@ -22,7 +21,6 @@ export const PLATFORM_NAME_ARR = [
   'tt',
   'web',
   'webapi',
-  'default',
 ]
 
 //以BaaS方式请求的平台
@@ -34,7 +32,6 @@ export const PLATFORM_NAME_BAAS = [
   'weapp',
   'tt',
   'web',
-  'default',
 ]
 
 //以axios请求的平台

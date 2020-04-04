@@ -5,9 +5,13 @@ import { METHOD_NOT_SUPPORT, PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 //
@@ -55,10 +59,7 @@ function fetchLogin(params: {
       BaaS_F({
         method: 'post',
         url: `${ArgsObj.RequestBase}/hserve/v2.1/login/${addr}/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Content-Type': 'application/json',
-        },
+        headers: ArgsObj.Header,
         data: params,
       }).then((user: any) => {
         resolve(user)
@@ -72,11 +73,10 @@ function fetchLogin(params: {
   if(ArgsObj.Platform === PLATFORM_NAME.OP){
     throw new Error(`minapp.login ${METHOD_NOT_SUPPORT}`)
   }
-  
 }
 
 
-function initFetchLogin(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchLogin(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchLogin
 }

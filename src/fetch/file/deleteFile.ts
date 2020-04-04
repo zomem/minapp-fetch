@@ -5,9 +5,13 @@ import { METHOD_NOT_SUPPORT, PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 //
@@ -38,11 +42,7 @@ function fetchDeleteFile(fileIDs: string | string[]){
         BaaS_F({
           method: 'delete',
           url: `${ArgsObj.RequestBase}/hserve/v2.2/uploaded-file/`,
-          headers: {
-            'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-            'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-            'Content-Type': 'application/json',
-          },
+          headers: ArgsObj.Header,
           data: {
             id__in: (fileIDs || []).toString()
           }
@@ -55,11 +55,7 @@ function fetchDeleteFile(fileIDs: string | string[]){
         BaaS_F({
           method: 'delete',
           url: `${ArgsObj.RequestBase}/hserve/v2.2/uploaded-file/${fileIDs}/`,
-          headers: {
-            'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-            'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-            'Content-Type': 'application/json',
-          }
+          headers: ArgsObj.Header
         }).then((res: any) => {
           resolve(res)
         }).catch((err: any) => {
@@ -95,7 +91,7 @@ function fetchDeleteFile(fileIDs: string | string[]){
 }
 
 
-function initFetchDeleteFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchDeleteFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchDeleteFile
 }

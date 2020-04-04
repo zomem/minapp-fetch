@@ -5,9 +5,13 @@ import { PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 function fetchFindCategory(contentGroupID: number, params: {
@@ -41,11 +45,7 @@ function fetchFindCategory(contentGroupID: number, params: {
       BaaS_F({
         method: 'get',
         url: `${ArgsObj.RequestBase}/hserve/v2.2/content/category/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: ArgsObj.Header,
         params: {
           limit: params.limit || 100,
           return_total_count: params.withCount ? 1 : 0,
@@ -78,7 +78,7 @@ function fetchFindCategory(contentGroupID: number, params: {
 }
 
 
-function initFindCategory(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFindCategory(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchFindCategory
 }

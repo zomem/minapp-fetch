@@ -5,9 +5,13 @@ import { PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 function fetchGet(table: string | number, id: string, params: {
@@ -39,11 +43,7 @@ function fetchGet(table: string | number, id: string, params: {
       BaaS_F({
         method: 'get',
         url: `${ArgsObj.RequestBase}/hserve/v2.2/table/${table}/record/${id}/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: ArgsObj.Header,
         params: {
           expand: (params.expand || []).toString(),
           keys: (params.select || []).toString(),
@@ -74,7 +74,7 @@ function fetchGet(table: string | number, id: string, params: {
 }
 
 
-function initFetchGet(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchGet(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchGet
 }

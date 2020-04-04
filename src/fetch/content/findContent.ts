@@ -5,9 +5,13 @@ import { FIND_R_ERROR, FIND_CHECKR_ERROR, FIND_P_ERROR, PLATFORM_ERROR } from '.
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
@@ -399,11 +403,7 @@ function fetchFindContent(contentGroupID: number, params: {
       BaaS_F({
         method: 'get',
         url: `${ArgsObj.RequestBase}/hserve/v2.2/content/detail/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Authorization': `Hydrogen-r1 ${ArgsObj.AccessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: ArgsObj.Header,
         params: {
           where: QQ,
           limit: params.limit || 20,
@@ -621,7 +621,7 @@ function fetchFindContent(contentGroupID: number, params: {
 }
 
 
-function initFetchFindContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchFindContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchFindContent
 }

@@ -12,7 +12,7 @@ type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
 
 
-function initFetchFindUserMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchFindUserMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchFindUserMany(findArray: {
     [index: number]: {
       p0?: [string, methodList, ...any[]]

@@ -9,7 +9,7 @@ type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
 
 
-function initFetchCountUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchCountUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchCountUser(params: {
     p0?: [string, methodList, ...any[]]
     p1?: [string, methodList, ...any[]]

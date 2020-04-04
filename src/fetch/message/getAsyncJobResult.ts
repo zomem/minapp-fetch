@@ -5,9 +5,13 @@ import { METHOD_NOT_SUPPORT, PLATFORM_ERROR } from '../../constants/error'
 
 let ArgsObj: {
   Platform?: string | undefined
-  ClientID?: string | undefined
   RequestBase?: string | undefined
-  AccessToken?: string | undefined
+  Header?: {
+    'Content-Type'?: string
+    'X-Hydrogen-Client-ID'?: string,
+    'Authorization'?: string,
+    'X-Hydrogen-Env-ID'?: string,
+  }
 }
 
 /**
@@ -35,10 +39,7 @@ function fetchGetAsyncJobResult(operationID: number){
       BaaS_F({
         method: 'get',
         url: `${ArgsObj.RequestBase}/hserve/v1/bulk-operation/${operationID}/`,
-        headers: {
-          'X-Hydrogen-Client-ID': ArgsObj.ClientID,
-          'Content-Type': 'application/json',
-        }
+        headers: ArgsObj.Header
       }).then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
@@ -54,7 +55,7 @@ function fetchGetAsyncJobResult(operationID: number){
 }
 
 
-function initFetchGetAsyncJobResult(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchGetAsyncJobResult(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchGetAsyncJobResult
 }

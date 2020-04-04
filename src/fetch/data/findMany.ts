@@ -14,7 +14,7 @@ type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 
 
 
-function initFetchFindMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'default', ...string[]]){
+function initFetchFindMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchFindMany(findArray: {
     [index: number]: [string | number, {
       p0?: [string, methodList, ...any[]]

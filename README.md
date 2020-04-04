@@ -6,12 +6,17 @@
 `npm install minapp-fetch`   
   
 适合：  
-**运营后台**、**云函数**、**小程序**、**Web**、**RN**、**Taro**、**uni-app**等js开发的  
+**运营后台**、**云函数**、**各平台小程序**、**Web/H5**、**RN**、**Taro**、**uni-app**等js开发的  
   
 使用：  
 ```js
 const minapp = require('minapp-fetch').init('weapp')
-minapp.find().then(res => {}, err => {})
+minapp.find('tableName', {
+  p0: ['num', '=', 0],
+  r: 'p0'
+}).then(res => {
+  
+}, err => {})
 ```  
   
 ### 文档  
@@ -21,7 +26,7 @@ minapp.find().then(res => {}, err => {})
 1. **跨平台性**：js平台写法一致，一处写，处处用（个别接口除外） 
 2. **调用简单**：简化官方复杂的概念，查错、修改更加方便  
 3. **方法丰富**：除官方的方法外，还增加了许多其他实用方法  
-4. **语法提示**：支持语法提示  
+4. **代码提示**：支持代码提示，类型定义文件`index.d.ts`  
   
 > 下面就以最简单的and、or复杂组合查寻为例：
   
@@ -41,7 +46,7 @@ Product.setQuery(orQuery).find().then(res => {
 })
 
 
-/** minapp-fetch 各个平台写法都如下 **/
+/** minapp-fetch js的各个平台写法都如下 **/
 minapp.find(tableName, {
   p1: ['color', 'in', ['green', 'red', 'yellow']],
   p2: ['price', '>', 10],
@@ -57,6 +62,13 @@ minapp.find(tableName, {
 > 还有部分官方接口没有跟进，我们会一直完善的~
   
     
+
+        
+#### v2.2.0  
+- 去掉了`default`的引入方式，也不再包含官方sdk了，大家可以根据需要，按需引入sdk。  
+- 前端可以使用`web`的引入方式，同时确保`window.BaaS`被赋值。  
+- 修改`webapi`的传参方式。  
+  
 #### v2.1.0  
 - 加入字节跳动小程序的支持。  
   
