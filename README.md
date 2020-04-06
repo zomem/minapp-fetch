@@ -64,7 +64,7 @@ minapp.find(tableName, {
     
 
         
-#### v2.2.0  
+#### v2.2.1  
 - 去掉了`default`的引入方式，也不再包含官方sdk了，大家可以根据需要，按需引入sdk。  
 - 前端可以使用`web`的引入方式，同时确保`window.BaaS`被赋值。  
 - 修改`webapi`的传参方式。  
