@@ -1,5 +1,5 @@
 
-import { setArgs, getBaaSF, cloneDeep } from '../../utils/utils'
+import { setArgs, getBaaSF, cloneDeep, isArray } from '../../utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, UPDATE_METHORD } from '../../constants/constants'
 import { UPDATE_ERROR, PLATFORM_ERROR } from '../../constants/error'
 
@@ -37,6 +37,11 @@ function fetchUpdate(table: string | number, id: string, params: {
       let Product = new BaaS_F.TableObject(table)
       let records = Product.getWithoutData(id)
       for(let pa in params){
+        if(!isArray(params[pa])){
+          //不是数组，则直接 set
+          records.set(pa, params[pa])
+          continue
+        }
         if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
           switch(params[pa][0]){
             case 'set':
@@ -99,6 +104,11 @@ function fetchUpdate(table: string | number, id: string, params: {
     return new Promise((resolve, reject)=>{
       let updata: any = {}
       for(let pa in params){
+        if(!isArray(params[pa])){
+          //不是数组，则直接 set
+          updata[pa] = params[pa]
+          continue
+        }
         if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
           switch(params[pa][0]){
             case 'set':
@@ -171,6 +181,11 @@ function fetchUpdate(table: string | number, id: string, params: {
       let updata:any = {}
 
       for(let pa in params){
+        if(!isArray(params[pa])){
+          //不是数组，则直接 set
+          updata[pa] = params[pa]
+          continue
+        }
         if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
           switch(params[pa][0]){
             case 'set':

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-01-23 17:44:21
+ * @LastEditTime: 2020-04-16 17:48:21
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /minapp-fetch/src/fetch/content/findCategory.ts
+ */
 
 import { setArgs, getBaaSF } from '../../utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME } from '../../constants/constants'
@@ -15,8 +23,10 @@ let ArgsObj: {
 }
 
 function fetchFindCategory(contentGroupID: number, params: {
-  withCount?: boolean
+  page?: number
   limit?: number
+  orderBy?: '-created_at' | 'created_at' | '-updated_at' | 'updated_at'
+  withCount?: boolean
 } = {}){
   let BaaS_F = getBaaSF(ArgsObj)
 
@@ -25,6 +35,18 @@ function fetchFindCategory(contentGroupID: number, params: {
   }
 
   if(PLATFORM_NAME_BAAS.indexOf(ArgsObj.Platform) > -1){
+    if(ArgsObj.Platform === PLATFORM_NAME.CLOUD){
+      return new Promise((resolve: any, reject: any)=>{
+        let MyContentCategory = new BaaS_F.ContentCategory(contentGroupID)
+        MyContentCategory.limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).orderBy(params.orderBy || '-created_at').find({withCount: params.withCount || false}).then((res: any) => {
+          // success
+          resolve(res)
+        }, (err: any) => {
+          // err
+          reject(err)
+        })
+      })
+    }
     return new Promise((resolve: any, reject: any)=>{
       let MyContentGroup = new BaaS_F.ContentGroup(contentGroupID)
       MyContentGroup.getCategoryList({

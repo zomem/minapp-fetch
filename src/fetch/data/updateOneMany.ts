@@ -1,5 +1,5 @@
 
-import { setArgs, getBaaSF, changeFindGeoJson, cloneDeep } from '../../utils/utils'
+import { setArgs, getBaaSF, changeFindGeoJson, cloneDeep, isArray } from '../../utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, UPDATE_METHORD } from '../../constants/constants'
 import { FIND_R_ERROR, FIND_CHECKR_ERROR, FIND_P_ERROR, METHOD_NOT_SUPPORT, UPDATE_ERROR, PLATFORM_ERROR } from '../../constants/error'
 
@@ -204,6 +204,11 @@ function fetchUpdateOneMany(table: string | number, params: {
   
       let { u } = params
       for(let pa in u){
+        if(!isArray(u[pa])){
+          //不是数组，则直接 set
+          records.set(pa, u[pa])
+          continue
+        }
         if(UPDATE_METHORD.indexOf(u[pa][0]) > -1 ){
           switch(u[pa][0]){
             case 'set':
@@ -425,6 +430,11 @@ function fetchUpdateOneMany(table: string | number, params: {
       let { u } = params
       let updata: any = {}
       for(let pa in u){
+        if(!isArray(u[pa])){
+          //不是数组，则直接 set
+          updata[pa] = u[pa]
+          continue
+        }
         if(UPDATE_METHORD.indexOf(u[pa][0]) > -1 ){
           switch(u[pa][0]){
             case 'set':

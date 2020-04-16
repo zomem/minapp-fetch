@@ -1,6 +1,6 @@
 {
   "name": "minapp-fetch",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "知晓云接口封装，js跨平台",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

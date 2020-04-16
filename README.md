@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-01-29 11:37:27
+ * @LastEditTime: 2020-04-16 20:47:03
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /minapp-fetch/README.md
+ -->
 
 ### 知晓云常用接口封装（js跨平台）    
    
@@ -64,6 +72,10 @@ minapp.find(tableName, {
     
 
         
+#### v2.3.0  
+- 更新部分内容操作方法，新增内容操作方法：`deleteCategory`、`deleteContent`、`setCategory`、`setContent`、`updateCategory`、`updateContent`方法
+- 修复`update`类型的方法更新`undefined、null`等数据时，会报错的bug。   
+        
 #### v2.2.1  
 - 去掉了`default`的引入方式，也不再包含官方sdk了，大家可以根据需要，按需引入sdk。  
 - 前端可以使用`web`的引入方式，同时确保`window.BaaS`被赋值。  
@@ -79,19 +91,4 @@ minapp.find(tableName, {
 - 其他优化。  
   
   
-#### v2.0.1  
-- 新增获取异步任务结果的方法`getAsyncJobResult`。  
-- 更新官方sdk到3.8.0  
-  
-
-  
-#### v2.0.0  
-- 用`typescript`重写`minapp-fetch`包，现在支持**语法提示**，让开发更高效。  
-- `upload`方法参数统一命名，`pay`方法优化  
-- 修改部分用户操作相关方法的bug  
-- 其他问题修复  
-- 引入方式统一改成`const minapp = require('minapp-fetch').init('default')`，且平台必须选择，`default`为默认平台(即以前的不加任何平台)  
-  
-
-
   

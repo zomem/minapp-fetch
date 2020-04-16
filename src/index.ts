@@ -3,12 +3,18 @@
 
 //内容库
 import countContent from './fetch/content/countContent'
+import deleteCategory from './fetch/content/deleteCategory'
+import deleteContent from './fetch/content/deleteContent'
 import findCategory from './fetch/content/findCategory'
 import findContent from './fetch/content/findContent'
 import findContentGroup from './fetch/content/findContentGroup'
 import getCategory from './fetch/content/getCategory'
 import getContent from './fetch/content/getContent'
 import getContentGroup from './fetch/content/getContentGroup'
+import setCategory from './fetch/content/setCategory'
+import setContent from './fetch/content/setContent'
+import updateCategory from './fetch/content/updateCategory'
+import updateContent from './fetch/content/updateContent'
 
 //数据表
 import count from './fetch/data/count'
@@ -92,12 +98,18 @@ import updateUserMany from './fetch/userGroup/updateUserMany'
 function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   return {
     countContent: countContent(args),
+    deleteCategory: deleteCategory(args),
+    deleteContent: deleteContent(args),
     findCategory: findCategory(args),
     findContent: findContent(args),
     findContentGroup: findContentGroup(args),
     getCategory: getCategory(args),
     getContent: getContent(args),
     getContentGroup: getContentGroup(args),
+    setCategory: setCategory(args),
+    setContent: setContent(args),
+    updateCategory: updateCategory(args),
+    updateContent: updateContent(args),
     
     count: count(args),
     countMany: countMany(args),

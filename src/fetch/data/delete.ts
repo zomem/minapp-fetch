@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-01-24 11:03:54
+ * @LastEditTime: 2020-04-16 20:08:03
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /minapp-fetch/src/fetch/data/delete.ts
+ */
 
 import { setArgs, getBaaSF } from '../../utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME } from '../../constants/constants'
@@ -52,8 +60,7 @@ function fetchDelete(table: string | number, id: string){
   //op 运营后台
   if(ArgsObj.Platform === PLATFORM_NAME.OP){
     return new Promise((resolve, reject) => {
-      BaaS_F.delete(`https://cloud.minapp.com/userve/v2.2/table/${table}/record/${id}/`)
-      .then((res: any) => {
+      BaaS_F.delete(`https://cloud.minapp.com/userve/v2.2/table/${table}/record/${id}/`).then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)

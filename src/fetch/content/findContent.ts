@@ -207,9 +207,13 @@ function fetchFindContent(contentGroupID: number, params: {
         }
         n += 2
       }
-  
+      let MyContentGroup: any = null
+      if(ArgsObj.Platform === PLATFORM_NAME.CLOUD){
+        MyContentGroup = new BaaS_F.Content(contentGroupID)
+      }else{
+        MyContentGroup = new BaaS_F.ContentGroup(contentGroupID)
+      }
       // 
-      let MyContentGroup = new BaaS_F.ContentGroup(contentGroupID)
       MyContentGroup.setQuery(QQ).limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).orderBy(params.orderBy || '-created_at').select(params.select || []).expand(params.expand || []).find({withCount: params.withCount || false}).then((res: any) => {
         // success
         resolve(res)
