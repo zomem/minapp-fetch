@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-29 11:37:27
- * @LastEditTime: 2020-05-11 17:36:09
+ * @LastEditTime: 2020-05-11 17:40:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/README.md
@@ -80,7 +80,7 @@ minapp.find(tableName, {
 - 修复`update`类型的方法更新`undefined、null`等数据时，会报错的bug。   
    
 ### 应用案例    
-![Fishbone资讯](https://file.wefishbone.com/1jY4cJGvV8YWuiI8.jpeg)
-![轻絮定制](https://file.wefishbone.com/1jY4cJckQ4p3c3od.jpeg)  
+![Fishbone资讯](https://file.wefishbone.com/1jY4uY4sSjMv8WKO.jpeg)
+![轻絮定制](https://file.wefishbone.com/1jY4uYiTUIDtLx8p.jpeg)  
   
   
