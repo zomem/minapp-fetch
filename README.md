@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-29 11:37:27
- * @LastEditTime: 2020-04-16 20:47:03
+ * @LastEditTime: 2020-05-11 17:32:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/README.md
@@ -67,28 +67,20 @@ minapp.find(tableName, {
   
 ### 更新日志  
   
-> 还有部分官方接口没有跟进，我们会一直完善的~
-  
+> 还有部分官方接口没有跟进，我们会一直完善的~  
     
-
+    
+#### v2.4.0  
+- 用户自定义字段的更新，`currentUserUpdate`  
+- 微信小程序unionid登录，`loginWith(data, {withUnionID: true})`  
+- 优化支付`pay`方法，并加入字节跳动支付功能  
         
 #### v2.3.0  
 - 更新部分内容操作方法，新增内容操作方法：`deleteCategory`、`deleteContent`、`setCategory`、`setContent`、`updateCategory`、`updateContent`方法
 - 修复`update`类型的方法更新`undefined、null`等数据时，会报错的bug。   
-        
-#### v2.2.1  
-- 去掉了`default`的引入方式，也不再包含官方sdk了，大家可以根据需要，按需引入sdk。  
-- 前端可以使用`web`的引入方式，同时确保`window.BaaS`被赋值。  
-- 修改`webapi`的传参方式。  
-  
-#### v2.1.0  
-- 加入字节跳动小程序的支持。  
-  
-#### v2.0.2  
-- 新增查寻类方法`stringLength`，查寻字符串长度。  
-- `p0: ['title', 'stringLength', 5]`查寻title长度为5的内容。  
-- `p0: ['title', 'stringLength', 5, 20]`查寻title长度为5~20的内容。  
-- 其他优化。  
-  
+   
+### 应用案例    
+![Fishbone资讯](https://file.wefishbone.com/1jY4cJGvV8YWuiI8.jpeg)  
+![轻絮定制](https://file.wefishbone.com/1jY4cJckQ4p3c3od.jpeg)  
   
   

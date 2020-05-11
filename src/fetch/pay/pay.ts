@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-01-26 16:53:50
+ * @LastEditTime: 2020-05-11 16:56:38
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /minapp-fetch/src/fetch/pay/pay.ts
+ */
 
 import { setArgs, getBaaSF } from '../../utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME } from '../../constants/constants'
@@ -15,12 +23,13 @@ let ArgsObj: {
 }
 
 //
-function fetchPay(way: 'alipay' | 'weapp' | 'qq' | 'swan', params: {
+function fetchPay(way: 'alipay' | 'weapp' | 'qq' | 'swan' | 'tt', params: {
   gatewayType?: 'weixin_tenpay_wap' | 'weixin_tenpay_native' | 'weixin_tenpay_js' | 'alipay_page' | 'alipay_wap' | 'qpay_native'
   totalCost: number
   merchandiseDescription: string
+  service?: string
   merchandiseSchemaID?: number
-  merchandiseRecordID?: number
+  merchandiseRecordID?: string
   merchandiseSnapshot?: any
   profitSharing?: boolean
 }){
@@ -29,7 +38,7 @@ function fetchPay(way: 'alipay' | 'weapp' | 'qq' | 'swan', params: {
     throw new Error(PLATFORM_ERROR)
   }
   if(PLATFORM_NAME_BAAS.indexOf(ArgsObj.Platform) > -1){
-    if(ArgsObj.Platform === PLATFORM_NAME.WEB || ArgsObj.Platform === PLATFORM_NAME.DEFAULT){
+    if(ArgsObj.Platform === PLATFORM_NAME.WEB){
       let platform = ''
       switch(way){
         case PLATFORM_NAME.ALIPAY:

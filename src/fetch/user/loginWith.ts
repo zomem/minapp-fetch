@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-01-27 13:18:41
+ * @LastEditTime: 2020-05-11 16:37:44
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /minapp-fetch/src/fetch/user/loginWith.ts
+ */
 
 import { setArgs, getBaaSF } from '../../utils/utils'
 import { PLATFORM_NAME } from '../../constants/constants'
@@ -19,7 +27,8 @@ function fetchLoginWith(...data: [
   any,
   {
     createUser?: boolean
-    syncUserProfile?: 'overwrite' | 'setnx' | 'false'
+    syncUserProfile?: 'overwrite' | 'setnx' | 'false',
+    withUnionID?: boolean
   }
 ]){
   let BaaS_F = getBaaSF(ArgsObj)

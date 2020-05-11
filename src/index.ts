@@ -61,6 +61,7 @@ import getTableList from './fetch/table/getTableList'
 //当前用户
 import anonymous from './fetch/user/anonymous'
 import currentUser from './fetch/user/currentUser'
+import currentUserUpdate from './fetch/user/currentUserUpdate'
 import emailVerify from './fetch/user/emailVerify'
 import login from './fetch/user/login'
 import loginThirdParty from './fetch/user/loginThirdParty'
@@ -148,6 +149,7 @@ function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 't
 
     anonymous: anonymous(args),
     currentUser: currentUser(args),
+    currentUserUpdate: currentUserUpdate(args),
     emailVerify: emailVerify(args),
     login: login(args),
     loginThirdParty: loginThirdParty(args),
