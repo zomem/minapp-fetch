@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-29 11:37:27
- * @LastEditTime: 2020-05-11 17:40:06
+ * @LastEditTime: 2020-05-23 13:12:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/README.md
@@ -11,8 +11,9 @@
    
 知晓云让后台开发变得更简单，我们让知晓云开发变得更简单。  
   
-`npm install minapp-fetch`   
-  
+> 知晓云API网关的推出，以后方法更新会侧重`云函数`，同时为了减小包的体积，提高运行效率，采取了更合理的分开维护方式。各平台包在[@minappjs](https://www.npmjs.com/search?q=keywords%3Aminappjs)。最后，`minapp-fetch`方法，将不再更新。感谢大家的支持。
+   
+   
 适合：  
 **运营后台**、**云函数**、**各平台小程序**、**Web/H5**、**RN**、**Taro**、**uni-app**等js开发的  
   
@@ -66,9 +67,9 @@ minapp.find(tableName, {
 ```
   
 ### 更新日志  
-  
-> 还有部分官方接口没有跟进，我们会一直完善的~  
     
+#### v2.4.1  
+- 停止更新   
     
 #### v2.4.0  
 - 用户自定义字段的更新，`currentUserUpdate`  
