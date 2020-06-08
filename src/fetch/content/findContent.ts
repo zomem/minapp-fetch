@@ -625,7 +625,7 @@ function fetchFindContent(contentGroupID: number, params: {
 }
 
 
-function initFetchFindContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchFindContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchFindContent
 }

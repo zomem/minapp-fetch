@@ -13,7 +13,7 @@ let ArgsObj: {
     'Authorization'?: string,
     'X-Hydrogen-Env-ID'?: string,
   }
-}, Args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]
+}, Args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]
 
 
 
@@ -184,7 +184,7 @@ function fetchUpdateUser(...data: [number, {
 }
 
 
-function initFetchUpdateUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchUpdateUser(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   Args = args
   ArgsObj = setArgs(args)
   return fetchUpdateUser

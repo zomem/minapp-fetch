@@ -1,14 +1,13 @@
 {
   "name": "minapp-fetch",
-  "version": "2.4.1",
+  "version": "2.6.0",
   "description": "知晓云接口封装，js跨平台",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "author": "",
   "license": "ISC",
   "scripts": {
-    "dist": "npx tsc",
-    "build": "npx gulp copy"
+    "build": "npx tsc"
   },
   "files": [
     "/lib"

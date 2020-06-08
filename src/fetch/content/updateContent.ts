@@ -191,7 +191,7 @@ function fetchUpdateContent(contentGroupID: number, richTextID: number, params: 
 }
 
 
-function initFetchUpdateContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchUpdateContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchUpdateContent
 }

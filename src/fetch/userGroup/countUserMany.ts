@@ -11,7 +11,7 @@ type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 
 
 
-function initFetchCountUserMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchCountUserMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchCountUserMany(findArray: {
     [index: number]: {
       p0?: [string, methodList, ...any[]]

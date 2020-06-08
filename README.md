@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-29 11:37:27
- * @LastEditTime: 2020-05-23 13:12:27
+ * @LastEditTime: 2020-06-08 21:16:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/README.md
@@ -11,7 +11,7 @@
    
 知晓云让后台开发变得更简单，我们让知晓云开发变得更简单。  
   
-> 知晓云API网关的推出，以后方法更新会侧重`云函数`，同时为了减小包的体积，提高运行效率，采取了更合理的分开维护方式。各平台包在[@minappjs](https://www.npmjs.com/search?q=keywords%3Aminappjs)。最后，`minapp-fetch`方法，将不再更新。感谢大家的支持。
+> 为了减小包的体积，提高运行效率，采取了更合理的分开维护方式。各平台包在[@minappjs](https://www.npmjs.com/search?q=keywords%3Aminappjs)。推荐大家使用这种新的方式。
    
    
 适合：  
@@ -30,6 +30,7 @@ minapp.find('tableName', {
   
 ### 文档  
 最新接口文档，可在[minapp-fetch文档](https://wefishbone.com/detail/5d4135320bc9f3134de37fa6)里查看  
+新方式推荐文档在[@minappjs文档](https://wefishbone.com/detail/5ec2781dc66ab4461293c8ea)里查看  
   
 ### 优点  
 1. **跨平台性**：js平台写法一致，一处写，处处用（个别接口除外） 
@@ -68,17 +69,16 @@ minapp.find(tableName, {
   
 ### 更新日志  
     
-#### v2.4.1  
-- 停止更新   
-    
-#### v2.4.0  
-- 用户自定义字段的更新，`currentUserUpdate`  
-- 微信小程序unionid登录，`loginWith(data, {withUnionID: true})`  
-- 优化支付`pay`方法，并加入字节跳动支付功能  
-        
-#### v2.3.0  
-- 更新部分内容操作方法，新增内容操作方法：`deleteCategory`、`deleteContent`、`setCategory`、`setContent`、`updateCategory`、`updateContent`方法
-- 修复`update`类型的方法更新`undefined、null`等数据时，会报错的bug。   
+#### v2.6.0  
+- 加入react-native的支持，请确保`global.BaaS`被赋值     
+- API网关感觉是增加了前端和云函数的开发量，如果不是特别需要，还是sdk+云函数吧，简单，安全，高效   
+- 推荐大家用新的方式。  
+     
+   
+### 加入讨论    
+大家可以加群，一起讨论@minappjs问题，或知晓云的问题。欢迎加官方微信fairy-pm，备注知晓云，会拉你进入讨论群。  
+有什么问题，也可以第一时间反馈。  
+  
    
 ### 应用案例    
 ![Fishbone资讯](https://file.wefishbone.com/1jY4uY4sSjMv8WKO.jpeg)

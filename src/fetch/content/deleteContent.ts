@@ -63,7 +63,7 @@ function fetchDeleteContent(contentGroupID: number, richTextID: number){
 }
 
 
-function initFetchDeleteContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchDeleteContent(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchDeleteContent
 }

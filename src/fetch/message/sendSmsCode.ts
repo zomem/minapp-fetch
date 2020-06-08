@@ -86,7 +86,7 @@ function fetchSendSmsCode(phone: string, signatureID: number, userID?: number){
 }
 
 
-function initFetchSendSmsCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchSendSmsCode(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchSendSmsCode
 }

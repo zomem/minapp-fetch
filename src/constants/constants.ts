@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-01-21 17:36:25
+ * @LastEditTime: 2020-06-08 20:52:06
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /minapp-fetch/src/constants/constants.ts
+ */ 
 
 export const PLATFORM_NAME = {
   ALIPAY: 'alipay',
@@ -8,6 +16,7 @@ export const PLATFORM_NAME = {
   WEAPP: 'weapp',
   TT: 'tt',
   WEB: 'web',
+  RN: 'rn',
   WEBAPI: 'webapi',
 }
 
@@ -20,6 +29,7 @@ export const PLATFORM_NAME_ARR = [
   'weapp',
   'tt',
   'web',
+  'rn',
   'webapi',
 ]
 
@@ -32,6 +42,7 @@ export const PLATFORM_NAME_BAAS = [
   'weapp',
   'tt',
   'web',
+  'rn',
 ]
 
 //以axios请求的平台
