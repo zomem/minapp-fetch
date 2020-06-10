@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-29 11:37:27
- * @LastEditTime: 2020-06-08 21:16:29
+ * @LastEditTime: 2020-06-10 19:37:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/README.md
@@ -69,9 +69,9 @@ minapp.find(tableName, {
   
 ### 更新日志  
     
-#### v2.6.0  
+#### v2.6.1  
 - 加入react-native的支持，请确保`global.BaaS`被赋值     
-- API网关感觉是增加了前端和云函数的开发量，如果不是特别需要，还是sdk+云函数吧，简单，安全，高效   
+- 对于API网关，大家还是可以去尝试     
 - 推荐大家用新的方式。  
      
    
