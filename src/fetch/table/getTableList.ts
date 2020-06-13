@@ -68,7 +68,7 @@ function fetchGetTableList(params: {
 }
 
 
-function initFetchGetTableList(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchGetTableList(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchGetTableList
 }

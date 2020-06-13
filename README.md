@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-01-29 11:37:27
- * @LastEditTime: 2020-06-10 19:37:56
+ * @LastEditTime: 2020-06-13 10:09:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/README.md
@@ -69,6 +69,11 @@ minapp.find(tableName, {
   
 ### 更新日志  
     
+#### v2.7.0  
+- 加入京东小程序的支持。     
+- 推荐大家用[@minappjs](https://www.npmjs.com/search?q=keywords%3Aminappjs)。  
+     
+    
 #### v2.6.1  
 - 加入react-native的支持，请确保`global.BaaS`被赋值     
 - 对于API网关，大家还是可以去尝试     
@@ -80,8 +85,9 @@ minapp.find(tableName, {
 有什么问题，也可以第一时间反馈。  
   
    
-### 应用案例    
+### 案例    
+[Fishbone资讯](https://wefishbone.com)   
 ![Fishbone资讯](https://file.wefishbone.com/1jY4uY4sSjMv8WKO.jpeg)
-![轻絮定制](https://file.wefishbone.com/1jY4uYiTUIDtLx8p.jpeg)  
+![轻絮定制](https://file.wefishbone.com/1jY4uYiTUIDtLx8p.jpeg)   
   
   

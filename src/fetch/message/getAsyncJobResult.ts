@@ -55,7 +55,7 @@ function fetchGetAsyncJobResult(operationID: number){
 }
 
 
-function initFetchGetAsyncJobResult(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchGetAsyncJobResult(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchGetAsyncJobResult
 }

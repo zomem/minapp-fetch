@@ -12,7 +12,7 @@ type methodList = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 type fieldList = 'id' | 'name' | 'size' | 'category_id' | 'category_name' | 'created_at'
 
 
-function initFetchCountFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchCountFile(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchCountFile(params: {
     p0?: [fieldList | string, methodList, ...any[]]
     p1?: [fieldList | string, methodList, ...any[]]

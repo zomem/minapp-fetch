@@ -4,7 +4,7 @@ import { FIND_MANY_L_ERROR } from '../../constants/error'
 const pLimit = require('p-limit')
 
 // 同时进行多张表的GET
-function initFetchGetMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchGetMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchGetMany(getArray: {
     [index: number]: [string | number, string, {
       select: string[]

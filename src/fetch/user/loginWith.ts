@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-01-27 13:18:41
- * @LastEditTime: 2020-05-11 16:37:44
- * @LastEditors: your name
+ * @LastEditTime: 2020-06-13 09:54:18
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/src/fetch/user/loginWith.ts
  */
@@ -86,13 +86,23 @@ function fetchLoginWith(...data: [
           reject(err)
         })
       })
+    case PLATFORM_NAME.JD:
+      return new Promise((resolve, reject)=>{
+        BaaS_F.auth.loginWithJd(...data).then((user: any) => {
+          // 登录成功
+          resolve(user)
+        }, (err: any) => {
+          // 登录失败
+          reject(err)
+        })
+      })
     default:
       throw new Error(`minapp.loginWith ${METHOD_NOT_SUPPORT}`)
   }
 }
 
 
-function initFetchLoginWith(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchLoginWith(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   ArgsObj = setArgs(args)
   return fetchLoginWith
 }

@@ -3,7 +3,7 @@ import { ARGS_ERROR, PLATFORM_ERROR, CLIENT_ID_ERROR } from '../constants/error'
 
 
 //生成参数对象
-export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   if(args.length === 0){
     throw new Error(ARGS_ERROR)
   }
@@ -82,6 +82,9 @@ export function getBaaSF(ArgsObj: {
     case PLATFORM_NAME.TT:
       // @ts-ignore：无法找到tt的错误
       return tt.BaaS
+    case PLATFORM_NAME.JD:
+      // @ts-ignore：无法找到tt的错误
+      return jd.BaaS
     case PLATFORM_NAME.WEB:
       // @ts-ignore：无法找到window的错误
       return window.BaaS

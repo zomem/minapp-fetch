@@ -14,7 +14,7 @@ type upMethodList = 'incr' | 'set' | 'unset' | 'patchObject' | 'geo' | 'append' 
 
 
 // 同时进行多张表的查寻
-function initFetchUpdateMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function initFetchUpdateMany(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   function fetchUpdateMany(updateArray: {
     [index: number]: [string | number, string, {
       [propName: string]: [upMethodList, dataType] | dataType

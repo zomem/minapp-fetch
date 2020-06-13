@@ -96,7 +96,7 @@ import updateUserMany from './fetch/userGroup/updateUserMany'
 
 
 
-function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
+function init(...args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
   return {
     countContent: countContent(args),
     deleteCategory: deleteCategory(args),

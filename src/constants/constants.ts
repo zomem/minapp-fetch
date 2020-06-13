@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-01-21 17:36:25
- * @LastEditTime: 2020-06-08 20:52:06
- * @LastEditors: your name
+ * @LastEditTime: 2020-06-13 09:48:11
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /minapp-fetch/src/constants/constants.ts
  */ 
@@ -15,6 +15,7 @@ export const PLATFORM_NAME = {
   SWAN: 'swan',             
   WEAPP: 'weapp',
   TT: 'tt',
+  JD: 'jd',
   WEB: 'web',
   RN: 'rn',
   WEBAPI: 'webapi',
@@ -28,6 +29,7 @@ export const PLATFORM_NAME_ARR = [
   'swan',             
   'weapp',
   'tt',
+  'jd',
   'web',
   'rn',
   'webapi',
@@ -41,6 +43,7 @@ export const PLATFORM_NAME_BAAS = [
   'swan',             
   'weapp',
   'tt',
+  'jd',
   'web',
   'rn',
 ]
