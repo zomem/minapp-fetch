@@ -1,108 +1,60 @@
-import { PLATFORM_NAME_ARR, PLATFORM_NAME } from '../constants/constants'
-import { ARGS_ERROR, PLATFORM_ERROR, CLIENT_ID_ERROR } from '../constants/error'
-
-
-//生成参数对象
-export function setArgs(args: ['alipay' | 'cloud' | 'op' | 'qq' | 'swan' | 'weapp' | 'tt' | 'web' | 'webapi' | 'rn'  | 'jd', {clientID?: string, host?: string, accessToken?: string, env?: string}]){
-  if(args.length === 0){
-    throw new Error(ARGS_ERROR)
-  }
-  let Platform:string = '',
-      RequestBase:string ='',
-      options: {
-        clientID?: string, 
-        host?: string, 
-        accessToken?: string, 
-        env?: string
-      } = {},
-      Header:{
-        'Content-Type'?: string
-        'X-Hydrogen-Client-ID'?: string,
-        'Authorization'?: string,
-        'X-Hydrogen-Env-ID'?: string,
-      } = {}
-  if(PLATFORM_NAME_ARR.indexOf(args[0]) === -1){
-    throw new Error(PLATFORM_ERROR)
-  }
-  [Platform, options] = args
-  if(options){
-    if(!options.clientID){
-      throw new Error(CLIENT_ID_ERROR)
-    }
-    RequestBase = options.host || `https://${options.clientID}.myminapp.com`
-    Header = {
-      'Content-Type': 'application/json',
-      'X-Hydrogen-Client-ID': options.clientID,
-    }
-    if(options.accessToken){
-      Header['Authorization'] = `Hydrogen-r1 ${options.accessToken}`
-    }
-    if(options.env){
-      Header['X-Hydrogen-Env-ID'] = options.env
-    }
-  }
-  return{
-    Platform,
-    RequestBase,
-    Header
-  }
-}
+import {PLATFORM_NAME} from '../constants/constants'
+import {PLATFORM_ERROR, WEBAPI_OPTIONS_ERROR} from '../constants/error'
+import {IGetBaaSF, TPlatform, THeader} from '../types'
 
 //根据平台，返回请求方式， BaaS/axios
-export function getBaaSF(ArgsObj: {
-  Platform?: string | undefined
-  RequestBase?: string | undefined
-  Header?: {
-    'Content-Type'?: string
-    'X-Hydrogen-Client-ID'?: string,
-    'Authorization'?: string,
-    'X-Hydrogen-Env-ID'?: string,
+export function getBaaSF():IGetBaaSF{
+  let tempMinapp = process.env.MINAPP as TPlatform
+  if(!tempMinapp){
+    throw new Error(PLATFORM_ERROR)
   }
-}){
-  switch(ArgsObj.Platform){
+  switch (tempMinapp) {
     case PLATFORM_NAME.ALIPAY:
-      // @ts-ignore：无法找到my的错误
-      return my.BaaS
+      return {BaaS_F: my.BaaS, minapp: tempMinapp}
     case PLATFORM_NAME.CLOUD:
       // @ts-ignore：无法找到BaaS的错误
-      return BaaS
-    case PLATFORM_NAME.OP:
-      return require('axios').create({
-        withCredentials: true
-      })
-    case PLATFORM_NAME.QQ:
-      // @ts-ignore：无法找到qq的错误
-      return qq.BaaS
-    case PLATFORM_NAME.SWAN:
-      // @ts-ignore：无法找到swan的错误
-      return swan.BaaS
-    case PLATFORM_NAME.WEAPP:
-      // @ts-ignore：无法找到wx的错误
-      return wx.BaaS
-    case PLATFORM_NAME.TT:
-      // @ts-ignore：无法找到tt的错误
-      return tt.BaaS
+      return {BaaS_F: BaaS, minapp: tempMinapp}
     case PLATFORM_NAME.JD:
-      // @ts-ignore：无法找到tt的错误
-      return jd.BaaS
-    case PLATFORM_NAME.WEB:
-      // @ts-ignore：无法找到window的错误
-      return window.BaaS
+      return {BaaS_F: jd.BaaS, minapp: tempMinapp}
+    case PLATFORM_NAME.OP:
+      return {
+        BaaS_F: require('axios').create({withCredentials: true}), 
+        minapp: tempMinapp
+      }
+    case PLATFORM_NAME.QQ:
+      return {BaaS_F: qq.BaaS, minapp: tempMinapp}
     case PLATFORM_NAME.RN:
-      // @ts-ignore：无法找到window的错误
-      return global.BaaS
+      return {BaaS_F: global.BaaS, minapp: tempMinapp}
+    case PLATFORM_NAME.SWAN:
+      return {BaaS_F: swan.BaaS, minapp: tempMinapp}
+    case PLATFORM_NAME.TT:
+      return {BaaS_F: tt.BaaS, minapp: tempMinapp}
+    case PLATFORM_NAME.WEAPP:
+      return {BaaS_F: wx.BaaS, minapp: tempMinapp}
+    case PLATFORM_NAME.WEB:
+      return {BaaS_F: window.BaaS, minapp: tempMinapp}
     case PLATFORM_NAME.WEBAPI:
-      return require('axios').create({
-        withCredentials: true
-      })
+      let tempOptions = process.env.MINAPP_OPTIONS
+      if(!tempOptions) throw new Error(WEBAPI_OPTIONS_ERROR)
+      let options = JSON.parse(tempOptions)
+      let Header: THeader = {
+        'Content-Type': 'application/json',
+        'X-Hydrogen-Client-ID': options.clientID,
+      }
+      if(options.accessToken) Header['Authorization'] = `Hydrogen-r1 ${options.accessToken}`
+      if(options.env) Header['X-Hydrogen-Env-ID'] = options.env
+      return {
+        BaaS_F: require('axios').create({withCredentials: true}),
+        minapp: tempMinapp,
+        options: {
+          RequestBase: options.host || `https://${options.clientID}.myminapp.com`,
+          Header: Header
+        }
+      }
     default:
       throw new Error(PLATFORM_ERROR)
   }
 }
-
-
-
-
 
 
 
