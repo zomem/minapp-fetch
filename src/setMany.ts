@@ -10,7 +10,7 @@
 import fetchSet from './set'
 import { FIND_MANY_L_ERROR } from './constants/error'
 import {TSetItem, IUpdateSetRes} from './types'
-const pLimit = require('p-limit')
+const pLimit = require('./utils/p-limit')
 
 
 function fetchSetMany(setArray: TSetItem[], plimit = 10): Promise<IUpdateSetRes[]>{

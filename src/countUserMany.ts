@@ -9,7 +9,7 @@
 import fetchFindUser from './findUser'
 import {ICountParams} from './types'
 import { FIND_MANY_L_ERROR } from './constants/error'
-const pLimit = require('p-limit')
+const pLimit = require('./utils/p-limit')
 
 
 

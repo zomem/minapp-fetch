@@ -10,7 +10,7 @@
 import fetchGet from './get'
 import { FIND_MANY_L_ERROR } from './constants/error'
 import {TGetItem, IUpdateSetRes} from './types'
-const pLimit = require('p-limit')
+const pLimit = require('./utils/p-limit')
 
 
 function fetchGetMany(getArray: TGetItem[], plimit: number = 10): Promise<IUpdateSetRes[]>{

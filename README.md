@@ -74,6 +74,9 @@ minapp.find(tableName, {
 ```
   
 ### 更新日志  
+
+#### v3.0.0-c  
+- 修复初始化时的bug
     
 #### v3.0.0-a  
 - 全部方法重新优化，ts类型定义更完善。  
@@ -82,7 +85,7 @@ minapp.find(tableName, {
 - 加入实时数据库，(websocket)方法。subscribe和unsubscribe方法。[使用示例](https://wefishbone.com/detail/5f22d20a5cab4d6f035262c8)。  
 - `delete`更名为`deleteOne`，`updateUserMany`更名为`updateUserOneMany`，  
 - 新增`deleteOneMany`、微信小程序：`subscribeMessage`、`wxDecryptData`方法  
-- 类型定义文件：`minapp-fetch/types`
+- 类型定义文件：`minapp-fetch/lib/types`
 - 其他优化  
      
    
