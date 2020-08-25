@@ -8,7 +8,7 @@
  */ 
 
 import { getBaaSF } from './utils/utils'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 /**
@@ -16,19 +16,25 @@ import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
  */
 function fetchGetAsyncJobResult(operationID: number): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<any>((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       BaaS_F.getAsyncJobResult(operationID).then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<any>((resolve, reject)=>{
+
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.getAsyncJobResult ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
@@ -39,16 +45,10 @@ function fetchGetAsyncJobResult(operationID: number): Promise<any>{
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    throw new Error(`minapp.getAsyncJobResult ${METHOD_NOT_SUPPORT}`)
-  }
-
-  return new Promise<any>((resolve, reject)=>{
-    resolve({})
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.getAsyncJobResult ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 

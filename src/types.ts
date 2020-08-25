@@ -1,12 +1,21 @@
+import { type } from "os"
 
 
 //初始化的平台
-export type TPlatform = 'alipay' | 'cloud' | 'jd' | 'op' | 'qq' | 'rn' | 'swan' | 'tt' | 'weapp' | 'web' | 'webapi'
+type TWxCloudEnvInit = {
+  database?: string
+  storage?: string
+  functions?: string
+  default?: string
+}
+export type TPlatform = 'zx_alipay' | 'zx_cloud' | 'zx_jd' | 'zx_op' | 'zx_qq' | 'zx_rn' | 'zx_swan' | 'zx_tt' | 'zx_weapp' | 'zx_web' | 'zx_webapi' | 'wx_weapp' | 'wx_cloud' | 'mongodb'
 export interface IWebApiInit {
-  clientID: string
+  clientID?: string
   host?: string
   accessToken?: string
-  env?: string
+  env?: string | TWxCloudEnvInit
+  traceUser?: boolean,
+  timeout?: number,
   [key: string]: any
 }
 
@@ -18,11 +27,12 @@ export interface IGetBaaSF {
   BaaS_F: any
   minapp: TPlatform
   options?: {
-    RequestBase: string
-    Header: THeader
+    RequestBase?: string
+    Header?: THeader
+    host?: string
+    env?: string | TWxCloudEnvInit
   }
 }
-
 
 
 //查寻的表名或表id
@@ -277,6 +287,11 @@ export interface ICountParams extends IPRList {
   withCount?: true
 }
 
+export interface ICountFileParams extends IPRFileList {
+  limit?: 1
+  withCount?: true
+}
+
 export interface IUpdateManyParams extends IPRList {
   page?: number
   limit?: number
@@ -288,8 +303,8 @@ export interface IUpdateManyParams extends IPRList {
 
 export type TCheckManyItem = [string | number, ICheckParams]
 
-type TUpdateMethod = 'incr' | 'set' | 'unset' | 'patchObject' | 'geo' | 'append' | 'remove' | 'uAppend'
-
+type TUpdateMethod = 'incr' | 'set' | 'unset' | 'patchObject' | 'geo' | 'append' | 'remove' | 'uAppend' | 'currentDate'
+type TSetMethod = 'geo'
 type dataType = string | string[] | number | number[] | boolean | boolean[] | null | undefined | {
   [propName: string] : any
 } | {
@@ -300,7 +315,7 @@ export interface IUpdateParams {
 }
 
 export interface ISetParams {
-  [key: string]: ['geo', ...any[]] | dataType
+  [key: string]: [TSetMethod, dataType] | dataType
 }
 
 export interface IGetParams {
@@ -377,7 +392,7 @@ export interface ISendEmailParams {
 
 //支付平台
 type TGetewayType = 'weixin_tenpay_wap' | 'weixin_tenpay_native' | 'weixin_tenpay_js' | 'alipay_page' | 'alipay_wap' | 'qpay_native'
-export type TPayWay = 'alipay' | 'weapp' | 'qq' | 'swan' | 'tt'
+export type TPayWay = 'zx_alipay' | 'zx_weapp' | 'zx_qq' | 'zx_swan' | 'zx_tt'
 
 export interface IPayParams {
   gatewayType?: TGetewayType
@@ -548,7 +563,7 @@ export interface ICurrentUser {
 export interface IFindRes {
   statusCode?: number
   data: {
-    meta: {
+    meta?: {
       limit: number
       next: string | null
       offset: number
@@ -564,10 +579,11 @@ export interface IFindRes {
 export interface IUpdateSetRes {
   statusCode?: number
   data: {
-    created_by: number
-    created_at: number
-    updated_at: number
-    id: string
+    created_by?: number
+    created_at?: number
+    updated_at?: number
+    id?: string
+    _id?: string
   }
   [key: string]: any
 }

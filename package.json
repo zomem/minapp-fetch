@@ -1,7 +1,7 @@
 {
   "name": "minapp-fetch",
-  "version": "3.0.0-c",
-  "description": "知晓云接口封装，js跨平台",
+  "version": "3.1.0",
+  "description": "serverless接口封装，js跨平台",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -27,7 +27,7 @@
     "typescript": "^3.9.7"
   },
   "keywords": [
-    "知晓云",
+    "serverless",
     "minapp-fetch"
   ]
 }

@@ -9,16 +9,16 @@
 
 import { getBaaSF } from './utils/utils'
 import {IFileParams, IMetaData, IGetFileRes} from './types'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR} from './constants/error'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
+import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 
 function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGetFileRes>{
   let { BaaS_F, minapp, options } = getBaaSF()
 
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    if(minapp === PLATFORM_NAME.CLOUD){
-      return new Promise<IGetFileRes>((resolve, reject)=>{
+  return new Promise<IGetFileRes>((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let MyFile = new BaaS_F.File()
         MyFile.upload(fileParams, metaData).then((res: IGetFileRes) => {
           // 上传成功
@@ -27,10 +27,8 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
           // HError 对象
           reject(err)
         })
-      })
-    }
+      }
 
-    return new Promise<IGetFileRes>((resolve, reject)=>{
       let MyFile = new BaaS_F.File()
       MyFile.upload(fileParams, metaData).then((res: IGetFileRes) => {
         // 上传成功
@@ -39,12 +37,18 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
         // HError 对象
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<IGetFileRes>((resolve, reject) => {
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.upload ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'post',
@@ -88,18 +92,15 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
       }).catch((err: any) => {
         reject(err)
       })
-    })
-    
-  }
-
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    let params: any = {
-      fileObj: fileParams.fileObj,
-      filename: metaData.fileName,
-      categoryID: metaData.categoryID,
     }
-    return new Promise<IGetFileRes>((resolve, reject)=>{
+
+    //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
+      let params: any = {
+        fileObj: fileParams.fileObj,
+        filename: metaData.fileName,
+        categoryID: metaData.categoryID,
+      }
       BaaS_F.post('https://cloud.minapp.com/userve/v2.1/upload/', {
         filename: params.filename,
         category_id: params.categoryID
@@ -128,29 +129,11 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-
-  return new Promise<IGetFileRes>((resolve, reject)=>{
-    resolve({
-      data: {
-        categories: [{
-          id: '',
-          name: '',
-        }],
-        cdn_path: '',
-        created_at: 0,
-        id: '',
-        media_type: '',
-        mime_type: '',
-        name: '',
-        path: '',
-        size: 0,
-        status: '',
-      }
-    })
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.upload ${METHOD_NOT_SUPPORT}`)
+    }
   })
-
 }
 
 

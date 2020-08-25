@@ -8,16 +8,16 @@
  */ 
 
 import { getBaaSF } from './utils/utils'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR} from './constants/error'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
+import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 
 function fetchGetContentGroup(contentGroupID: number): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
+  return new Promise<any>((resolve, reject)=>{
 
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<any>((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       BaaS_F.ContentGroup.get(contentGroupID).then((res: any) => {
         // success
         resolve(res)
@@ -25,12 +25,18 @@ function fetchGetContentGroup(contentGroupID: number): Promise<any>{
         // err
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<any>((resolve, reject)=>{
+
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.getContentGroup ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
@@ -41,25 +47,20 @@ function fetchGetContentGroup(contentGroupID: number): Promise<any>{
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    return new Promise<any>((resolve, reject)=>{
+    //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
       BaaS_F.get(`https://cloud.minapp.com/userve/v2.2/content/${contentGroupID}/`).then((res: any) => {
         resolve(res)
       }).catch((err: any)=>{
         reject(err)
       })
-    })
-  }
-
-
-  return new Promise<any>((resolve, reject)=>{
-    resolve({})
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.getContentGroup ${METHOD_NOT_SUPPORT}`)
+    }
   })
-  
 }
 
 export default fetchGetContentGroup

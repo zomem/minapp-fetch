@@ -9,7 +9,7 @@
 
 import { getBaaSF } from './utils/utils'
 import {IGetServerTimeRes} from './types'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 /**
@@ -19,19 +19,25 @@ import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 function fetchGetServerDate(): Promise<IGetServerTimeRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<IGetServerTimeRes>((resolve, reject) => {
+  return new Promise<IGetServerTimeRes>((resolve, reject) => {
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       BaaS_F.getServerDate().then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<IGetServerTimeRes>((resolve, reject)=>{
+
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.getServerDate ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
@@ -42,21 +48,10 @@ function fetchGetServerDate(): Promise<IGetServerTimeRes>{
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    throw new Error(`minapp.getServerDate ${METHOD_NOT_SUPPORT}`)
-  }
-
-  return new Promise<IGetServerTimeRes>((resolve, reject)=>{
-    resolve({
-      data: {
-        time: '',
-      },
-      status: 0
-    })
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.getServerDate ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 

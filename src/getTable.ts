@@ -1,15 +1,15 @@
 
 import { getBaaSF } from './utils/utils'
-import { PLATFORM_NAME_BAAS, PLATFORM_NAME } from './constants/constants'
+import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { METHOD_NOT_SUPPORT } from './constants/error'
 
 
 function fetchGetTable(table: string | number): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    if(minapp === PLATFORM_NAME.CLOUD){
-      return new Promise<any>((resolve, reject)=>{
+  return new Promise<any>((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let tableSchema = new BaaS_F.TableSchema()
         tableSchema.getSchema(table).then((res: any) => {
           // success
@@ -18,29 +18,28 @@ function fetchGetTable(table: string | number): Promise<any>{
           // HError 对象
           reject(err)
         })
-      })
+      }
     }
-    throw new Error(`minapp.getTable ${METHOD_NOT_SUPPORT}`)
-  }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    throw new Error(`minapp.getTable ${METHOD_NOT_SUPPORT}`)
-  }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    return new Promise<any>((resolve, reject)=>{
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.getTable ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+    //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
       BaaS_F.get(`https://cloud.minapp.com/userve/v1.8/table/${table}/`).then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-    
-  return new Promise<any>((resolve, reject)=>{
-    resolve({})
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.getTable ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 

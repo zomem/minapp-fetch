@@ -8,14 +8,14 @@
  */ 
 
 import { getBaaSF } from './utils/utils'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR} from './constants/error'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
+import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 function fetchInvoke(invokeName: string, params: any, sync: boolean): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<any>((resolve, reject)=>{
+  return new Promise<any>((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       BaaS_F.invoke(invokeName, params, sync).then((res: any) => {
         if (res.code === 0) {
           // success
@@ -28,12 +28,18 @@ function fetchInvoke(invokeName: string, params: any, sync: boolean): Promise<an
         // HError 对象
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<any>((resolve, reject)=>{
+
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.invoke ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'post',
@@ -49,22 +55,19 @@ function fetchInvoke(invokeName: string, params: any, sync: boolean): Promise<an
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    return new Promise<any>((resolve, reject)=>{
+    //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
       BaaS_F.post(`https://cloud.minapp.com/userve/v1.3/cloud-function/${invokeName}/job/?sync=${sync}`, params).then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-
-  return new Promise<any>((resolve, reject)=>{
-    resolve({})
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.invoke ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 export default fetchInvoke

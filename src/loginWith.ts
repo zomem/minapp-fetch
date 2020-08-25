@@ -8,16 +8,16 @@
  */
 
 import { getBaaSF } from './utils/utils'
-import { PLATFORM_NAME } from './constants/constants'
+import { PLATFORM_NAME, PLATFORM_ALL } from './constants/constants'
 import { METHOD_NOT_SUPPORT } from './constants/error'
 import {ICurrentUser, ILoginWithParams} from './types'
 //
 function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  switch(minapp){
-    case PLATFORM_NAME.ALIPAY:
-      return new Promise<ICurrentUser>((resolve, reject)=>{
+  return new Promise<ICurrentUser>((resolve, reject)=>{
+    switch(minapp){
+      case PLATFORM_NAME.ZX_ALIPAY:
         BaaS_F.auth.loginWithAlipay(...data).then((user: any) => {
           // 登录成功
           resolve(user)
@@ -25,9 +25,8 @@ function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>
           // 登录失败
           reject(err)
         })
-      })
-    case PLATFORM_NAME.QQ:
-      return new Promise<ICurrentUser>((resolve, reject)=>{
+        break
+      case PLATFORM_NAME.ZX_QQ:
         BaaS_F.auth.loginWithQQ(...data).then((user: any) => {
           // 登录成功
           resolve(user)
@@ -35,9 +34,8 @@ function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>
           // 登录失败
           reject(err)
         })
-      })
-    case PLATFORM_NAME.SWAN:
-      return new Promise<ICurrentUser>((resolve, reject)=>{
+        break
+      case PLATFORM_NAME.ZX_SWAN:
         BaaS_F.auth.loginWithBaidu(...data).then((user: any) => {
           // 登录成功
           resolve(user)
@@ -45,9 +43,8 @@ function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>
           // 登录失败
           reject(err)
         })
-      })
-    case PLATFORM_NAME.WEAPP:
-      return new Promise<ICurrentUser>((resolve, reject)=>{
+        break
+      case PLATFORM_NAME.ZX_WEAPP:
         BaaS_F.auth.loginWithWechat(...data).then((user: any) => {
           // 登录成功
           resolve(user)
@@ -55,9 +52,8 @@ function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>
           // 登录失败
           reject(err)
         })
-      })
-    case PLATFORM_NAME.TT:
-      return new Promise<ICurrentUser>((resolve, reject)=>{
+        break
+      case PLATFORM_NAME.ZX_TT:
         BaaS_F.auth.loginWithTt(...data).then((user: any) => {
           // 登录成功
           resolve(user)
@@ -65,9 +61,8 @@ function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>
           // 登录失败
           reject(err)
         })
-      })
-    case PLATFORM_NAME.JD:
-      return new Promise<ICurrentUser>((resolve, reject)=>{
+        break
+      case PLATFORM_NAME.ZX_JD:
         BaaS_F.auth.loginWithJd(...data).then((user: any) => {
           // 登录成功
           resolve(user)
@@ -75,10 +70,13 @@ function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>
           // 登录失败
           reject(err)
         })
-      })
-    default:
-      throw new Error(`minapp.loginWith ${METHOD_NOT_SUPPORT}`)
-  }
+        break
+      default:
+        if(PLATFORM_ALL.indexOf(minapp) === -1){
+          throw new Error(`minapp.loginWith ${METHOD_NOT_SUPPORT}`)
+        }
+    }
+  })
 }
 
 export default fetchLoginWith

@@ -8,30 +8,36 @@
  */ 
 
 import { getBaaSF } from './utils/utils'
-import { PLATFORM_NAME_BAAS, PLATFORM_NAME } from './constants/constants'
+import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { METHOD_NOT_SUPPORT, WEBAPI_OPTIONS_ERROR } from './constants/error'
 import {ICurrentUser, ILoginParams} from './types'
 
 function fetchRegister(params: ILoginParams): Promise<ICurrentUser>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    //webapi
-    if(minapp === PLATFORM_NAME.CLOUD){
-      throw new Error(`minapp.register ${METHOD_NOT_SUPPORT}`)
-    }
-    return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
+      //webapi
+      if(minapp === PLATFORM_NAME.ZX_CLOUD){
+        throw new Error(`minapp.register ${METHOD_NOT_SUPPORT}`)
+      }
       BaaS_F.auth.register(params).then((user: any) => {
         resolve(user)
       }).catch((err: any) => {
         // HError 对象
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<ICurrentUser>((resolve, reject)=>{
+
+    //MongoDB
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.register ${METHOD_NOT_SUPPORT}`)
+    }
+
+    
+
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       let addr = null
       if(params.email){
@@ -53,20 +59,12 @@ function fetchRegister(params: ILoginParams): Promise<ICurrentUser>{
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    throw new Error(`minapp.register ${METHOD_NOT_SUPPORT}`)
-  }
-
-  return new Promise<ICurrentUser>((resolve, reject)=>{
-    resolve({
-      id: 0
-    })
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.register ${METHOD_NOT_SUPPORT}`)
+    }
   })
-
 }
 
 export default fetchRegister

@@ -9,13 +9,15 @@
 
 import {getBaaSF} from './utils/utils'
 import {IUpdateSetRes, TTable, IGetParams} from './types'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR} from './constants/error'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME} from './constants/constants'
+import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 function fetchGet(table: TTable, id: string, params: IGetParams): Promise<IUpdateSetRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<IUpdateSetRes>((resolve, reject)=>{
+  return new Promise<IUpdateSetRes>((resolve, reject)=>{
+
+    //BaaS
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
       Product.select(params.select || []).expand(params.expand || []).get(id).then((res: IUpdateSetRes) => {
         // success
@@ -24,12 +26,35 @@ function fetchGet(table: TTable, id: string, params: IGetParams): Promise<IUpdat
         // err
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<IUpdateSetRes>((resolve, reject)=>{
+    //Mongo类平台
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.MONGODB){
+        let hex = /^[a-fA-F0-9]{24}$/
+        BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
+          if(err) throw new Error(err)
+          let db = client.db(options.env)
+          let tempId = (hex.test(id)) ? BaaS_F.ObjectID(id) : id
+          db.collection(table).findOne({_id: BaaS_F.ObjectID(id)}, (err, res) => {
+            if(err) reject(err)
+            client.close()
+            resolve({data: res})
+          })
+        })
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+        //微信云
+        BaaS_F.minappDB.collection(table).doc(id).get().then(res => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
+    }
+
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
@@ -44,12 +69,10 @@ function fetchGet(table: TTable, id: string, params: IGetParams): Promise<IUpdat
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    return new Promise<IUpdateSetRes>((resolve, reject)=>{
+     //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
       BaaS_F.get(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/${id}/`, {
         params: {
           expand: (params.expand || []).toString(),
@@ -60,20 +83,8 @@ function fetchGet(table: TTable, id: string, params: IGetParams): Promise<IUpdat
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-
-  return new Promise<IUpdateSetRes>((resolve, reject)=>{
-    resolve({
-      data: {
-        created_by: 0,
-        created_at: 0,
-        updated_at: 0,
-        id: ''
-      }
-    })
+    }
   })
-  
 }
 
 export default fetchGet

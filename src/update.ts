@@ -7,72 +7,20 @@
  * @FilePath: /@ownpack/weapp/src/fetch/data/update.ts
  */ 
 
-import { getBaaSF, cloneDeep, isArray } from './utils/utils'
-import { UPDATE_METHORD, PLATFORM_NAME_BAAS, PLATFORM_NAME } from './constants/constants'
-import { UPDATE_ERROR, WEBAPI_OPTIONS_ERROR } from './constants/error'
+import { getBaaSF } from './utils/utils'
+import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
+import { WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT } from './constants/error'
 import {IUpdateParams, TTable, IUpdateSetRes} from './types'
+import updateTrans from './utils/updateTrans'
 
 
 function fetchUpdate(table: TTable, id: string, params: IUpdateParams): Promise<IUpdateSetRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<IUpdateSetRes>((resolve, reject)=>{
+  return new Promise<IUpdateSetRes>((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
-      let records = Product.getWithoutData(id)
-      for(let pa in params){
-        if(!isArray(params[pa])){
-          //不是数组，则直接 set
-          records.set(pa, params[pa])
-          continue
-        }
-        if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
-          switch(params[pa][0]){
-            case 'set':
-              records.set(pa, params[pa][1])
-              break
-            case 'geo':
-              let temp = params[pa], tempGeo = {}
-              temp.shift()
-              if(temp.length > 1){
-                tempGeo = cloneDeep({
-                  type: 'Polygon',
-                  coordinates: [temp]
-                })
-              }else{
-                tempGeo = cloneDeep({
-                  type: 'Point',
-                  coordinates: temp[0]
-                })
-              }
-              records.set(pa, tempGeo)
-              break
-            case 'unset':
-              records.unset(pa)
-              break
-            case 'incr':
-              records.incrementBy(pa, params[pa][1])
-              break
-            case 'append':
-              records.append(pa, Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]])
-              break
-            case 'uAppend':
-              records.uAppend(pa, Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]])
-              break
-            case 'remove':
-              records.remove(pa, Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]])
-              break
-            case 'patchObject':
-              records.patchObject(pa, params[pa][1])
-              break
-            default:
-              throw new Error(UPDATE_ERROR)
-          }
-        }else{
-          //直接 set
-          records.set(pa, params[pa])
-        }
-      }
+      let records = updateTrans(params, Product.getWithoutData(id), minapp)
       records.update().then((res: IUpdateSetRes) => {
         // success
         resolve(res)
@@ -80,72 +28,41 @@ function fetchUpdate(table: TTable, id: string, params: IUpdateParams): Promise<
         // err
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<IUpdateSetRes>((resolve, reject)=>{
-      let updata: any = {}
-      for(let pa in params){
-        if(!isArray(params[pa])){
-          //不是数组，则直接 set
-          updata[pa] = params[pa]
-          continue
-        }
-        if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
-          switch(params[pa][0]){
-            case 'set':
-              updata[pa] = params[pa][1]
-              break
-            case 'geo':
-              let temp = params[pa], tempGeo = {}
-              temp.shift()
-              if(temp.length > 1){
-                tempGeo = cloneDeep({
-                  type: 'Polygon',
-                  coordinates: [temp]
-                })
-              }else{
-                tempGeo = cloneDeep({
-                  type: 'Point',
-                  coordinates: temp[0]
-                })
-              }
-              updata[pa] = tempGeo
-              break
-            case 'unset':
-              updata[pa] = {}
-              updata[pa]['$unset'] = ''
-              break
-            case 'incr':
-              updata[pa] = {}
-              updata[pa]['$incr_by'] = params[pa][1]
-              break
-            case 'append':
-              updata[pa] = {}
-              updata[pa]['$append'] = Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              break
-            case 'uAppend':
-              updata[pa] = {}
-              updata[pa]['$append_unique'] = Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              break
-            case 'remove':
-              updata[pa] = {}
-              updata[pa]['$remove'] = Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              break
-            case 'patchObject':
-              updata[pa] = {}
-              updata[pa]['$update'] = params[pa][1]
-              break
-            default:
-              throw new Error(UPDATE_ERROR)
-          }
-        }else{
-          //直接 set
-          updata[pa] = params[pa]
-        }
+    //Mongo类平台
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.MONGODB){
+        let hex = /^[a-fA-F0-9]{24}$/
+        BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
+          if(err) throw new Error(err)
+          let db = client.db(options.env)
+          if (err) reject(err)
+          let records = updateTrans(params, {}, minapp)
+          let tempId = (hex.test(id)) ? BaaS_F.ObjectID(id) : id
+          db.collection(table).updateOne({_id: tempId}, records, function(err, res) {
+            if (err) reject(err)
+            client.close()
+            resolve({data: res})
+          })
+        })
       }
+      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+        //微信云
+        let updata: any = updateTrans(params, BaaS_F.minappDB.command, minapp)
+        BaaS_F.minappDB.collection(table).doc(id).update({
+          data: updata
+        }).then(res => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
+    }
+
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
+      let updata: any = updateTrans(params, {}, minapp)
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'put',
@@ -157,90 +74,17 @@ function fetchUpdate(table: TTable, id: string, params: IUpdateParams): Promise<
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
+    }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    return new Promise<IUpdateSetRes>((resolve, reject)=>{
-      let updata:any = {}
-      for(let pa in params){
-        if(!isArray(params[pa])){
-          //不是数组，则直接 set
-          updata[pa] = params[pa]
-          continue
-        }
-        if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
-          switch(params[pa][0]){
-            case 'set':
-              updata[pa] = params[pa][1]
-              break
-            case 'geo':
-              let temp = params[pa], tempGeo = {}
-              temp.shift()
-              if(temp.length > 1){
-                tempGeo = cloneDeep({
-                  type: 'Polygon',
-                  coordinates: [temp]
-                })
-              }else{
-                tempGeo = cloneDeep({
-                  type: 'Point',
-                  coordinates: temp[0]
-                })
-              }
-              updata[pa] = tempGeo
-              break
-            case 'unset':
-              updata[pa] = {}
-              updata[pa]['$unset'] = ''
-              break
-            case 'incr':
-              updata[pa] = {}
-              updata[pa]['$incr_by'] = params[pa][1]
-              break
-            case 'append':
-              updata[pa] = {}
-              updata[pa]['$append'] = Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              break
-            case 'uAppend':
-              updata[pa] = {}
-              updata[pa]['$append_unique'] = Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              break
-            case 'remove':
-              updata[pa] = {}
-              updata[pa]['$remove'] = Array.isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              break
-            case 'patchObject':
-              updata[pa] = {}
-              updata[pa]['$update'] = params[pa][1]
-              break
-            default:
-              throw new Error(UPDATE_ERROR)
-          }
-        }else{
-          //直接 set
-          updata[pa] = params[pa]
-        }
-      }
-      
+    //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
+      let updata:any = updateTrans(params, {}, minapp)
       BaaS_F.put(`https://cloud.minapp.com/userve/v2.2/table/${table}/record/${id}/`, updata).then((res: IUpdateSetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
       })
-    })
-  }
-
-  return new Promise<IUpdateSetRes>((resolve, reject)=>{
-    resolve({
-      data: {
-        created_by: 0,
-        created_at: 0,
-        updated_at: 0,
-        id: ''
-      }
-    })
+    }
   })
 }
 

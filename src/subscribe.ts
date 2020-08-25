@@ -1,7 +1,7 @@
 
 import { getBaaSF } from './utils/utils'
 import {TTable, TSubEvent, TSubUnionID, ISubRes, ISubCallBack} from './types'
-import {PLATFORM_NAME} from './constants/constants'
+import {PLATFORM_NAME, PLATFORM_ALL} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 
 
@@ -21,7 +21,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
   let tempErr: any = ''
 
   switch (minapp) {
-    case PLATFORM_NAME.ALIPAY:
+    case PLATFORM_NAME.ZX_ALIPAY:
       my[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -38,7 +38,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.JD:
+    case PLATFORM_NAME.ZX_JD:
       jd[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -55,7 +55,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.QQ:
+    case PLATFORM_NAME.ZX_QQ:
       qq[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -72,7 +72,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.RN:
+    case PLATFORM_NAME.ZX_RN:
       global[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -89,7 +89,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.SWAN:
+    case PLATFORM_NAME.ZX_SWAN:
       swan[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -106,7 +106,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.TT:
+    case PLATFORM_NAME.ZX_TT:
       tt[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -123,7 +123,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.WEAPP:
+    case PLATFORM_NAME.ZX_WEAPP:
       wx[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -140,7 +140,7 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
         },
       })
       break
-    case PLATFORM_NAME.WEB:
+    case PLATFORM_NAME.ZX_WEB:
       window[`${table}_${event}_${sid || '0'}`] = Product.subscribe(event, {
         oninit: () => {
           tempRes.event = 'on_init'
@@ -158,7 +158,9 @@ function fetchSubscribe(table: TTable, event: TSubEvent, callback: ISubCallBack,
       })
       break
     default:
-      throw new Error(`minapp.subscribe ${METHOD_NOT_SUPPORT}`)
+      if(PLATFORM_ALL.indexOf(minapp) === -1){
+        throw new Error(`minapp.subscribe ${METHOD_NOT_SUPPORT}`)
+      }
   }
 }
 

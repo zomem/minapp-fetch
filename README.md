@@ -7,12 +7,15 @@
  * @FilePath: /minapp-fetch/README.md
  -->
 
-### 知晓云常用接口封装（js跨平台）    
+### Serverless平台，常用接口封装（js跨平台）    
    
-知晓云让后台开发变得更简单，我们让知晓云开发变得更简单。  
+**后台开发，学一次就够了**  
    
-适合：  
-**运营后台**、**云函数**、**各平台小程序**、**Web/H5**、**RN**、**Taro**、**uni-app**等js开发的  
+目前支持的平台有：  
+1. **知晓云**：运营后台、云函数、各平台小程序、Web/H5、RN、Taro、uni-app等js开发的   
+2. **微信小程序云开发**：微信小程序、云函数   
+3. **MongoDB数据库**：Nodejs   
+  
   
 使用：  
 ```js
@@ -20,7 +23,7 @@
 import minapp from 'minapp-fetch'
 ...
 onLaunch: function() {
-  minapp.init('weapp')
+  minapp.init('zx_weapp')
 }
 
 
@@ -39,12 +42,12 @@ minapp.find('tableName', {
 按需加载配置：[按需加载配置文档](https://wefishbone.com/detail/5ed5ae7b899abe7b80d67a5f)
   
 ### 优点  
-1. **跨平台性**：js平台写法一致，一处写，处处用（个别接口除外） 
+1. **跨平台性**：各服务平台写法一致，一处写，处处用  
 2. **调用简单**：简化官方复杂的概念，查错、修改更加方便  
-3. **方法丰富**：除官方的方法外，还增加了许多其他实用方法  
-4. **代码提示**：支持代码提示，类型定义文件`index.d.ts`  
+3. **易迁移性**：可以很方便的把一个平台的项目迁移到其他平台  
+4. **代码提示**：支持代码提示，类型定义文件`types.d.ts`  
   
-> 下面就以最简单的and、or复杂组合查寻为例：
+> 下面就以知晓云平台的最简单的and、or复杂组合查寻为例：
   
 ```js
 /** 原方法 **/
@@ -62,7 +65,7 @@ Product.setQuery(orQuery).find().then(res => {
 })
 
 
-/** minapp-fetch js的各个平台写法都如下 **/
+/** minapp-fetch 其他各个平台写法都如下 **/
 minapp.find(tableName, {
   p1: ['color', 'in', ['green', 'red', 'yellow']],
   p2: ['price', '>', 10],
@@ -75,10 +78,14 @@ minapp.find(tableName, {
   
 ### 更新日志  
 
-#### v3.0.0-c  
-- 修复初始化时的bug
+#### v3.1.0  
+- 微信云开发的云函数和小程序端方法：**wx_cloud**, **wx_weapp**。目前方法有：`set` `get` `update` `find` `count` `deleteOne` `deleteMany`
+- MongoDB数据库方法：**mongodb**。目前方法有：`set` `get` `update` `find` `count` `deleteOne` `deleteMany`
+- 去掉所有原`xxxMany`方法，其中`xxxOneMany`方法更名为`xxxMany`方法，这也是为了保持各平台命名统一。
+- 新增`minapp.pLimit`方法，可以替代以前的`xxxMany`方法。这个方法就是p-limit封装的。
+- 初始化时，名称变更，前半部分为平台名，后半部分为平台对应的端名。如知晓云的微信小程序端：`minapp.init('zx_weapp')`
     
-#### v3.0.0-a  
+#### v3.0.0-c  
 - 全部方法重新优化，ts类型定义更完善。  
 - **多平台统一开发时，使用更方便简洁**，详见[使用示例](https://wefishbone.com/detail/5d4135320bc9f3134de37fa6#fishbone_%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)  
 - 支持按需加载，[按需加载配置文档](https://wefishbone.com/detail/5ed5ae7b899abe7b80d67a5f)   
@@ -90,12 +97,12 @@ minapp.find(tableName, {
      
    
 ### 加入讨论    
-大家可以加群，一起讨论minapp问题，或知晓云的问题。欢迎加官方**微信：`fairy-pm`**，备注知晓云，会拉你进入讨论群。  
-有什么问题，也可以第一时间反馈。  
+大家可以加群，一起讨论minapp-fetch问题。欢迎加官方**官方微信：`fairy-pm`**，备注知晓云，会拉你进入讨论群。有什么问题，也可以第一时间反馈。  
    
    
 ### 案例    
-[Fishbone资讯](https://wefishbone.com)   
+[Fishbone资讯web](https://wefishbone.com)   
+--  
 ![Fishbone资讯](https://file.wefishbone.com/1jY4uY4sSjMv8WKO.jpeg)  
   
   

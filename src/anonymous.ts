@@ -7,36 +7,29 @@
  * @FilePath: /@ownpack/weapp/src/fetch/user/anonymous.ts
  */ 
 import {getBaaSF} from './utils/utils'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME} from './constants/constants'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 import {ICurrentUser} from './types'
 
 //
 function fetchAnonymous(): Promise<ICurrentUser>{
   let {BaaS_F, minapp} = getBaaSF()
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    if(minapp === PLATFORM_NAME.CLOUD) throw new Error(`minapp.anonymous ${METHOD_NOT_SUPPORT}`)
-    return new Promise<ICurrentUser>((resolve, reject)=>{
+  return new Promise<ICurrentUser>((resolve, reject)=>{
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.ZX_CLOUD) throw new Error(`minapp.anonymous ${METHOD_NOT_SUPPORT}`)
       BaaS_F.auth.anonymousLogin().then((user: ICurrentUser) => {
         resolve(user)
       }).catch((err: any) => {
         // HError
         reject(err)
       })
-    })
-  }
-
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI) throw new Error(`minapp.anonymous ${METHOD_NOT_SUPPORT}`)
-
-  //op
-  if(minapp === PLATFORM_NAME.OP) throw new Error(`minapp.anonymous ${METHOD_NOT_SUPPORT}`)
-
-
-  return new Promise<ICurrentUser>((resolve, reject)=>{
-    resolve({
-      id: 0
-    })
+    }
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.anonymous ${METHOD_NOT_SUPPORT}`)
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.anonymous ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 

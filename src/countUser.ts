@@ -8,10 +8,13 @@
  */ 
 import fetchFindUser from './findUser'
 import {ICountParams} from './types'
-
+import {PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
+import {METHOD_NOT_SUPPORT} from './constants/error'
+import { getBaaSF } from './utils/utils'
 
 function fetchCountUser(params: ICountParams): Promise<number>{
   return new Promise<number>((resolve, reject) => {
+    let {minapp} = getBaaSF()
     params.limit = 1
     params.withCount = true
     fetchFindUser(params).then((res: any) => {
@@ -20,6 +23,12 @@ function fetchCountUser(params: ICountParams): Promise<number>{
     }, err=>{
       reject(err)
     })
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.countUser ${METHOD_NOT_SUPPORT}`)
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.countUser ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 

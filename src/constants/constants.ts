@@ -8,36 +8,55 @@
  */ 
 
 export const PLATFORM_NAME = {
-  ALIPAY: 'alipay',
-  CLOUD: 'cloud',           //云函数
-  JD: 'jd',
-  OP: 'op',                 //运营后台
-  QQ: 'qq',                 
-  RN: 'rn',
-  SWAN: 'swan',             
-  TT: 'tt',
-  WEAPP: 'weapp',
-  WEB: 'web',
-  WEBAPI: 'webapi',
+  ZX_ALIPAY: 'zx_alipay',
+  ZX_CLOUD: 'zx_cloud',           //云函数
+  ZX_JD: 'zx_jd',
+  ZX_OP: 'zx_op',                 //运营后台
+  ZX_QQ: 'zx_qq',                 
+  ZX_RN: 'zx_rn',
+  ZX_SWAN: 'zx_swan',             
+  ZX_TT: 'zx_tt',
+  ZX_WEAPP: 'zx_weapp',
+  ZX_WEB: 'zx_web',
+  ZX_WEBAPI: 'zx_webapi',
+
+  WX_WEAPP: 'wx_weapp',     //微信云开发，微信小程序端
+  WX_CLOUD: 'wx_cloud',      //微信云开发，云函数端
+
+  MONGODB: 'mongodb',     //MongoDB数据库
 }
 
-//以BaaS方式请求的平台
+//知晓云 以BaaS方式请求的平台
 export const PLATFORM_NAME_BAAS = [
-  'alipay',
-  'cloud',           //云函数
-  'qq',                 
-  'swan',             
-  'weapp',
-  'tt',
-  'jd',
-  'web',
-  'rn',
+  'zx_alipay',
+  'zx_cloud',           //云函数
+  'zx_qq',                 
+  'zx_swan',             
+  'zx_weapp',
+  'zx_tt',
+  'zx_jd',
+  'zx_web',
+  'zx_rn',
 ]
 
-//以axios请求的平台
+//知晓云 以axios请求的平台
 export const PLATFORM_NAME_AXIOS = [
-  'op',                 //运营后台
-  'webapi',
+  'zx_op',                 //运营后台
+  'zx_webapi',
+]
+
+//Mongod类数据库
+export const PLATFORM_NAME_MONGO_SERVER = [
+  'wx_weapp',
+  'wx_cloud',
+  'mongodb'
+]
+
+//所有平台
+export const PLATFORM_ALL = [
+  ...PLATFORM_NAME_BAAS,
+  ...PLATFORM_NAME_AXIOS,
+  ...PLATFORM_NAME_MONGO_SERVER,
 ]
 
 //更新数据的方法
@@ -50,5 +69,6 @@ export const UPDATE_METHORD = [
   'remove',
   'uAppend',
   'patchObject',
+  'currentDate',
 ]
 

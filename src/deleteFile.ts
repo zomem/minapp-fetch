@@ -8,14 +8,14 @@
  */ 
 
 import { getBaaSF, isArray } from './utils/utils'
-import {PLATFORM_NAME, PLATFORM_NAME_BAAS} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR} from './constants/error'
+import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
+import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
 //
 function fetchDeleteFile(fileIDs: string | string[]): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-    return new Promise<any>((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
+    if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyFile = new BaaS_F.File()
       MyFile.delete(fileIDs).then((res: any) => {
         // success
@@ -24,12 +24,10 @@ function fetchDeleteFile(fileIDs: string | string[]): Promise<any>{
         // err
         reject(err)
       })
-    })
-  }
+    }
 
-  //webapi
-  if(minapp === PLATFORM_NAME.WEBAPI){
-    return new Promise<any>((resolve, reject) => {
+    //webapi
+    if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       if(isArray(fileIDs)){
         BaaS_F({
@@ -55,12 +53,14 @@ function fetchDeleteFile(fileIDs: string | string[]): Promise<any>{
           reject(err)
         })
       }
-    })
-  }
+    }
 
-  //op 运营后台
-  if(minapp === PLATFORM_NAME.OP){
-    return new Promise<any>((resolve, reject) => {
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.addUserIntoGroup ${METHOD_NOT_SUPPORT}`)
+    }
+
+    //op 运营后台
+    if(minapp === PLATFORM_NAME.ZX_OP){
       if(isArray(fileIDs)){
         BaaS_F.delete('https://cloud.minapp.com/userve/v2.2/file/', {
           params: {
@@ -79,12 +79,11 @@ function fetchDeleteFile(fileIDs: string | string[]): Promise<any>{
           reject(err)
         })
       }
-    })
-  }
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.deleteFile ${METHOD_NOT_SUPPORT}`)
+    }
 
-
-  return new Promise<any>((resolve, reject)=>{
-    resolve('')
   })
 }
 

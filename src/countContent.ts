@@ -8,11 +8,14 @@
  */ 
 import fetchFindContent from './findContent'
 import {ICountParams} from './types'
-
+import {PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
+import {METHOD_NOT_SUPPORT} from './constants/error'
+import { getBaaSF } from './utils/utils'
 
 
 function fetchCountContent(contentGroupID: number, params: ICountParams): Promise<number>{
   return new Promise<number>((resolve, reject)=>{
+    let {minapp} = getBaaSF()
     params.limit = 1
     params.withCount = true
     fetchFindContent(contentGroupID, params).then((res: any) => {
@@ -21,6 +24,12 @@ function fetchCountContent(contentGroupID: number, params: ICountParams): Promis
     }, (err: any) => {
       reject(err)
     })
+    if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
+      throw new Error(`minapp.addUserIntoGroup ${METHOD_NOT_SUPPORT}`)
+    }
+    if(PLATFORM_ALL.indexOf(minapp) === -1){
+      throw new Error(`minapp.countContent ${METHOD_NOT_SUPPORT}`)
+    }
   })
 }
 

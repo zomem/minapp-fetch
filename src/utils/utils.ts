@@ -1,21 +1,21 @@
 import {PLATFORM_NAME} from '../constants/constants'
-import {PLATFORM_ERROR, WEBAPI_OPTIONS_ERROR} from '../constants/error'
-import {IGetBaaSF, TPlatform, THeader} from '../types'
+import {PLATFORM_ERROR, WEBAPI_OPTIONS_ERROR, GEO_POLYGON_ERROR} from '../constants/error'
+import {IGetBaaSF, THeader} from '../types'
 
 //根据平台，返回请求方式， BaaS/axios
 export function getBaaSF():IGetBaaSF{
-  let tempMinapp: IGetBaaSF = {BaaS_F: '', minapp: 'cloud'}
+  let tempMinapp: IGetBaaSF = {BaaS_F: '', minapp: 'zx_cloud'}
   if(typeof(window) !== 'undefined'){
     if(window.MINAPP){
       tempMinapp.minapp = window.MINAPP
       switch(tempMinapp.minapp){
-        case PLATFORM_NAME.WEB:
+        case PLATFORM_NAME.ZX_WEB:
           tempMinapp.BaaS_F = window.BaaS
           break
-        case PLATFORM_NAME.OP:
+        case PLATFORM_NAME.ZX_OP:
           tempMinapp.BaaS_F = require('axios').create({withCredentials: true})
           break
-        case PLATFORM_NAME.WEBAPI:
+        case PLATFORM_NAME.ZX_WEBAPI:
           let options = window.MINAPP_OPTIONS
           if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
           let Header: THeader = {
@@ -39,14 +39,14 @@ export function getBaaSF():IGetBaaSF{
     if(global.MINAPP){
       tempMinapp.minapp = global.MINAPP
       switch(tempMinapp.minapp){
-        case PLATFORM_NAME.CLOUD:
+        case PLATFORM_NAME.ZX_CLOUD:
           // @ts-ignore：无法找到BaaS的错误
           tempMinapp.BaaS_F = BaaS
           break
-        case PLATFORM_NAME.RN:
+        case PLATFORM_NAME.ZX_RN:
           tempMinapp.BaaS_F = global.BaaS
           break
-        case PLATFORM_NAME.WEBAPI:
+        case PLATFORM_NAME.ZX_WEBAPI:
           let options = global.MINAPP_OPTIONS
           if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
           let Header: THeader = {
@@ -60,6 +60,14 @@ export function getBaaSF():IGetBaaSF{
             RequestBase: options.host || `https://${options.clientID}.myminapp.com`,
             Header: Header
           }
+          break
+        case PLATFORM_NAME.WX_CLOUD:
+          tempMinapp.BaaS_F = global
+          break
+        case PLATFORM_NAME.MONGODB:
+          tempMinapp.BaaS_F = global.MongoDB
+          if(!global.MINAPP_OPTIONS) throw new Error(WEBAPI_OPTIONS_ERROR)
+          tempMinapp.options = global.MINAPP_OPTIONS
           break
         default:
           break
@@ -99,7 +107,16 @@ export function getBaaSF():IGetBaaSF{
   if(typeof(wx) !== 'undefined'){
     if(wx.MINAPP){
       tempMinapp.minapp = wx.MINAPP
-      tempMinapp.BaaS_F = wx.BaaS
+      switch(tempMinapp.minapp){
+        case PLATFORM_NAME.ZX_WEAPP:
+          tempMinapp.BaaS_F = wx.BaaS
+          break
+        case PLATFORM_NAME.WX_WEAPP:
+          tempMinapp.BaaS_F = wx
+          break
+        default:
+          break
+      }
     }
   }
   if(!tempMinapp.BaaS_F) throw new Error(PLATFORM_ERROR)
@@ -112,6 +129,14 @@ export const isArray = (value: any) => {
   return Object.prototype.toString.call(value) === '[object Array]'
 }
 
+// 检查polygon是否对
+const isPolygonArr = (arr: [number, number][]) => {
+  if((arr.length < 4) || (arr[0][0] !== arr[arr.length-1][0]) || (arr[0][1] !== arr[arr.length-1][1])){
+    throw new Error(GEO_POLYGON_ERROR)
+  }else{
+    return true
+  }
+}
 // 目前仅支持对象或数字的拷贝
 export const cloneDeep = (source: any) => {
   if (source === undefined || source === null) return Object.create(null)
@@ -139,6 +164,7 @@ export const changeSetParams = (params: any) => {
           let temp = params[p]
           temp.shift()
           if(temp.length > 1){
+            isPolygonArr(temp)
             changeData[p] = cloneDeep({
               type: 'Polygon',
               coordinates: [temp]
@@ -170,6 +196,7 @@ export const changeFindGeoJson = (lparams: any) => {  //['point', 'include', [23
   let temp = []  
   if(lparams[1] === 'within'){
     lparams.splice(0,2)
+    isPolygonArr(lparams)
     temp = cloneDeep({
       type: 'Polygon',
       coordinates: [lparams]
@@ -182,4 +209,6 @@ export const changeFindGeoJson = (lparams: any) => {  //['point', 'include', [23
   }
   return temp
 }
+
+
 
