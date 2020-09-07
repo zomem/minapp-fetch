@@ -1,6 +1,6 @@
 {
   "name": "minapp-fetch",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "统一各类后台服务和数据库的接口",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
