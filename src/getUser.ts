@@ -12,7 +12,7 @@ import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SE
 import { WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT } from './constants/error'
 import {IGetParams} from './types'
 
-function fetchGetUser(uid: number, params?: IGetParams): Promise<any>{
+function fetchGetUser(uid: number, params: IGetParams={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
   return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){

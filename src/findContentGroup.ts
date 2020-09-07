@@ -12,7 +12,7 @@ import {IContentGroupParams} from './types'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
-function fetchFindContentGroup(params: IContentGroupParams): Promise<any>{
+function fetchFindContentGroup(params: IContentGroupParams={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise<any>((resolve, reject)=>{

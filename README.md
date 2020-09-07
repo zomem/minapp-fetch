@@ -7,11 +7,11 @@
  * @FilePath: /minapp-fetch/README.md
  -->
 
-### Serverless平台，常用接口封装（js跨平台）    
+### 统一各类后台服务和数据库的接口（js跨平台）    
    
 **后台开发，学一次就够了**  
    
-目前支持的平台有：  
+目前支持的后台服务和数据库有：  
 1. **知晓云**：运营后台、云函数、各平台小程序、Web/H5、RN、Taro、uni-app等js开发的   
 2. **微信小程序云开发**：微信小程序、云函数   
 3. **MongoDB数据库**：Nodejs   
@@ -78,6 +78,9 @@ minapp.find(tableName, {
   
 ### 更新日志  
 
+#### v3.1.1  
+- 修复非必要参数未传递时，报错的bug  
+  
 #### v3.1.0  
 - 微信云开发的云函数和小程序端方法：**wx_cloud**, **wx_weapp**。目前方法有：`set` `get` `update` `find` `count` `deleteOne` `deleteMany`
 - MongoDB数据库方法：**mongodb**。目前方法有：`set` `get` `update` `find` `count` `deleteOne` `deleteMany`
@@ -102,7 +105,8 @@ minapp.find(tableName, {
    
 ### 案例    
 [Fishbone资讯web](https://wefishbone.com)   
---  
+  
+   
 ![Fishbone资讯](https://file.wefishbone.com/1jY4uY4sSjMv8WKO.jpeg)  
   
   

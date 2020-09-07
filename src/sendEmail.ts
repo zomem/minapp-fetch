@@ -5,7 +5,7 @@ import { METHOD_NOT_SUPPORT } from './constants/error'
 import {ISendEmailParams} from './types'
 
 
-function fetchSendEmail(params: ISendEmailParams): Promise<any>{
+function fetchSendEmail(params: ISendEmailParams={}): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
   return new Promise<any>((resolve, reject) => {

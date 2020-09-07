@@ -12,7 +12,7 @@ import {IGetParams} from './types'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
-function fetchGetContent(contentGroupID: number, richTextID: number, params: IGetParams): Promise<any>{
+function fetchGetContent(contentGroupID: number, richTextID: number, params: IGetParams={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise<any>((resolve: any, reject: any)=>{

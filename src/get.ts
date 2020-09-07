@@ -10,9 +10,9 @@
 import {getBaaSF} from './utils/utils'
 import {IUpdateSetRes, TTable, IGetParams} from './types'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
+import {WEBAPI_OPTIONS_ERROR} from './constants/error'
 
-function fetchGet(table: TTable, id: string, params: IGetParams): Promise<IUpdateSetRes>{
+function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUpdateSetRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
   return new Promise<IUpdateSetRes>((resolve, reject)=>{
 
@@ -36,7 +36,7 @@ function fetchGet(table: TTable, id: string, params: IGetParams): Promise<IUpdat
           if(err) throw new Error(err)
           let db = client.db(options.env)
           let tempId = (hex.test(id)) ? BaaS_F.ObjectID(id) : id
-          db.collection(table).findOne({_id: BaaS_F.ObjectID(id)}, (err, res) => {
+          db.collection(table).findOne({_id: tempId}, (err, res) => {
             if(err) reject(err)
             client.close()
             resolve({data: res})

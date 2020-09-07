@@ -1,7 +1,7 @@
 {
   "name": "minapp-fetch",
-  "version": "3.1.0",
-  "description": "serverless接口封装，js跨平台",
+  "version": "3.1.1",
+  "description": "统一各类后台服务和数据库的接口",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -27,7 +27,6 @@
     "typescript": "^3.9.7"
   },
   "keywords": [
-    "serverless",
     "minapp-fetch"
   ]
 }

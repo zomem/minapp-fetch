@@ -14,7 +14,7 @@ import {IUpdateParams, ICurrentUser} from './types'
 import updateTrans from './utils/updateTrans'
 
 //
-function fetchCurrentUserUpdate(params: IUpdateParams): Promise<ICurrentUser>{
+function fetchCurrentUserUpdate(params: IUpdateParams={}): Promise<ICurrentUser>{
   let {BaaS_F, minapp} = getBaaSF()
   return new Promise<ICurrentUser>((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){

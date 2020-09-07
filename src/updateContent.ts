@@ -15,7 +15,7 @@ import updateTrans from './utils/updateTrans'
 
 
 
-function fetchUpdateContent(contentGroupID: number, richTextID: number, params: IUpdateParams): Promise<any>{
+function fetchUpdateContent(contentGroupID: number, richTextID: number, params: IUpdateParams={}): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
   
   return new Promise<any>((resolve, reject)=>{

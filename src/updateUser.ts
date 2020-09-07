@@ -6,7 +6,7 @@ import {IUpdateParams} from './types'
 import updateTrans from './utils/updateTrans'
 
 
-function fetchUpdateUser(uid: number, params: IUpdateParams): Promise<any>{
+function fetchUpdateUser(uid: number, params: IUpdateParams={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise<any>((resolve, reject) => {

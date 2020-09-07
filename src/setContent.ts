@@ -12,7 +12,7 @@ import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SER
 import {METHOD_NOT_SUPPORT} from './constants/error'
 
 
-function fetchSetContent(contentGroupID: number, params: ISetContentParams): Promise<any>{
+function fetchSetContent(contentGroupID: number, params: ISetContentParams={}): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
   return new Promise<any>((resolve: any, reject: any)=>{

@@ -9,12 +9,12 @@
 
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
-import { WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT } from './constants/error'
+import { WEBAPI_OPTIONS_ERROR } from './constants/error'
 import {IUpdateParams, TTable, IUpdateSetRes} from './types'
 import updateTrans from './utils/updateTrans'
 
 
-function fetchUpdate(table: TTable, id: string, params: IUpdateParams): Promise<IUpdateSetRes>{
+function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}): Promise<IUpdateSetRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise<IUpdateSetRes>((resolve, reject)=>{

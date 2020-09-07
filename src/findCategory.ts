@@ -13,7 +13,7 @@ import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 import {ICategoryParams} from './types'
 
 
-function fetchFindCategory(contentGroupID: number, params: ICategoryParams): Promise<any>{
+function fetchFindCategory(contentGroupID: number, params: ICategoryParams={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise<any>((resolve: any, reject: any)=>{
