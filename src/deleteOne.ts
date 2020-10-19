@@ -59,7 +59,7 @@ function fetchDeleteOne(table: TTable, id: string): Promise<any>{
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'delete',
-        url: `${options.RequestBase}/hserve/v2.2/table/${table}/record/${id}/`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/${id}/`,
         headers: options.Header
       }).then((res: any) => {
         resolve(res)

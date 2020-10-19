@@ -17,7 +17,10 @@ function fetchUpdateUserMany(params: IUpdateManyParams): Promise<any>{
         let QQ = findTrans(params, BaaS_F, minapp)
         let { u } = params
         let records = updateTrans(u, User.limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).getWithoutData(QQ), minapp)
-        records.update().then((res: any) => {
+        records.update({
+          enableTrigger: params.enableTrigger === undefined ? true : params.enableTrigger,
+          withCount: params.withCount || false
+        }).then((res: any) => {
           // success
           resolve(res)
         }, (err: any) => {

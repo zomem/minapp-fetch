@@ -45,7 +45,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'put',
-        url: `${options.RequestBase}/hserve/v2.2/table/${table}/record/`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/`,
         headers: options.Header,
         params: {
           where: QQ,

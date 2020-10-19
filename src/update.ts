@@ -10,18 +10,18 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { WEBAPI_OPTIONS_ERROR } from './constants/error'
-import {IUpdateParams, TTable, IUpdateSetRes} from './types'
+import {IUpdateParams, TTable, IUpdateSetRes, ISetQuery} from './types'
 import updateTrans from './utils/updateTrans'
 
 
-function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}): Promise<IUpdateSetRes>{
+function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}, query: ISetQuery = {}): Promise<IUpdateSetRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise<IUpdateSetRes>((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
       let records = updateTrans(params, Product.getWithoutData(id), minapp)
-      records.update().then((res: IUpdateSetRes) => {
+      records.update(query).then((res: IUpdateSetRes) => {
         // success
         resolve(res)
       }, (err: any) => {
@@ -66,7 +66,7 @@ function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}): Promi
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'put',
-        url: `${options.RequestBase}/hserve/v2.2/table/${table}/record/${id}/`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/${id}/?enable_trigger=${query.enableTrigger || false}&expand=${(query.expand || []).toString()}`,
         headers: options.Header,
         data: updata
       }).then((res: IUpdateSetRes) => {
@@ -79,7 +79,7 @@ function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}): Promi
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
       let updata:any = updateTrans(params, {}, minapp)
-      BaaS_F.put(`https://cloud.minapp.com/userve/v2.2/table/${table}/record/${id}/`, updata).then((res: IUpdateSetRes) => {
+      BaaS_F.put(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/${id}/?enable_trigger=${query.enableTrigger || false}&expand=${(query.expand || []).toString()}`, updata).then((res: IUpdateSetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)

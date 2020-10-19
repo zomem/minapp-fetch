@@ -58,7 +58,7 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
-        url: `${options.RequestBase}/hserve/v2.2/table/${table}/record/${id}/`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/${id}/`,
         headers: options.Header,
         params: {
           expand: (params.expand || []).toString(),

@@ -318,6 +318,15 @@ export interface ISetParams {
   [key: string]: [TSetMethod, dataType] | dataType
 }
 
+export interface ISetQuery {
+  expand?: string | string[]
+  enableTrigger?: boolean
+}
+
+export interface ISetManyQuery {
+  enableTrigger?: boolean
+}
+
 export interface IGetParams {
   expand?: string | string[]
   select?: string | string[]

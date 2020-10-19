@@ -8,13 +8,13 @@
  */ 
 
 import { getBaaSF, changeSetParams } from './utils/utils'
-import {TTable, ISetParams, IUpdateSetRes} from './types'
+import {TTable, ISetParams, IUpdateSetRes, ISetQuery} from './types'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR} from './constants/error'
 
 
 
-function fetchSet(table: TTable, params: ISetParams): Promise<IUpdateSetRes>{
+function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {}): Promise<IUpdateSetRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
   return new Promise<IUpdateSetRes>((resolve, reject)=>{
 
@@ -22,7 +22,7 @@ function fetchSet(table: TTable, params: ISetParams): Promise<IUpdateSetRes>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
       let product = Product.create()
-      product.set(changeSetParams(params)).save().then((res: IUpdateSetRes) => {
+      product.set(changeSetParams(params)).save(query).then((res: IUpdateSetRes) => {
         // success
         resolve(res)
       }, (err: any) => {
@@ -59,7 +59,7 @@ function fetchSet(table: TTable, params: ISetParams): Promise<IUpdateSetRes>{
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'post',
-        url: `${options.RequestBase}/hserve/v2.2/table/${table}/record/`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/?expand=${(query.expand || []).toString()}`,
         headers: options.Header,
         data: changeSetParams(params)
       }).then((res: IUpdateSetRes) => {
@@ -71,7 +71,7 @@ function fetchSet(table: TTable, params: ISetParams): Promise<IUpdateSetRes>{
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      BaaS_F.post(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/`, changeSetParams(params)).then((res: IUpdateSetRes) => {
+      BaaS_F.post(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/?expand=${(query.expand || []).toString()}`, changeSetParams(params)).then((res: IUpdateSetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
