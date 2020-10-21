@@ -17,7 +17,7 @@
     "url": "git@github.com:Mihawk-zhao/minapp-fetch.git"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.20.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.27",

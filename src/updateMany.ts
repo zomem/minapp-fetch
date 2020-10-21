@@ -17,6 +17,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
       let { u } = params
       let records = updateTrans(u, MyTableObject.limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).getWithoutData(QQ), minapp)
       records.update({
+        expand: (params.expand || []).toString(),
         enableTrigger: params.enableTrigger === undefined ? true : params.enableTrigger,
         withCount: params.withCount || false
       }).then((res: any) => {
@@ -51,6 +52,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
           where: QQ,
           limit: params.limit || 20,
           offset: (params.limit || 20) * ((params.page || 1) - 1),
+          expand: (params.expand || []).toString(),
           enable_trigger: params.enableTrigger === undefined ? true : params.enableTrigger,
           return_total_count: params.withCount ? 1 : 0,
         },
@@ -75,6 +77,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
           where: QQ,
           limit: params.limit || 20,
           offset: (params.limit || 20) * ((params.page || 1) - 1),
+          expand: (params.expand || []).toString(),
           enable_trigger: params.enableTrigger === undefined ? true : params.enableTrigger,
           return_total_count: params.withCount ? 1 : 0,
         },

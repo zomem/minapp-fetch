@@ -296,6 +296,7 @@ export interface IUpdateManyParams extends IPRList {
   page?: number
   limit?: number
   u: IUpdateParams
+  expand?: string | string[]
   enableTrigger?: boolean
   withCount?: boolean
 }
