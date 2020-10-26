@@ -32,7 +32,18 @@ function fetchGetFile(fileID: string): Promise<IGetFileRes>{
 
     //MongoDB
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
-      throw new Error(`minapp.getFile ${METHOD_NOT_SUPPORT}`)
+      if(minapp === PLATFORM_NAME.MONGODB){
+        throw new Error(`minapp.getFile ${METHOD_NOT_SUPPORT}`)
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+        BaaS_F.cloud.downloadFile({
+          fileID: fileID
+        }).then(res => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
     }
 
     

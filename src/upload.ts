@@ -42,7 +42,30 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
 
     //MongoDB
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
-      throw new Error(`minapp.upload ${METHOD_NOT_SUPPORT}`)
+      if(minapp === PLATFORM_NAME.MONGODB){
+        throw new Error(`minapp.upload ${METHOD_NOT_SUPPORT}`)
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP){
+        let tempFileName = new Date().getTime() + fileParams.filePath.match(/\.[^.]+?$/)[0]
+        BaaS_F.cloud.uploadFile({
+          filePath: fileParams.filePath,
+          cloudPath: metaData.categoryName + '/' + (metaData.fileName ? metaData.fileName : tempFileName) 
+        }).then(res => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
+      if(minapp === PLATFORM_NAME.WX_CLOUD){
+        BaaS_F.cloud.uploadFile({
+          fileContent: fileParams.fileObj,
+          cloudPath: metaData.categoryName + '/' + metaData.fileName
+        }).then(res => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
     }
 
     

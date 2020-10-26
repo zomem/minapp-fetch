@@ -587,6 +587,7 @@ export interface IFindRes {
 
 //upload
 export interface IUpdateSetRes {
+  _id?: string
   statusCode?: number
   data: {
     created_by?: number
@@ -600,6 +601,8 @@ export interface IUpdateSetRes {
 
 //getFile
 export interface IGetFileRes {
+  tempFilePath?: string
+  fileID?: string
   statusCode?: number
   data: {
     categories?: {
