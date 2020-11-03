@@ -55,9 +55,22 @@ function fetchDeleteFile(fileIDs: string | string[]): Promise<any>{
       }
     }
 
+    //MongoDB
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
-      throw new Error(`minapp.addUserIntoGroup ${METHOD_NOT_SUPPORT}`)
+      if(minapp === PLATFORM_NAME.MONGODB){
+        throw new Error(`minapp.deleteFile ${METHOD_NOT_SUPPORT}`)
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+        BaaS_F.cloud.deleteFile({
+          fileList: isArray(fileIDs) ? fileIDs : [fileIDs]
+        }).then((res: any) => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
     }
+    
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){

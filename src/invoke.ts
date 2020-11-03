@@ -31,12 +31,22 @@ function fetchInvoke(invokeName: string, params: any, sync: boolean): Promise<an
     }
 
 
-
     //MongoDB
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
-      throw new Error(`minapp.invoke ${METHOD_NOT_SUPPORT}`)
+      if(minapp === PLATFORM_NAME.MONGODB){
+        throw new Error(`minapp.invoke ${METHOD_NOT_SUPPORT}`)
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+        BaaS_F.cloud.callFunction({
+          name: invokeName,
+          data: params,
+        }).then((res: any) => {
+          resolve(res)
+        }, (err: any) => {
+          reject(err)
+        })
+      }
     }
-
     
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){

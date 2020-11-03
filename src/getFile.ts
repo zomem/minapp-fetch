@@ -38,7 +38,7 @@ function fetchGetFile(fileID: string): Promise<IGetFileRes>{
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         BaaS_F.cloud.downloadFile({
           fileID: fileID
-        }).then(res => {
+        }).then((res: any) => {
           resolve(res)
         }, (err: any) => {
           reject(err)
