@@ -83,7 +83,7 @@ minapp.find(tableName, {
 
    
 ### 加入讨论    
-大家可以加群，一起讨论minapp-fetch问题。欢迎加**官方微信：`Fishbone_app`**，**备注: mf**，会拉你进入讨论群。有什么问题，也可以第一时间反馈哦。  
+大家可以加群，一起讨论minapp-fetch问题。欢迎加**官方微信：`Fishbone_app`**，**回复: minapp-fetch讨论**，会拉你进入讨论群。有什么问题，也可以第一时间反馈哦。  
    
    
 ### 案例    
