@@ -62,7 +62,10 @@ export function getBaaSF():IGetBaaSF{
           }
           break
         case PLATFORM_NAME.WX_CLOUD:
-          tempMinapp.BaaS_F = global
+          tempMinapp.BaaS_F = global.wxCloud
+          break
+        case PLATFORM_NAME.UNI_CLOUD:
+          tempMinapp.BaaS_F = global.uniCloud
           break
         case PLATFORM_NAME.MONGODB:
           tempMinapp.BaaS_F = global.MongoDB
@@ -112,7 +115,7 @@ export function getBaaSF():IGetBaaSF{
           tempMinapp.BaaS_F = wx.BaaS
           break
         case PLATFORM_NAME.WX_WEAPP:
-          tempMinapp.BaaS_F = wx
+          tempMinapp.BaaS_F = wx.cloud
           break
         default:
           break

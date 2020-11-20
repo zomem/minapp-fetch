@@ -25,8 +25,10 @@ function fetchInit(platform: TPlatform, options?: IWebApiInit): void{
       global.cloud.init({
         env: options.env || global.cloud.DYNAMIC_CURRENT_ENV
       })
-      global.minappDB = global.cloud.database()
-      //global.minappDBCommand = global.minappDB.command
+    }
+    if(platform === PLATFORM_NAME.UNI_CLOUD){
+      global.MINAPP = platform
+      global.MINAPP_OPTIONS = options || null
     }
     if(platform === PLATFORM_NAME.MONGODB){
       global.MINAPP = platform
@@ -70,8 +72,6 @@ function fetchInit(platform: TPlatform, options?: IWebApiInit): void{
         env: options.env,
         traceUser: options.traceUser
       })
-      wx.minappDB = wx.cloud.database()
-      //wx.minappDBCommand = wx.minappDB.command
     }
   }
 }

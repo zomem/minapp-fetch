@@ -37,7 +37,7 @@ function fetchInvoke(invokeName: string, params: any, sync: boolean): Promise<an
         throw new Error(`minapp.invoke ${METHOD_NOT_SUPPORT}`)
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
-        BaaS_F.cloud.callFunction({
+        BaaS_F.callFunction({
           name: invokeName,
           data: params,
         }).then((res: any) => {

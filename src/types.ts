@@ -1,5 +1,3 @@
-import { type } from "os"
-
 
 //初始化的平台
 type TWxCloudEnvInit = {
@@ -8,7 +6,23 @@ type TWxCloudEnvInit = {
   functions?: string
   default?: string
 }
-export type TPlatform = 'zx_alipay' | 'zx_cloud' | 'zx_jd' | 'zx_op' | 'zx_qq' | 'zx_rn' | 'zx_swan' | 'zx_tt' | 'zx_weapp' | 'zx_web' | 'zx_webapi' | 'wx_weapp' | 'wx_cloud' | 'mongodb'
+export type TPlatform = 
+'zx_alipay' | 
+'zx_cloud' | 
+'zx_jd' | 
+'zx_op' | 
+'zx_qq' | 
+'zx_rn' |
+'zx_swan' | 
+'zx_tt' | 
+'zx_weapp' | 
+'zx_web' | 
+'zx_webapi' | 
+'wx_weapp' | 
+'wx_cloud' | 
+'mongodb' |
+'uni_cloud'
+
 export interface IWebApiInit {
   clientID?: string
   host?: string
@@ -587,14 +601,14 @@ export interface IFindRes {
 
 //upload
 export interface IUpdateSetRes {
-  _id?: string
   statusCode?: number
   data: {
     created_by?: number
     created_at?: number
     updated_at?: number
-    id?: string
+    id: string
     _id?: string
+    [key: string]: any
   }
   [key: string]: any
 }

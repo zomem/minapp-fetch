@@ -49,11 +49,23 @@ function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}, query:
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         //微信云
-        let updata: any = updateTrans(params, BaaS_F.minappDB.command, minapp)
-        BaaS_F.minappDB.collection(table).doc(id).update({
+        let db = BaaS_F.database()
+        let dbCommand = db.command
+        let updata: any = updateTrans(params, dbCommand, minapp)
+        db.collection(table).doc(id).update({
           data: updata
         }).then(res => {
-          resolve(res)
+          resolve({data: {id: id, _updated: res.stats.updated}})
+        }, (err: any) => {
+          reject(err)
+        })
+      }
+      if(minapp === PLATFORM_NAME.UNI_CLOUD){
+        let db = BaaS_F.database()
+        let dbCommand = db.command
+        let updata: any = updateTrans(params, dbCommand, minapp)
+        db.collection(table).doc(id).update(updata).then(res => {
+          resolve({data: {id: id, _updated: res.updated}})
         }, (err: any) => {
           reject(err)
         })

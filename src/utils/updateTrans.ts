@@ -143,7 +143,10 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
       }
     }
 
-    if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+    if(minapp === PLATFORM_NAME.WX_WEAPP 
+      || minapp === PLATFORM_NAME.WX_CLOUD
+      || minapp === PLATFORM_NAME.UNI_CLOUD
+    ){
       //此处的operate是操作方法
       let tempParams = {}
       for(let pa in params){
@@ -183,9 +186,13 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
               tempParams[pa] = operate.push(isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]])
               break
             case 'uAppend':
-              tempParams[pa] = operate.addToSet({
-                each: isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
-              })
+              if(isArray(params[pa][1])){
+                tempParams[pa] = operate.addToSet({
+                  each: isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]
+                })
+              }else{
+                tempParams[pa] = operate.addToSet(params[pa][1])
+              }
               break
             case 'remove':
               tempParams[pa] = operate.pull(operate.in(isArray(params[pa][1]) ? params[pa][1] : [params[pa][1]]))

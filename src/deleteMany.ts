@@ -41,7 +41,8 @@ function fetchDeleteMany(table: TTable, params: IDeleteParams): Promise<any>{
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         //微信云
         let QQ = findTrans(params, BaaS_F, minapp)
-        BaaS_F.minappDB.collection(table).where(QQ).remove().then(res => {
+        let db = BaaS_F.database()
+        db.collection(table).where(QQ).remove().then(res => {
           resolve(res)
         }, (err: any) => {
           reject(err)

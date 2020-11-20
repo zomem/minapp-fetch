@@ -45,8 +45,19 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         //微信云
-        BaaS_F.minappDB.collection(table).doc(id).get().then(res => {
-          resolve(res)
+        let db = BaaS_F.database()
+        db.collection(table).doc(id).get().then(res => {
+          resolve({data: {id: res.data._id, ...res.data}})
+        }, (err: any) => {
+          reject(err)
+        })
+      }
+      if(minapp === PLATFORM_NAME.UNI_CLOUD){
+        let db = BaaS_F.database()
+        db.collection(table).doc(id).get().then(res => {
+          resolve({
+            data: {id: res.data[0]._id, ...res.data[0]}
+          })
         }, (err: any) => {
           reject(err)
         })

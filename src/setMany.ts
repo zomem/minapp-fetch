@@ -30,7 +30,20 @@ function fetchSetMany(table: TTable, params: ISetParams, query: ISetManyQuery = 
 
     //MongoDB
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
-      throw new Error(`minapp.setMany ${METHOD_NOT_SUPPORT}`)
+      if(minapp === PLATFORM_NAME.MONGODB){
+        BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
+          if(err) throw new Error(err)
+          let db = client.db(options.env)
+          db.collection(table).insertMany(changeSetManyParams(params), {ordered: false}, (err, res) => {
+            if(err) reject(err)
+            client.close()
+            resolve({data: res})
+          })
+        })
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+        throw new Error(`minapp.setMany ${METHOD_NOT_SUPPORT}`)
+      }
     }
 
     

@@ -36,7 +36,7 @@ function fetchGetFile(fileID: string): Promise<IGetFileRes>{
         throw new Error(`minapp.getFile ${METHOD_NOT_SUPPORT}`)
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
-        BaaS_F.cloud.downloadFile({
+        BaaS_F.downloadFile({
           fileID: fileID
         }).then((res: any) => {
           resolve(res)

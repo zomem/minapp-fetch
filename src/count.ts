@@ -30,11 +30,16 @@ function fetchCount(table: TTable, params: ICountParams): Promise<number>{
             resolve(res)
           })
         })
-      }else{
+      }
+      if(minapp === PLATFORM_NAME.WX_WEAPP 
+        || minapp === PLATFORM_NAME.WX_CLOUD
+        || minapp === PLATFORM_NAME.UNI_CLOUD
+      ){
         //微信云
         let QQ = findTrans(params, BaaS_F, minapp)
-        BaaS_F.minappDB.collection(table).where(QQ).count().then(res => {
-          resolve(res)
+        let db = BaaS_F.database()
+        db.collection(table).where(QQ).count().then(res => {
+          resolve(res.total)
         }, (err: any) => {
           reject(err)
         })

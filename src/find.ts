@@ -60,38 +60,110 @@ function fetchFind(table: TTable, params: ICheckParams): Promise<IFindRes>{
         })
       }
 
-      if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
+      if(minapp === PLATFORM_NAME.WX_WEAPP 
+        || minapp === PLATFORM_NAME.WX_CLOUD
+        || minapp === PLATFORM_NAME.UNI_CLOUD
+      ){
         //微信云
         let QQ = findTrans(params, BaaS_F, minapp)
-        let tempCheck = BaaS_F.minappDB.collection(table).where(QQ)
-        .limit(params.limit || 20)
-        .skip((params.limit || 20) * ((params.page || 1) - 1))
+        let db = BaaS_F.database()
+        let tempCheck = db.collection(table)
+        let tempOrder = [{field: '', method: ''}, {field: '', method: ''}]
+        let tempSelect = {}
         
+        
+
+        if(params.select){
+          if(isArray(params.select)){
+            let temp = params.select as string[]
+            for(let i = 0; i < temp.length; i++){
+              if(temp[i][0] === '-'){
+                tempSelect[temp[i].substring(1, temp[i].length)] = false
+              }else{
+                tempSelect[temp[i]] = true
+              }
+            }
+          }else{
+            let temp = params.select as string
+            if(temp[0] === '-'){
+              tempSelect[temp.substring(1, temp.length)] = false
+            }else{
+              tempSelect[temp] = true
+            }
+          }
+        }
+
         if(params.orderBy){
           if(isArray(params.orderBy)){
             let temp = params.orderBy as string[]
             for(let i = 0; i < temp.length; i++){
               if(temp[i][0] === '-'){
-                tempCheck.orderBy(temp[i].substring(1, temp[i].length), 'desc')
+                tempOrder[i] = {
+                  field: temp[i].substring(1, temp[i].length),
+                  method: 'desc'
+                }
               }else{
-                tempCheck.orderBy(temp[i], 'asc')
+                tempOrder[i] = {
+                  field: temp[i],
+                  method: 'asc'
+                }
               }
             }
           }else{
             let temp = params.orderBy as string
             if(temp[0] === '-'){
-              tempCheck.orderBy(temp.substring(1, temp.length), 'desc')
+              tempOrder[0] = {
+                field: temp.substring(1, temp.length),
+                method: 'desc'
+              }
             }else{
-              tempCheck.orderBy(temp, 'asc')
+              tempOrder[0] = {
+                field: temp,
+                method: 'asc'
+              }
             }
           }
         }
+
+        if(tempOrder[1].field){
+          tempCheck.limit(params.limit || 20)
+          .skip((params.limit || 20) * ((params.page || 1) - 1))
+          .where(QQ)
+          .orderBy(tempOrder[0].field, tempOrder[0].method)
+          .orderBy(tempOrder[1].field, tempOrder[1].method)
+          .field(tempSelect)
+          .get()
+          .then(res => {
+            resolve({data: {objects: res.data}})
+          }, (err: any) => {
+            reject(err)
+          })
+        }else if(tempOrder[0].field){
+          tempCheck.limit(params.limit || 20)
+          .skip((params.limit || 20) * ((params.page || 1) - 1))
+          .where(QQ)
+          .orderBy(tempOrder[0].field, tempOrder[0].method)
+          .field(tempSelect)
+          .get()
+          .then(res => {
+            resolve({data: {objects: res.data}})
+          }, (err: any) => {
+            reject(err)
+          })
+        }else{
+          tempCheck.limit(params.limit || 20)
+          .skip((params.limit || 20) * ((params.page || 1) - 1))
+          .where(QQ)
+          .field(tempSelect)
+          .get()
+          .then(res => {
+            resolve({data: {objects: res.data}})
+          }, (err: any) => {
+            reject(err)
+          })
+        }
         
-        tempCheck.get().then(res => {
-          resolve(res)
-        }, (err: any) => {
-          reject(err)
-        })
+        
       }
     }
 

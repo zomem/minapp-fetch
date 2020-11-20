@@ -44,10 +44,19 @@ function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {})
         })
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
-        BaaS_F.minappDB.collection(table).add({
+        let db = BaaS_F.database()
+        db.collection(table).add({
           data: changeSetParams(params)
         }).then(res => {
-          resolve(res)
+          resolve({data: {id: res._id}})
+        }, (err: any) => {
+          reject(err)
+        })
+      }
+      if(minapp === PLATFORM_NAME.UNI_CLOUD){
+        let db = BaaS_F.database()
+        db.collection(table).add(changeSetParams(params)).then(res => {
+          resolve({data: {id: res.id}})
         }, (err: any) => {
           reject(err)
         })

@@ -45,7 +45,8 @@ function fetchDeleteOne(table: TTable, id: string): Promise<any>{
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         //微信云
-        BaaS_F.minappDB.collection(table).doc(id).remove().then(res => {
+        let db = BaaS_F.database()
+        db.collection(table).doc(id).remove().then(res => {
           resolve(res)
         }, (err: any) => {
           reject(err)

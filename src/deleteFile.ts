@@ -61,7 +61,7 @@ function fetchDeleteFile(fileIDs: string | string[]): Promise<any>{
         throw new Error(`minapp.deleteFile ${METHOD_NOT_SUPPORT}`)
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
-        BaaS_F.cloud.deleteFile({
+        BaaS_F.deleteFile({
           fileList: isArray(fileIDs) ? fileIDs : [fileIDs]
         }).then((res: any) => {
           resolve(res)

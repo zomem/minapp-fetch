@@ -47,7 +47,7 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP){
         let tempFileName = new Date().getTime() + fileParams.filePath.match(/\.[^.]+?$/)[0]
-        BaaS_F.cloud.uploadFile({
+        BaaS_F.uploadFile({
           filePath: fileParams.filePath,
           cloudPath: metaData.categoryName + '/' + (metaData.fileName ? metaData.fileName : tempFileName) 
         }).then(res => {
@@ -57,7 +57,7 @@ function fetchUpload(fileParams: IFileParams, metaData: IMetaData): Promise<IGet
         })
       }
       if(minapp === PLATFORM_NAME.WX_CLOUD){
-        BaaS_F.cloud.uploadFile({
+        BaaS_F.uploadFile({
           fileContent: fileParams.fileObj,
           cloudPath: metaData.categoryName + '/' + metaData.fileName
         }).then(res => {

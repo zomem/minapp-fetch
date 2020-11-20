@@ -144,7 +144,7 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
             query[ps[i]][params[ps[i]][0]] = {"$regex": params[ps[i]][2]}
             break
           case 'stringLength':
-            let reg
+            let reg: any
             if(params[ps[i]].length > 3){
               reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
             }else{
@@ -166,7 +166,7 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
           case 'withinCircle':
             query[ps[i]][params[ps[i]][0]] = {
               "$geoWithin": {
-                "$center": [[params[ps[i]][2][0], params[ps[i]][2][1]], params[ps[i]][3] || 1]
+                "$center": [[params[ps[i]][2][0], params[ps[i]][2][1]], (params[ps[i]][3] || 1) / 6378.1]
               }
             }
             break
@@ -216,33 +216,38 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
         }
       }
     }
-    if(minapp === PLATFORM_NAME.WX_CLOUD || minapp === PLATFORM_NAME.WX_WEAPP){
+    if(minapp === PLATFORM_NAME.WX_CLOUD 
+      || minapp === PLATFORM_NAME.WX_WEAPP
+      || minapp === PLATFORM_NAME.UNI_CLOUD
+    ){
+      let db = BaaS_F.database()
+      let dbCommand = db.command
       for(let i = 0; i < ps.length; i++){
         query[ps[i]] = {}
         switch(params[ps[i]][1]){
           case 'in':
             let tm1 = {}, tm2 = {}
-            tm1[params[ps[i]][0]] = BaaS_F.minappDB.command.elemMatch(BaaS_F.minappDB.command.in(params[ps[i]][2]))
-            tm2[params[ps[i]][0]] = BaaS_F.minappDB.command.in(params[ps[i]][2])
-            query[ps[i]] = BaaS_F.minappDB.command.or([tm1, tm2])
+            tm1[params[ps[i]][0]] = dbCommand.elemMatch(dbCommand.in(params[ps[i]][2]))
+            tm2[params[ps[i]][0]] = dbCommand.in(params[ps[i]][2])
+            query[ps[i]] = dbCommand.or([tm1, tm2])
             break
           case 'notIn':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.nin(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.nin(params[ps[i]][2])
             break
           case 'contains':
             throw new Error(`contains查寻：${METHOD_NOT_SUPPORT}`)
           case 'arrayContains':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.all(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.all(params[ps[i]][2])
             break
           case 'matches':
             query[ps[i]][params[ps[i]][0]] = params[ps[i]][2]
             break
           case 'stringLength':
-            let reg
+            let reg: any
             if(params[ps[i]].length > 3){
-              reg = new BaaS_F.minappDB.RegExp({regexp: `^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`})
+              reg = new RegExp(`^.{${params[ps[i]][2]},${params[ps[i]][3]}}$`)
             }else{
-              reg = new BaaS_F.minappDB.RegExp({regexp: `^.{${params[ps[i]][2]}}$`})
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
             }
             query[ps[i]][params[ps[i]][0]] = reg
             break
@@ -251,25 +256,31 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
             // break
             throw new Error(`hasKey查寻：${METHOD_NOT_SUPPORT}，你可以直接使用对象查寻，如：'user.name'查寻name`)
           case 'include':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.geoIntersects({
-              geometry: changeFindGeoJson(params[ps[i]])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.geoIntersects({
+              geometry: new db.Geo.Point(params[ps[i]][2][0], params[ps[i]][2][1])
             })
             break
           case 'withinCircle':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.geoWithin({
-              centerSphere: [[params[ps[i]][2][0], params[ps[i]][2][1]], params[ps[i]][3] || 1]
+            query[ps[i]][params[ps[i]][0]] = dbCommand.geoWithin({
+              centerSphere: [[params[ps[i]][2][0], params[ps[i]][2][1]], (params[ps[i]][3] || 1) / 6378.1]
             })
             break
           case 'withinRegion':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.geoNear({
-              geometry: changeFindGeoJson(params[ps[i]]),
+            query[ps[i]][params[ps[i]][0]] = dbCommand.geoNear({
+              geometry: new db.Geo.Point(params[ps[i]][2][0], params[ps[i]][2][1]),
               minDistance: params[ps[i]][4] || 0,
               maxDistance: params[ps[i]][3]
             })
             break
           case 'within':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.geoWithin({
-              geometry: changeFindGeoJson(params[ps[i]])
+            let { Point, LineString, Polygon } = db.Geo
+            let tempArr = [...params[ps[i]]], tempPs = []
+            tempArr.splice(0,2)
+            for(let i = 0; i < tempArr.length; i++){
+              tempPs.push(new Point(tempArr[i][0], tempArr[i][1]))
+            }
+            query[ps[i]][params[ps[i]][0]] = dbCommand.geoWithin({
+              geometry: new Polygon([new LineString(tempPs)])
             })
             break
           case 'isNull':
@@ -277,25 +288,25 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
             // break
             throw new Error(`isNull查寻：${METHOD_NOT_SUPPORT}`)
           case 'isExists':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.exists(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.exists(params[ps[i]][2])
             break
           case '=':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.eq(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.eq(params[ps[i]][2])
             break
           case '!=':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.neq(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.neq(params[ps[i]][2])
             break
           case '<':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.lt(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.lt(params[ps[i]][2])
             break
           case '<=':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.lte(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.lte(params[ps[i]][2])
             break
           case '>':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.gt(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.gt(params[ps[i]][2])
             break
           case '>=':
-            query[ps[i]][params[ps[i]][0]] = BaaS_F.minappDB.command.gte(params[ps[i]][2])
+            query[ps[i]][params[ps[i]][0]] = dbCommand.gte(params[ps[i]][2])
             break
           default:
             throw new Error(FIND_P_ERROR)
@@ -428,13 +439,18 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
             n += 2
           }
         }
-        if(minapp === PLATFORM_NAME.WX_CLOUD || minapp === PLATFORM_NAME.WX_WEAPP){
+        if(minapp === PLATFORM_NAME.WX_CLOUD
+          || minapp === PLATFORM_NAME.WX_WEAPP
+          || minapp === PLATFORM_NAME.UNI_CLOUD
+        ){
+          let db = BaaS_F.database()
+          let dbCommand = db.command
           while(n < tempArr.length - 1){
             if(tempArr[n+1] === '&&'){
-              tempQQ = BaaS_F.minappDB.command.and([tempQQ, query[tempArr[n+2]]])
+              tempQQ = dbCommand.and([tempQQ, query[tempArr[n+2]]])
             }
             if(tempArr[n+1] === '||'){
-              tempQQ = BaaS_F.minappDB.command.or([tempQQ, query[tempArr[n+2]]])
+              tempQQ = dbCommand.or([tempQQ, query[tempArr[n+2]]])
             }
             n += 2
           }
@@ -500,13 +516,18 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
         n += 2
       }
     }
-    if(minapp === PLATFORM_NAME.WX_CLOUD || minapp === PLATFORM_NAME.WX_WEAPP){
+    if(minapp === PLATFORM_NAME.WX_CLOUD 
+      || minapp === PLATFORM_NAME.WX_WEAPP
+      || minapp === PLATFORM_NAME.UNI_CLOUD
+    ){
+      let db = BaaS_F.database()
+      let dbCommand = db.command
       while(n < tempArr2.length - 1){
         if(tempArr2[n+1] === '&&'){
-          QQ = BaaS_F.minappDB.command.and([QQ, query[tempArr2[n+2]]])
+          QQ = dbCommand.and([QQ, query[tempArr2[n+2]]])
         }
         if(tempArr2[n+1] === '||'){
-          QQ = BaaS_F.minappDB.command.or([QQ, query[tempArr2[n+2]]])
+          QQ = dbCommand.or([QQ, query[tempArr2[n+2]]])
         }
         n += 2
       }

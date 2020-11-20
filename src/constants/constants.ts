@@ -23,6 +23,8 @@ export const PLATFORM_NAME = {
   WX_WEAPP: 'wx_weapp',     //微信云开发，微信小程序端
   WX_CLOUD: 'wx_cloud',      //微信云开发，云函数端
 
+  UNI_CLOUD: 'uni_cloud',    //uniCloud云开发
+
   MONGODB: 'mongodb',     //MongoDB数据库
 }
 
@@ -49,6 +51,7 @@ export const PLATFORM_NAME_AXIOS = [
 export const PLATFORM_NAME_MONGO_SERVER = [
   'wx_weapp',
   'wx_cloud',
+  'uni_cloud',
   'mongodb'
 ]
 
