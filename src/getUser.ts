@@ -54,13 +54,14 @@ function fetchGetUser(uid: number, params: IGetParams={}): Promise<any>{
     
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      BaaS_F.get(`https://cloud.minapp.com/userve/v2.0/miniapp/user_profile/${uid}/`)
+      BaaS_F.get(`https://cloud.minapp.com/userve/v2.2/miniapp/user_profile/${uid}/`)
       .then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
       })
     }
+
     if(PLATFORM_ALL.indexOf(minapp) === -1){
       throw new Error(`minapp.getUser ${METHOD_NOT_SUPPORT}`)
     }

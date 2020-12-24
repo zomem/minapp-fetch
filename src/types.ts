@@ -555,7 +555,10 @@ export interface ICurrentUser {
   unionid?: string
   user_id?: number
   _anonymous?: boolean
+  _email?: string
   _email_verified?: boolean
+  _phone?: string
+  _phone_verified?: boolean
   _provider?: {
     alipay: {
       avatar: string
