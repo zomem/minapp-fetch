@@ -21,15 +21,19 @@ export type TPlatform =
 'wx_weapp' | 
 'wx_cloud' | 
 'mongodb' |
-'uni_cloud'
+'uni_cloud' |
+'mysql'
 
 export interface IWebApiInit {
   clientID?: string
   host?: string
+  user?: string
+  password?: string
+  port?: string
   accessToken?: string
   env?: string | TWxCloudEnvInit
-  traceUser?: boolean,
-  timeout?: number,
+  traceUser?: boolean
+  timeout?: number
   [key: string]: any
 }
 
@@ -44,6 +48,9 @@ export interface IGetBaaSF {
     RequestBase?: string
     Header?: THeader
     host?: string
+    user?: string
+    password?: string
+    port?: string
     env?: string | TWxCloudEnvInit
   }
 }
@@ -55,42 +62,163 @@ export type TTable = string | number
 //查寻的方法
 export type TCheckMethod = '=' | '!=' | '<' | '<=' | '>' | '>=' |
 'in' | 'notIn' | 'arrayContains' |
-'contains' | 'matches' | 'stringLength' |
-'hasKey' |
+'contains' | 'matches' | 'stringLength' | 'like' |
+'hasKey' | 'between' | 'notBetween' |
 'isNull' | 'isExists' |
 'include' | 'withinCircle' | 'withinRegion' | 'within'
 
+//j方法，mysql的join 聚合等
+export type TJiaMethod = 'uniqueTable' | 'tableOf' | 'inner' | 'left' | 'right' | 'full' | 'count' | 
+'sum' | 'max' | 'min' | 'avg' | 'ucase' | 'lcase' |
+'mid' | 'len' | 'round' | 'now' | 'format'
 
+export type TJiaParams = 'distinct' | 'all'
+//j参数
+export type TJ = 'j0' | 'j1' | 'j2' | 'j3' | 'j4' | 'j5' | 'j6' | 'j7' | 'j8' | 'j9'
 
 //查寻的参数
 export type TP = 'p0' | 'p1' | 'p2' | 'p3' | 'p4' | 'p5' | 'p6' | 'p7' | 'p8'
 | 'p9' | 'p10' | 'p11' | 'p12' | 'p13' | 'p14' | 'p15' | 'p16' | 'p17' | 'p18' | 'p19'
-| 'p20' | 'p21' | 'p22' | 'p23' | 'p24' | 'p25' | 'p26' | 'p27' | 'p28' | 'p29' | 'p30'
 
 //文件查寻时
 type TField = 'id' | 'name' | 'size' | 'category_id' | 'category_name' | 'created_at'
 
 interface IPRList {
-  p0?: [string, TCheckMethod, ...any[]]
-  p1?: [string, TCheckMethod, ...any[]]
-  p2?: [string, TCheckMethod, ...any[]]
-  p3?: [string, TCheckMethod, ...any[]]
-  p4?: [string, TCheckMethod, ...any[]]
-  p5?: [string, TCheckMethod, ...any[]]
-  p6?: [string, TCheckMethod, ...any[]]
-  p7?: [string, TCheckMethod, ...any[]]
-  p8?: [string, TCheckMethod, ...any[]]
-  p9?: [string, TCheckMethod, ...any[]]
-  p10?: [string, TCheckMethod, ...any[]]
-  p11?: [string, TCheckMethod, ...any[]]
-  p12?: [string, TCheckMethod, ...any[]]
-  p13?: [string, TCheckMethod, ...any[]]
-  p14?: [string, TCheckMethod, ...any[]]
-  p15?: [string, TCheckMethod, ...any[]]
-  p16?: [string, TCheckMethod, ...any[]]
-  p17?: [string, TCheckMethod, ...any[]]
-  p18?: [string, TCheckMethod, ...any[]]
-  p19?: [string, TCheckMethod, ...any[]]
+  j0?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j1?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j2?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j3?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j4?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j5?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j6?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j7?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j8?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  j9?: [string, TJiaMethod, 'distinct'] | [string, TJiaMethod, string] | [string, TJiaMethod]
+  p0?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p1?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p2?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p3?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p4?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p5?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p6?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p7?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p8?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p9?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p10?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p11?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p12?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p13?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p14?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p15?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p16?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p17?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p18?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p19?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p20?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p21?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p22?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p23?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p24?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p25?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p26?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p27?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p28?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p29?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p30?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p31?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p32?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p33?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p34?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p35?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p36?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p37?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p38?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p39?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p40?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p41?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p42?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p43?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p44?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p45?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p46?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p47?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p48?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p49?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p50?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p51?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p52?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p53?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p54?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p55?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p56?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p57?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p58?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p59?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p60?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p61?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p62?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p63?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p64?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p65?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p66?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p67?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p68?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p69?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p70?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p71?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p72?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p73?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p74?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p75?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p76?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p77?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p78?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p79?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p80?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p81?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p82?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p83?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p84?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p85?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p86?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p87?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p88?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p89?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p90?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p91?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p92?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p93?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p94?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p95?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p96?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p97?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p98?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  p99?: [string, TCheckMethod, ...any[]] | [TJ, TCheckMethod, ...any[]]
+  r?: string
+  r2?: string
+}
+
+interface IPRFileList {
+  p0?: [TField, TCheckMethod, ...any[]]
+  p1?: [TField, TCheckMethod, ...any[]]
+  p2?: [TField, TCheckMethod, ...any[]]
+  p3?: [TField, TCheckMethod, ...any[]]
+  p4?: [TField, TCheckMethod, ...any[]]
+  p5?: [TField, TCheckMethod, ...any[]]
+  p6?: [TField, TCheckMethod, ...any[]]
+  p7?: [TField, TCheckMethod, ...any[]]
+  p8?: [TField, TCheckMethod, ...any[]]
+  p9?: [TField, TCheckMethod, ...any[]]
+  p10?: [TField, TCheckMethod, ...any[]]
+  p11?: [TField, TCheckMethod, ...any[]]
+  p12?: [TField, TCheckMethod, ...any[]]
+  p13?: [TField, TCheckMethod, ...any[]]
+  p14?: [TField, TCheckMethod, ...any[]]
+  p15?: [TField, TCheckMethod, ...any[]]
+  p16?: [TField, TCheckMethod, ...any[]]
+  p17?: [TField, TCheckMethod, ...any[]]
+  p18?: [TField, TCheckMethod, ...any[]]
+  p19?: [TField, TCheckMethod, ...any[]]
   p20?: [string, TCheckMethod, ...any[]]
   p21?: [string, TCheckMethod, ...any[]]
   p22?: [string, TCheckMethod, ...any[]]
@@ -171,111 +299,7 @@ interface IPRList {
   p97?: [string, TCheckMethod, ...any[]]
   p98?: [string, TCheckMethod, ...any[]]
   p99?: [string, TCheckMethod, ...any[]]
-  r: string
-}
-
-interface IPRFileList {
-  p0?: [TField, TCheckMethod, ...any[]]
-  p1?: [TField, TCheckMethod, ...any[]]
-  p2?: [TField, TCheckMethod, ...any[]]
-  p3?: [TField, TCheckMethod, ...any[]]
-  p4?: [TField, TCheckMethod, ...any[]]
-  p5?: [TField, TCheckMethod, ...any[]]
-  p6?: [TField, TCheckMethod, ...any[]]
-  p7?: [TField, TCheckMethod, ...any[]]
-  p8?: [TField, TCheckMethod, ...any[]]
-  p9?: [TField, TCheckMethod, ...any[]]
-  p10?: [TField, TCheckMethod, ...any[]]
-  p11?: [TField, TCheckMethod, ...any[]]
-  p12?: [TField, TCheckMethod, ...any[]]
-  p13?: [TField, TCheckMethod, ...any[]]
-  p14?: [TField, TCheckMethod, ...any[]]
-  p15?: [TField, TCheckMethod, ...any[]]
-  p16?: [TField, TCheckMethod, ...any[]]
-  p17?: [TField, TCheckMethod, ...any[]]
-  p18?: [TField, TCheckMethod, ...any[]]
-  p19?: [TField, TCheckMethod, ...any[]]
-  p20?: [TField, TCheckMethod, ...any[]]
-  p21?: [TField, TCheckMethod, ...any[]]
-  p22?: [TField, TCheckMethod, ...any[]]
-  p23?: [TField, TCheckMethod, ...any[]]
-  p24?: [TField, TCheckMethod, ...any[]]
-  p25?: [TField, TCheckMethod, ...any[]]
-  p26?: [TField, TCheckMethod, ...any[]]
-  p27?: [TField, TCheckMethod, ...any[]]
-  p28?: [TField, TCheckMethod, ...any[]]
-  p29?: [TField, TCheckMethod, ...any[]]
-  p30?: [TField, TCheckMethod, ...any[]]
-  p31?: [TField, TCheckMethod, ...any[]]
-  p32?: [TField, TCheckMethod, ...any[]]
-  p33?: [TField, TCheckMethod, ...any[]]
-  p34?: [TField, TCheckMethod, ...any[]]
-  p35?: [TField, TCheckMethod, ...any[]]
-  p36?: [TField, TCheckMethod, ...any[]]
-  p37?: [TField, TCheckMethod, ...any[]]
-  p38?: [TField, TCheckMethod, ...any[]]
-  p39?: [TField, TCheckMethod, ...any[]]
-  p40?: [TField, TCheckMethod, ...any[]]
-  p41?: [TField, TCheckMethod, ...any[]]
-  p42?: [TField, TCheckMethod, ...any[]]
-  p43?: [TField, TCheckMethod, ...any[]]
-  p44?: [TField, TCheckMethod, ...any[]]
-  p45?: [TField, TCheckMethod, ...any[]]
-  p46?: [TField, TCheckMethod, ...any[]]
-  p47?: [TField, TCheckMethod, ...any[]]
-  p48?: [TField, TCheckMethod, ...any[]]
-  p49?: [TField, TCheckMethod, ...any[]]
-  p50?: [TField, TCheckMethod, ...any[]]
-  p51?: [TField, TCheckMethod, ...any[]]
-  p52?: [TField, TCheckMethod, ...any[]]
-  p53?: [TField, TCheckMethod, ...any[]]
-  p54?: [TField, TCheckMethod, ...any[]]
-  p55?: [TField, TCheckMethod, ...any[]]
-  p56?: [TField, TCheckMethod, ...any[]]
-  p57?: [TField, TCheckMethod, ...any[]]
-  p58?: [TField, TCheckMethod, ...any[]]
-  p59?: [TField, TCheckMethod, ...any[]]
-  p60?: [TField, TCheckMethod, ...any[]]
-  p61?: [TField, TCheckMethod, ...any[]]
-  p62?: [TField, TCheckMethod, ...any[]]
-  p63?: [TField, TCheckMethod, ...any[]]
-  p64?: [TField, TCheckMethod, ...any[]]
-  p65?: [TField, TCheckMethod, ...any[]]
-  p66?: [TField, TCheckMethod, ...any[]]
-  p67?: [TField, TCheckMethod, ...any[]]
-  p68?: [TField, TCheckMethod, ...any[]]
-  p69?: [TField, TCheckMethod, ...any[]]
-  p70?: [TField, TCheckMethod, ...any[]]
-  p71?: [TField, TCheckMethod, ...any[]]
-  p72?: [TField, TCheckMethod, ...any[]]
-  p73?: [TField, TCheckMethod, ...any[]]
-  p74?: [TField, TCheckMethod, ...any[]]
-  p75?: [TField, TCheckMethod, ...any[]]
-  p76?: [TField, TCheckMethod, ...any[]]
-  p77?: [TField, TCheckMethod, ...any[]]
-  p78?: [TField, TCheckMethod, ...any[]]
-  p79?: [TField, TCheckMethod, ...any[]]
-  p80?: [TField, TCheckMethod, ...any[]]
-  p81?: [TField, TCheckMethod, ...any[]]
-  p82?: [TField, TCheckMethod, ...any[]]
-  p83?: [TField, TCheckMethod, ...any[]]
-  p84?: [TField, TCheckMethod, ...any[]]
-  p85?: [TField, TCheckMethod, ...any[]]
-  p86?: [TField, TCheckMethod, ...any[]]
-  p87?: [TField, TCheckMethod, ...any[]]
-  p88?: [TField, TCheckMethod, ...any[]]
-  p89?: [TField, TCheckMethod, ...any[]]
-  p90?: [TField, TCheckMethod, ...any[]]
-  p91?: [TField, TCheckMethod, ...any[]]
-  p92?: [TField, TCheckMethod, ...any[]]
-  p93?: [TField, TCheckMethod, ...any[]]
-  p94?: [TField, TCheckMethod, ...any[]]
-  p95?: [TField, TCheckMethod, ...any[]]
-  p96?: [TField, TCheckMethod, ...any[]]
-  p97?: [TField, TCheckMethod, ...any[]]
-  p98?: [TField, TCheckMethod, ...any[]]
-  p99?: [TField, TCheckMethod, ...any[]]
-  r: string
+  r?: string
 }
 
 export interface ICheckParams extends IPRList {
@@ -283,8 +307,13 @@ export interface ICheckParams extends IPRList {
   limit?: number
   orderBy?: string | string[]
   expand?: string | string[]
-  select?: string | string[]
+  select?: string | string[] | TJ[]
+  groupBy?: string | string[]
   withCount?: boolean
+}
+
+export interface ICheckQuery {
+  getSentence?: boolean
 }
 
 export interface ICheckFileParams extends IPRFileList {
@@ -336,15 +365,22 @@ export interface ISetParams {
 export interface ISetQuery {
   expand?: string | string[]
   enableTrigger?: boolean
+  getSentence?: boolean
+}
+
+export interface IDeleteQuery {
+  getSentence?: boolean
 }
 
 export interface ISetManyQuery {
   enableTrigger?: boolean
+  getSentence?: boolean
 }
 
 export interface IGetParams {
   expand?: string | string[]
   select?: string | string[]
+  getSentence?: boolean
 }
 
 export interface IFileParams {
@@ -611,6 +647,14 @@ export interface IUpdateSetRes {
     updated_at?: number
     id: string
     _id?: string
+    [key: string]: any
+  }
+  [key: string]: any
+}
+
+//delete
+export interface IDeleteRes {
+  data: {
     [key: string]: any
   }
   [key: string]: any

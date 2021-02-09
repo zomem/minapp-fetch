@@ -1,14 +1,15 @@
-import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER} from '../constants/constants'
+import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME_MYSQL_SERVER, J_NAME_LIST} from '../constants/constants'
 import {ICheckParams} from '../types'
-import { FIND_R_ERROR, FIND_CHECKR_ERROR, FIND_P_ERROR } from '../constants/error'
-import { changeFindGeoJson, isArray } from './utils'
-import {METHOD_NOT_SUPPORT} from '../constants/error'
+import {FIND_R_ERROR, FIND_CHECKR_ERROR, FIND_P_ERROR} from '../constants/error'
+import {changeFindGeoJson, isArray, isNumber} from './utils'
+import {METHOD_NOT_SUPPORT, FIND_P_BETWEEN_ERROR, FIND_NO_PJ_ERROR} from '../constants/error'
 
-export default function findTrans(params: ICheckParams, BaaS_F, minapp){
-  if(!params.r){
-    throw new Error(FIND_R_ERROR)
+export default function findTrans(params: ICheckParams, r_num: number, BaaS_F, minapp){
+  let rstring = `r${r_num === 1 ? '' : r_num}`
+  if(!params[rstring]){
+    return false
   }
-  let r = params.r.replace(/\s+/g,'')       //去掉空格
+  let r = params[rstring].replace(/\s+/g,'')       //去掉空格
   let query: any  = {}
 
   let checkR = r.replace(/[^\(\)]/g, '')
@@ -32,6 +33,7 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
   if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
     for(let i = 0; i < ps.length; i++){
       query[ps[i]] = new BaaS_F.Query()
+      if(!params[ps[i]]) throw new Error(FIND_NO_PJ_ERROR + ps[i])
       switch(params[ps[i]][1]){
         case 'in':
           query[ps[i]].in(params[ps[i]][0], params[ps[i]][2])
@@ -109,6 +111,7 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
       let hex = /^[a-fA-F0-9]{24}$/
       for(let i = 0; i < ps.length; i++){
         query[ps[i]] = {}
+        if(!params[ps[i]]) throw new Error(FIND_NO_PJ_ERROR + ps[i])
         //如果是_id，则要对数据进行转换
         if(params[ps[i]][0] === '_id'){
           if(isArray(params[ps[i]][2])){
@@ -224,6 +227,7 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
       let dbCommand = db.command
       for(let i = 0; i < ps.length; i++){
         query[ps[i]] = {}
+        if(!params[ps[i]]) throw new Error(FIND_NO_PJ_ERROR + ps[i])
         switch(params[ps[i]][1]){
           case 'in':
             let tm1 = {}, tm2 = {}
@@ -314,10 +318,226 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
       }
     }
   }
+  //mysql 类平台
+  if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+    if(minapp === PLATFORM_NAME.MYSQL){
+      for(let i = 0; i < ps.length; i++){
+        query[ps[i]] = {}
+        let tableName = '', fieldName = '', tempSelect = ''
+        if(!params[ps[i]]) throw new Error(FIND_NO_PJ_ERROR + ps[i])
+        if(params[ps[i]][0].toString().indexOf('SELECT') > -1){
+          tempSelect = `(${params[ps[i]][0]})`
+        }else{
+          let tempT = params[ps[i]][0].split('.')
+          if(tempT.length === 1){
+            tableName = BaaS_F.tableMain
+            fieldName = params[ps[i]][0]
+          }else{
+            tableName = tempT[0]
+            fieldName = tempT[1]
+          }
+        }
+        
+        let tempParam = ''
+        if(isArray(params[ps[i]][2])){
+          let tempArr = []
+          for(let j = 0; j < params[ps[i]][2].length; j++){
+            if(isNumber(params[ps[i]][2][j])){
+              tempArr.push(`${params[ps[i]][2][j]}`)
+            }else{
+              tempArr.push(`'${params[ps[i]][2][j]}'`)
+            }
+          }
+          tempParam = `(${tempArr.toString()})`
+        }else{
+          if(params[ps[i]][2].toString().indexOf('SELECT') > -1){
+            tempParam = `(${params[ps[i]][2]})`
+          }else if(isNumber(params[ps[i]][2])){
+            tempParam = params[ps[i]][2]
+          }else if(params[ps[i]][2].toString().indexOf('.') > -1){
+            let tempPl = params[ps[i]][2].split('.')
+            if(BaaS_F.table.indexOf(tempPl[0]) > -1){
+              tempParam = `${BaaS_F.tableHash[tempPl[0]]}.${tempPl[1]}`
+            }else{
+              tempParam = `'${params[ps[i]][2]}'`
+            }
+          }else{
+            tempParam = `'${params[ps[i]][2]}'`
+          }
+        }
+
+        let tempParam2 = ''
+        if(params[ps[i]][3]){
+          if(params[ps[i]][3].toString().indexOf('SELECT') > -1){
+            tempParam2 = `(${params[ps[i]][3]})`
+          }else if(isNumber(params[ps[i]][3])){
+            tempParam2 = params[ps[i]][3]
+          }else if(params[ps[i]][3].toString().indexOf('.') > -1){
+            let tempPl = params[ps[i]][3].split('.')
+            if(BaaS_F.table.indexOf(tempPl[0]) > -1){
+              tempParam2 = `${BaaS_F.tableHash[tempPl[0]]}.${tempPl[1]}`
+            }else{
+              tempParam2 = `'${params[ps[i]][3]}'`
+            }
+          }else{
+            tempParam2 = `'${params[ps[i]][3]}'`
+          }
+        }
+
+        switch(params[ps[i]][1]){
+          case '=':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} = ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} = ${tempParam}`
+            }
+            break
+          case '!=':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} != ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} != ${tempParam}`
+            }
+            break
+          case '<':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} < ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} < ${tempParam}`
+            }
+            break
+          case '<=':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} <= ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} <= ${tempParam}`
+            }
+            break
+          case '>':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} > ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} > ${tempParam}`
+            }
+            break
+          case '>=':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} >= ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} >= ${tempParam}`
+            }
+            break
+          case 'between':
+            if(params[ps[i]].length > 3){
+              if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+                if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+                query[ps[i]] = `${BaaS_F.jObj[fieldName]} BETWEEN ${tempParam} AND ${tempParam2}`
+              }else{
+                query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} BETWEEN ${tempParam} AND ${tempParam2}`
+              }
+            }else{
+              throw new Error(FIND_P_BETWEEN_ERROR)
+            }
+            break
+          case 'notBetween':
+            if(params[ps[i]].length > 3){
+              if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+                if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+                query[ps[i]] = `${BaaS_F.jObj[fieldName]} NOT BETWEEN ${tempParam} AND ${tempParam2}`
+              }else{
+                query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} NOT BETWEEN ${tempParam} AND ${tempParam2}`
+              }
+            }else{
+              throw new Error(FIND_P_BETWEEN_ERROR)
+            }
+            break
+          case 'like':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} LIKE ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} LIKE ${tempParam}`
+            }
+            break
+          case 'matches':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} REGEXP ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} REGEXP ${tempParam}`
+            }
+            break
+          case 'stringLength':
+            let reg: any
+            if(params[ps[i]].length > 3){
+              reg = new RegExp(`^.${params[ps[i]][2]},${params[ps[i]][3]}}$`)
+            }else{
+              reg = new RegExp(`^.{${params[ps[i]][2]}}$`)
+            }
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} REGEXP ${reg}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} REGEXP ${reg}`
+            }
+            break
+          case 'in':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} IN ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} IN ${tempParam}`
+            }
+            break
+          case 'notIn':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} NOT IN ${tempParam}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} NOT IN ${tempParam}`
+            }
+            break
+          case 'isNull':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              query[ps[i]] = `${BaaS_F.jObj[fieldName]} is ${tempParam === 'true' ? 'NULL' : 'NOT NULL'}`
+            }else{
+              query[ps[i]] = `${BaaS_F.tableHash[tableName]}.${fieldName} is ${tempParam === 'true' ? 'NULL' : 'NOT NULL'}`
+            }
+            break
+          case 'isExists':
+            if(r_num === 2 && J_NAME_LIST.indexOf(fieldName) > -1){
+              if(!params[fieldName]) throw new Error(FIND_NO_PJ_ERROR + fieldName)
+              if(tempParam === 'true'){
+                query[ps[i]] = `EXISTS ${tempSelect ? tempSelect : BaaS_F.jObj[fieldName]}`
+              }else{
+                query[ps[i]] = `NOT EXISTS ${tempSelect ? tempSelect : BaaS_F.jObj[fieldName]}`
+              }
+            }else{
+              if(tempParam === 'true'){
+                query[ps[i]] = `EXISTS ${tempSelect ? tempSelect : BaaS_F.tableHash[tableName][fieldName]}`
+              }else{
+                query[ps[i]] = `NOT EXISTS ${tempSelect ? tempSelect : BaaS_F.tableHash[tableName][fieldName]}`
+              }
+            }
+            break
+          default:
+            throw new Error(FIND_P_ERROR)
+        }
+      }
+    }
+  }
   //webapi  op
   if(minapp === PLATFORM_NAME.ZX_WEBAPI || minapp === PLATFORM_NAME.ZX_OP){
     for(let i = 0; i < ps.length; i++){
       query[ps[i]] = {}
+      if(!params[ps[i]]) throw new Error(FIND_NO_PJ_ERROR + ps[i])
       switch(params[ps[i]][1]){
         case 'in':
           query[ps[i]][params[ps[i]][0]] = {"$in": params[ps[i]][2]}
@@ -456,6 +676,20 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
           }
         }
       }
+      //mysql 类平台
+      if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+        if(minapp === PLATFORM_NAME.MYSQL){
+          while (n < tempArr.length - 1) {
+            if (tempArr[n + 1] === '&&') {
+              tempQQ = `(${tempQQ} AND ${query[tempArr[n + 2]]})`
+            }
+            if (tempArr[n + 1] === '||') {
+              tempQQ = `(${tempQQ} OR ${query[tempArr[n + 2]]})`
+            }
+            n += 2;
+          }
+        }
+      }
       //webapi  op
       if(minapp === PLATFORM_NAME.ZX_WEBAPI || minapp === PLATFORM_NAME.ZX_OP){
         while(n < tempArr.length - 1){
@@ -530,6 +764,20 @@ export default function findTrans(params: ICheckParams, BaaS_F, minapp){
           QQ = dbCommand.or([QQ, query[tempArr2[n+2]]])
         }
         n += 2
+      }
+    }
+  }
+  //mysql 类平台
+  if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+    if(minapp === PLATFORM_NAME.MYSQL){
+      while (n < tempArr2.length - 1) {
+        if (tempArr2[n + 1] === '&&') {
+          QQ = `(${QQ} AND ${query[tempArr2[n + 2]]})`
+        }
+        if (tempArr2[n + 1] === '||') {
+          QQ = `(${QQ} OR ${query[tempArr2[n + 2]]})`
+        }
+        n += 2;
       }
     }
   }

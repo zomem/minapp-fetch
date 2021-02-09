@@ -11,7 +11,7 @@ function fetchFindUser(params: ICheckParams): Promise<any>{
 
   return new Promise<any>((resolve, reject) => {
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
   
       let MyUser = new BaaS_F.User()
       MyUser.setQuery(QQ).limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).orderBy(params.orderBy || '-created_at').select(params.select || []).expand(params.expand || []).find({withCount: params.withCount || false}).then((res: any) => {
@@ -33,7 +33,7 @@ function fetchFindUser(params: ICheckParams): Promise<any>{
     
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
@@ -57,7 +57,7 @@ function fetchFindUser(params: ICheckParams): Promise<any>{
     
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       BaaS_F.get(`https://cloud.minapp.com/userve/v2.2/miniapp/user_profile/`,{
         params: {
           where: QQ,

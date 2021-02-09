@@ -72,6 +72,10 @@ export function getBaaSF():IGetBaaSF{
           if(!global.MINAPP_OPTIONS) throw new Error(WEBAPI_OPTIONS_ERROR)
           tempMinapp.options = global.MINAPP_OPTIONS
           break
+        case PLATFORM_NAME.MYSQL:
+          tempMinapp.BaaS_F = global.MySQL
+          if(!global.MINAPP_OPTIONS) throw new Error(WEBAPI_OPTIONS_ERROR)
+          tempMinapp.options = global.MINAPP_OPTIONS
         default:
           break
       }
@@ -127,9 +131,15 @@ export function getBaaSF():IGetBaaSF{
 }
 
 
-
+export const isJson = (value: any) => {
+  return typeof(value) === 'object'
+}
+//isArray属于isJson
 export const isArray = (value: any) => {
   return Object.prototype.toString.call(value) === '[object Array]'
+}
+export const isNumber = (value: any) => {
+  return typeof(value) === 'number' && !isNaN(value)
 }
 
 // 检查polygon是否对
@@ -212,6 +222,21 @@ export const changeFindGeoJson = (lparams: any) => {  //['point', 'include', [23
   }
   return temp
 }
+
+
+//mysql 链接池
+export const mysqlConnect = (tempMinapp, sql, sqlArr, callback) => {
+  let {BaaS_F, options} = tempMinapp
+  let pool = BaaS_F.createPool({
+    ...options
+  })
+  pool.getConnection((err, connection) => {
+    if(err) throw new Error(err)
+    connection.query(sql, sqlArr, callback)
+    connection.release()
+  })
+}
+
 
 
 

@@ -10,7 +10,7 @@ function fetchDeleteMany(table: TTable, params: IDeleteParams): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
   return new Promise<any>((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       let Product = new BaaS_F.TableObject(table)
       Product.limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).delete(QQ, {
         enableTrigger: params.enableTrigger === undefined ? true : params.enableTrigger,
@@ -27,7 +27,7 @@ function fetchDeleteMany(table: TTable, params: IDeleteParams): Promise<any>{
     //Mongo类平台
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.MONGODB){
-        let QQ = findTrans(params, BaaS_F, minapp)
+        let QQ = findTrans(params, 1, BaaS_F, minapp)
         BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
           if(err) throw new Error(err)
           let db = client.db(options.env)
@@ -40,7 +40,7 @@ function fetchDeleteMany(table: TTable, params: IDeleteParams): Promise<any>{
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         //微信云
-        let QQ = findTrans(params, BaaS_F, minapp)
+        let QQ = findTrans(params, 1, BaaS_F, minapp)
         let db = BaaS_F.database()
         db.collection(table).where(QQ).remove().then(res => {
           resolve(res)
@@ -52,7 +52,7 @@ function fetchDeleteMany(table: TTable, params: IDeleteParams): Promise<any>{
 
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'delete',
@@ -74,7 +74,7 @@ function fetchDeleteMany(table: TTable, params: IDeleteParams): Promise<any>{
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       BaaS_F({
         method: 'delete',
         url: `https://cloud.minapp.com/userve/v2.4/table/${table}/record/`,

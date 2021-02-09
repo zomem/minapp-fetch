@@ -7,17 +7,17 @@
  * @FilePath: /@ownpack/weapp/src/fetch/data/update.ts
  */ 
 
-import { getBaaSF } from './utils/utils'
-import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
+import { getBaaSF, mysqlConnect } from './utils/utils'
+import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME_MYSQL_SERVER } from './constants/constants'
 import { WEBAPI_OPTIONS_ERROR } from './constants/error'
 import {IUpdateParams, TTable, IUpdateSetRes, ISetQuery} from './types'
 import updateTrans from './utils/updateTrans'
 
 
-function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}, query: ISetQuery = {}): Promise<IUpdateSetRes>{
+function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}, query: ISetQuery = {}): Promise<IUpdateSetRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<IUpdateSetRes>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
       let records = updateTrans(params, Product.getWithoutData(id), minapp)
@@ -71,6 +71,29 @@ function fetchUpdate(table: TTable, id: string, params: IUpdateParams={}, query:
         })
       }
     }
+
+
+
+    //mysql类
+    if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.MYSQL){
+        let updata: any = updateTrans(params, [], minapp)
+        let sql = `UPDATE ${table} SET ${updata.toString()} WHERE id = ${id}`
+        if(query.getSentence){
+          resolve(sql)
+          return
+        }
+        mysqlConnect({BaaS_F, options}, sql, [], (err, results, fields) => {
+          if (err) {
+            reject({err})
+          }
+          let jsonStr = JSON.stringify(results || {})
+          resolve({data: JSON.parse(jsonStr)})
+        })
+      }
+    }
+      
+
 
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){

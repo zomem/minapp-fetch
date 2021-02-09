@@ -59,6 +59,7 @@ import setMany_temp from './setMany'
 import subscribe_temp from './subscribe'
 import subscribeMessage_temp from './subscribeMessage'
 import thirdPartyAuth_temp from './thirdPartyAuth'
+import transaction_temp from './transaction'
 import unsubscribe_temp from './unsubscribe'
 import update_temp from './update'
 import updateCategory_temp from './updateCategory'
@@ -136,6 +137,7 @@ export default {
     subscribe: subscribe_temp,
     subscribeMessage: subscribeMessage_temp,
     thirdPartyAuth: thirdPartyAuth_temp,
+    transaction: transaction_temp,
     unsubscribe: unsubscribe_temp,
     update: update_temp,
     updateCategory: updateCategory_temp,
@@ -211,6 +213,7 @@ export const setMany = setMany_temp
 export const subscribe = subscribe_temp
 export const subscribeMessage = subscribeMessage_temp
 export const thirdPartyAuth = thirdPartyAuth_temp
+export const transaction = transaction_temp
 export const unsubscribe = unsubscribe_temp
 export const update = update_temp
 export const updateCategory = updateCategory_temp

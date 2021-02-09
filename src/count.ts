@@ -7,20 +7,20 @@
  * @FilePath: /@minappjs/weapp/src/count.ts
  */ 
 import fetchFind from './find'
-import {TTable, ICountParams, IFindRes} from './types'
+import {TTable, ICountParams, IFindRes, ICheckQuery} from './types'
 import { getBaaSF } from './utils/utils'
-import {PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_ALL} from './constants/constants'
+import {PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 import findTrans from './utils/findTrans'
 
-function fetchCount(table: TTable, params: ICountParams): Promise<number>{
+function fetchCount(table: TTable, params: ICountParams, query: ICheckQuery = {}): Promise<number | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<number>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
 
     //Mongo类平台
     if(PLATFORM_NAME_MONGO_SERVER.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.MONGODB){
-        let QQ = findTrans(params, BaaS_F, minapp)
+        let QQ = findTrans(params, 1, BaaS_F, minapp)
         BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
           if(err) throw new Error(err)
           let db = client.db(options.env)
@@ -36,13 +36,44 @@ function fetchCount(table: TTable, params: ICountParams): Promise<number>{
         || minapp === PLATFORM_NAME.UNI_CLOUD
       ){
         //微信云
-        let QQ = findTrans(params, BaaS_F, minapp)
+        let QQ = findTrans(params, 1, BaaS_F, minapp)
         let db = BaaS_F.database()
         db.collection(table).where(QQ).count().then(res => {
           resolve(res.total)
         }, (err: any) => {
           reject(err)
         })
+      }
+    }else if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+      //mysql类
+      if(minapp === PLATFORM_NAME.MYSQL){
+        params.limit = 1
+        params.withCount = true
+        if(query.getSentence){
+          fetchFind(table, {
+            j0: ['*', 'count'],
+            ...params,
+            select: ['j0'],
+          }, {getSentence: true}).then((res: string) => {
+            resolve(res)
+          }, err=>{
+            reject(err)
+          })
+        }else{
+          fetchFind(table, {
+            j0: ['*', 'count'],
+            ...params,
+            select: ['j0']
+          }).then((res: IFindRes) => {
+            let num: number = 0
+            if(res.data.objects.length > 0){
+              num = parseInt(res.data.objects[0].all_count0)
+            }
+            resolve(num)
+          }, err=>{
+            reject(err)
+          })
+        }
       }
     }else{
       params.limit = 1

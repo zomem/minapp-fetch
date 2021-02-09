@@ -1,11 +1,11 @@
 
 import {TPlatform, IWebApiInit} from './types'
 import {INIT_ERROR} from './constants/error'
-import {PLATFORM_NAME_AXIOS, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME} from './constants/constants'
+import {PLATFORM_NAME_AXIOS, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 
 
 function fetchInit(platform: TPlatform, options?: IWebApiInit): void{
-  if([...PLATFORM_NAME_AXIOS, ...PLATFORM_NAME_BAAS, ...PLATFORM_NAME_MONGO_SERVER].indexOf(platform) === -1) throw new Error(INIT_ERROR)
+  if([...PLATFORM_NAME_AXIOS, ...PLATFORM_NAME_BAAS, ...PLATFORM_NAME_MONGO_SERVER, ...PLATFORM_NAME_MYSQL_SERVER].indexOf(platform) === -1) throw new Error(INIT_ERROR)
   if(typeof(my) !== 'undefined'){
     if(platform === PLATFORM_NAME.ZX_ALIPAY){
       my.MINAPP = platform
@@ -31,6 +31,10 @@ function fetchInit(platform: TPlatform, options?: IWebApiInit): void{
       global.MINAPP_OPTIONS = options || null
     }
     if(platform === PLATFORM_NAME.MONGODB){
+      global.MINAPP = platform
+      global.MINAPP_OPTIONS = options || null
+    }
+    if(platform === PLATFORM_NAME.MYSQL){
       global.MINAPP = platform
       global.MINAPP_OPTIONS = options || null
     }

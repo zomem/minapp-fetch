@@ -1,7 +1,7 @@
-import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, UPDATE_METHORD} from '../constants/constants'
+import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, UPDATE_METHORD, PLATFORM_NAME_MYSQL_SERVER} from '../constants/constants'
 import {IUpdateParams} from '../types'
 import { UPDATE_ERROR, METHOD_NOT_SUPPORT } from '../constants/error'
-import { cloneDeep, isArray } from './utils'
+import { cloneDeep, isArray, isNumber } from './utils'
 
 
 export default function updateTrans(params: IUpdateParams, operate, minapp){
@@ -19,7 +19,7 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
             operate.set(pa, params[pa][1])
             break
           case 'geo':
-            let temp = params[pa], tempGeo = {}
+            let temp: any = params[pa], tempGeo = {}
             temp.shift()
             if(temp.length > 1){
               tempGeo = cloneDeep({
@@ -83,7 +83,7 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
               operate = {...operate, "$set": { ...operate['$set'], ...temp}}
               break
             case 'geo':
-              let temp2 = params[pa], tempGeo = {}
+              let temp2: any = params[pa], tempGeo = {}
               temp2.shift()
               if(temp2.length > 1){
                 tempGeo = cloneDeep({
@@ -161,7 +161,7 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
               tempParams[pa] = operate.set(params[pa][1])
               break
             case 'geo':
-              let temp2 = params[pa], tempGeo = {}
+              let temp2: any = params[pa], tempGeo = {}
               temp2.shift()
               if(temp2.length > 1){
                 tempGeo = cloneDeep({
@@ -215,6 +215,51 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
     }
   }
 
+  //mysql类
+  if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+    if(minapp === PLATFORM_NAME.MYSQL){
+      for(let pa in params){
+        if(!isArray(params[pa])){
+          //不是数组，则直接 set
+          operate.push(`${pa} = ${isNumber(params[pa]) ? params[pa] : `'${params[pa]}'`}`)
+          continue
+        }
+        if(UPDATE_METHORD.indexOf(params[pa][0]) > -1 ){
+          switch(params[pa][0]){
+            case 'set':
+              operate.push(`${pa} = ${isNumber(params[pa][1]) ? params[pa][1] : `'${params[pa][1]}'`}`)
+              break
+            case 'geo':
+              throw new Error(`geo新增：${METHOD_NOT_SUPPORT}`)
+            case 'unset':
+              operate.push(`${pa} = NULL`)
+              break
+            case 'incr':
+              if(params[pa][1] >= 0){
+                operate.push(`${pa} = ${pa} + ${params[pa][1]}`)
+              }else{
+                operate.push(`${pa} = ${pa} - ${Math.abs(params[pa][1])}`)
+              }
+              break
+            case 'append':
+              throw new Error(`append新增：${METHOD_NOT_SUPPORT}`)
+            case 'uAppend':
+              throw new Error(`uAppend新增：${METHOD_NOT_SUPPORT}`)
+            case 'remove':
+              throw new Error(`remove新增：${METHOD_NOT_SUPPORT}`)
+            case 'patchObject':
+              throw new Error(`patchObject新增：${METHOD_NOT_SUPPORT}`)
+            default:
+              throw new Error(UPDATE_ERROR)
+          }
+        }else{
+          //直接 set
+          operate.set(pa, params[pa])
+        }
+      }
+    }
+  }
+
   //webapi  op
   if(minapp === PLATFORM_NAME.ZX_WEBAPI || minapp === PLATFORM_NAME.ZX_OP){
     for(let pa in params){
@@ -229,7 +274,7 @@ export default function updateTrans(params: IUpdateParams, operate, minapp){
             operate[pa] = params[pa][1]
             break
           case 'geo':
-            let temp = params[pa], tempGeo = {}
+            let temp: any = params[pa], tempGeo = {}
             temp.shift()
             if(temp.length > 1){
               tempGeo = cloneDeep({

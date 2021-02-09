@@ -26,6 +26,7 @@ export const PLATFORM_NAME = {
   UNI_CLOUD: 'uni_cloud',    //uniCloud云开发
 
   MONGODB: 'mongodb',     //MongoDB数据库
+  MYSQL: 'mysql',         //mysql数据库
 }
 
 //知晓云 以BaaS方式请求的平台
@@ -54,12 +55,17 @@ export const PLATFORM_NAME_MONGO_SERVER = [
   'uni_cloud',
   'mongodb'
 ]
+//Mysql 数据库类
+export const PLATFORM_NAME_MYSQL_SERVER = [
+  'mysql'
+]
 
 //所有平台
 export const PLATFORM_ALL = [
   ...PLATFORM_NAME_BAAS,
   ...PLATFORM_NAME_AXIOS,
   ...PLATFORM_NAME_MONGO_SERVER,
+  ...PLATFORM_NAME_MYSQL_SERVER,
 ]
 
 //更新数据的方法
@@ -74,4 +80,10 @@ export const UPDATE_METHORD = [
   'patchObject',
   'currentDate',
 ]
+//新增数据方法
+export const SET_METHORD = [
+  'geo'
+]
 
+export const J_MAX = 10   // j*  参数的最大少于个数
+export const J_NAME_LIST = ['j0', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'j9']

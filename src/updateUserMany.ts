@@ -14,7 +14,7 @@ function fetchUpdateUserMany(params: IUpdateManyParams): Promise<any>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let User = new BaaS_F.User()
-        let QQ = findTrans(params, BaaS_F, minapp)
+        let QQ = findTrans(params, 1, BaaS_F, minapp)
         let { u } = params
         let records = updateTrans(u, User.limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).getWithoutData(QQ), minapp)
         records.update({
@@ -40,7 +40,7 @@ function fetchUpdateUserMany(params: IUpdateManyParams): Promise<any>{
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       let { u } = params
       let updata = updateTrans(u, {}, minapp)
 

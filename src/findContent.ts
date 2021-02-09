@@ -10,7 +10,7 @@ function fetchFindContent(contentGroupID: number, params: ICheckParams): Promise
 
   return new Promise<IFindRes>((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       let MyContentGroup: any = null
       MyContentGroup = new BaaS_F.ContentGroup(contentGroupID)
       // 
@@ -33,7 +33,7 @@ function fetchFindContent(contentGroupID: number, params: ICheckParams): Promise
     
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'get',
@@ -58,7 +58,7 @@ function fetchFindContent(contentGroupID: number, params: ICheckParams): Promise
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       BaaS_F.get(`https://cloud.minapp.com/userve/v2.2/content/${contentGroupID}/text/`,{
         params: {
           where: QQ,

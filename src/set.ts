@@ -7,16 +7,17 @@
  * @FilePath: /@ownpack/weapp/src/fetch/data/set.ts
  */ 
 
-import { getBaaSF, changeSetParams } from './utils/utils'
+import { getBaaSF, changeSetParams, mysqlConnect } from './utils/utils'
 import {TTable, ISetParams, IUpdateSetRes, ISetQuery} from './types'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME} from './constants/constants'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR} from './constants/error'
+import setTrans from './utils/setTrans'
 
 
 
-function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {}): Promise<IUpdateSetRes>{
+function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {}): Promise<IUpdateSetRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  return new Promise<IUpdateSetRes>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
 
     //知晓云 BaaS端
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
@@ -59,6 +60,25 @@ function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {})
           resolve({data: {id: res.id}})
         }, (err: any) => {
           reject(err)
+        })
+      }
+    }
+
+    //mysql类
+    if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.MYSQL){
+        let tempSet: any = setTrans(params, {}, minapp)
+        let sql = `INSERT INTO ${table}(${tempSet.fieldsArr.toString()}) VALUES (${tempSet.valuesArr.toString()})`
+        if(query.getSentence){
+          resolve(sql)
+          return
+        }
+        mysqlConnect({BaaS_F, options}, sql, [], (err, results, fields) => {
+          if (err) {
+            reject({err})
+          }
+          let jsonStr = JSON.stringify(results || {})
+          resolve({data: JSON.parse(jsonStr)})
         })
       }
     }

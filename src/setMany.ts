@@ -7,15 +7,16 @@
  * @FilePath: /@ownpack/weapp/src/fetch/data/setOneMany.ts
  */ 
 
-import { getBaaSF, changeSetManyParams } from './utils/utils'
+import { getBaaSF, changeSetManyParams, mysqlConnect, isArray } from './utils/utils'
 import {TTable, ISetParams, ISetManyQuery} from './types'
-import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
-import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
+import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
+import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT, SET_MANY_PARAMS_ARR_ERROR} from './constants/error'
+import setTrans from './utils/setTrans'
 
 
-function fetchSetMany(table: TTable, params: ISetParams, query: ISetManyQuery = {}): Promise<any>{
+function fetchSetMany(table: TTable, params: ISetParams[], query: ISetManyQuery = {}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  
+  if(!isArray(params)) throw new Error(SET_MANY_PARAMS_ARR_ERROR)
   return new Promise<any>((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyTableObject = new BaaS_F.TableObject(table)
@@ -43,6 +44,34 @@ function fetchSetMany(table: TTable, params: ISetParams, query: ISetManyQuery = 
       }
       if(minapp === PLATFORM_NAME.WX_WEAPP || minapp === PLATFORM_NAME.WX_CLOUD){
         throw new Error(`minapp.setMany ${METHOD_NOT_SUPPORT}`)
+      }
+    }
+
+
+
+    //mysql类
+    if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
+      if(minapp === PLATFORM_NAME.MYSQL){
+        let fields = []
+        let values = []
+        for(let i = 0; i < params.length; i++){
+          let tempSet: any = setTrans(params[i], {}, minapp)
+          if(i === 0) fields = tempSet.fieldsArr
+          values.push(`(${tempSet.valuesArr.toString()})`)
+        }
+
+        let sql = `INSERT INTO ${table}(${fields.toString()}) VALUES ${values.toString()}`
+        if(query.getSentence){
+          resolve(sql)
+          return
+        }
+        mysqlConnect({BaaS_F, options}, sql, [], (err, results, fields) => {
+          if (err) {
+            reject({err})
+          }
+          let jsonStr = JSON.stringify(results || {})
+          resolve({data: JSON.parse(jsonStr)})
+        })
       }
     }
 

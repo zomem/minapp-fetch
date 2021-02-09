@@ -13,7 +13,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
   return new Promise<any>((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyTableObject = new BaaS_F.TableObject(table)
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       let { u } = params
       let records = updateTrans(u, MyTableObject.limit(params.limit || 20).offset((params.limit || 20) * ((params.page || 1) - 1)).getWithoutData(QQ), minapp)
       records.update({
@@ -39,7 +39,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
 
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       let { u } = params
       let updata = updateTrans(u, {}, minapp)
       
@@ -66,7 +66,7 @@ function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      let QQ = findTrans(params, BaaS_F, minapp)
+      let QQ = findTrans(params, 1, BaaS_F, minapp)
       let { u } = params
       let updata = updateTrans(u, {}, minapp)
       

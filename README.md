@@ -12,10 +12,11 @@
 官方网站：[minapp-fetch.com](https://minapp-fetch.com)  
     
 目前支持的后台服务和数据库有：  
-1. **知晓云**：运营后台、云函数、各平台小程序、Web/H5、RN、Taro、uni-app等js开发的   
+1. **知晓云**：运营后台、云函数、小程序、webapi等     
 2. **微信小程序云开发**：微信小程序、云函数   
-3. **MongoDB数据库**：Nodejs   
-  
+3. **uniCloud**：阿里云、腾讯云   
+4. **MongoDB数据库**：Nodejs   
+5. **Mysql数据库**：Nodejs  
 
   
 使用：  
@@ -83,13 +84,10 @@ minapp.find(tableName, {
 
    
 ### 加入讨论    
-大家可以加群，一起讨论minapp-fetch问题。欢迎加**官方微信：`Fishbone_app`**，**回复: minapp-fetch讨论**，会拉你进入讨论群。有什么问题，也可以第一时间反馈哦。  
+欢迎加**官方微信：`Fishbone_app`**，会拉大家进入讨论群。有什么问题，也可以第一时间反馈哦。  
    
    
 ### 案例    
 [Fishbone资讯web](https://wefishbone.com)   
-  
-   
-![Fishbone资讯](https://file.wefishbone.com/1jY4uY4sSjMv8WKO.jpeg)  
   
   
