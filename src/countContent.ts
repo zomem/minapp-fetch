@@ -7,14 +7,14 @@
  * @FilePath: /@minappjs/weapp/src/countContent.ts
  */ 
 import fetchFindContent from './findContent'
-import {ICountParams} from './types'
+import {ICountParams} from './index'
 import {PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 import { getBaaSF } from './utils/utils'
 
 
 function fetchCountContent(contentGroupID: number, params: ICountParams): Promise<number>{
-  return new Promise<number>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     let {minapp} = getBaaSF()
     params.limit = 1
     params.withCount = true

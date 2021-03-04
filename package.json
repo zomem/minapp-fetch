@@ -1,11 +1,12 @@
 {
   "name": "minapp-fetch",
-  "version": "3.3.0",
+  "version": "3.3.3",
   "description": "统一各类[数据库]和[后台云服务]接口的 JavaScript 库",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "test": "jest"
   },
   "files": [
     "/lib"
@@ -17,13 +18,14 @@
     "url": "git@github.com:Mihawk-zhao/minapp-fetch.git"
   },
   "dependencies": {
-    "axios": "^0.21.0"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@types/node": "^14.0.27",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-uglify": "^3.0.2",
+    "jest": "^26.6.3",
     "typescript": "^3.9.7"
   },
   "keywords": [

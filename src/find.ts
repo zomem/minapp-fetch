@@ -2,14 +2,17 @@
 import { getBaaSF, isArray, mysqlConnect } from './utils/utils'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER, J_MAX, J_NAME_LIST} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, PARAM_TABLE_ERROR, FIND_J_JOIN_ERROR, FIND_NO_PJ_ERROR} from './constants/error'
-import {TTable, ICheckParams, IFindRes, ICheckQuery} from './types'
+import {TTable, ICheckParams, IFindRes, TSentence} from './index'
 import findTrans from './utils/findTrans'
 import timeHash from './utils/timeHash'
 
 
 const SAME_NAME_TAG = '__as__hash__'
 
-function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {}): Promise<IFindRes | string>{
+
+function fetchFind(table: TTable, params: ICheckParams): Promise<IFindRes>
+function fetchFind(table: TTable, params: ICheckParams, query: TSentence): Promise<string>
+function fetchFind(table: TTable, params: ICheckParams, query?: TSentence): Promise<IFindRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
   if(!table) throw new Error(PARAM_TABLE_ERROR)
   return new Promise((resolve, reject)=>{
@@ -17,7 +20,7 @@ function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {})
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let QQ = findTrans(params, 1, BaaS_F, minapp)
       let Product = new BaaS_F.TableObject(table)
-      if(query.getSentence){
+      if(query === 'sentence'){
         resolve(QQ)
         return
       }
@@ -64,7 +67,7 @@ function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {})
             }
           }
         }
-        if(query.getSentence){
+        if(query === 'sentence'){
           resolve(QQ)
           return
         }
@@ -144,7 +147,7 @@ function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {})
             }
           }
         }
-        if(query.getSentence){
+        if(query === 'sentence'){
           resolve(QQ)
           return
         }
@@ -533,7 +536,7 @@ function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {})
         }
         sql = sql.replace(/\s+/ig, ' ')
 
-        if(query.getSentence){
+        if(query === 'sentence'){
           resolve(sql)
           return
         }
@@ -552,7 +555,7 @@ function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {})
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       let QQ = findTrans(params, 1, BaaS_F, minapp) || ''
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
-      if(query.getSentence){
+      if(query === 'sentence'){
         resolve(QQ)
         return
       }
@@ -579,7 +582,7 @@ function fetchFind(table: TTable, params: ICheckParams, query: ICheckQuery = {})
     //op
     if(minapp === PLATFORM_NAME.ZX_OP){
       let QQ = findTrans(params, 1, BaaS_F, minapp) || ''
-      if(query.getSentence){
+      if(query === 'sentence'){
         resolve(QQ)
         return
       }

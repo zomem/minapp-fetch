@@ -1,6 +1,6 @@
 
 import { getBaaSF } from './utils/utils'
-import {TTable, TSubEvent, TSubUnionID} from './types'
+import {TTable, TSubEvent, TSubUnionID} from './index'
 import {PLATFORM_NAME, PLATFORM_ALL} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 

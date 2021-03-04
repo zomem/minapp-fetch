@@ -1,5 +1,5 @@
 import {PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from '../constants/constants'
-import {ISetParams} from '../types'
+import {ISetParams} from '../index'
 import { UPDATE_ERROR } from '../constants/error'
 import { isArray, isNumber } from './utils'
 

@@ -10,7 +10,7 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { METHOD_NOT_SUPPORT, WEBAPI_OPTIONS_ERROR } from './constants/error'
-import {ICurrentUser, ILoginParams} from './types'
+import {ICurrentUser, ILoginParams} from './index'
 
 function fetchRegister(params: ILoginParams): Promise<ICurrentUser>{
   let {BaaS_F, minapp, options} = getBaaSF()

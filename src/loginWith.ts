@@ -10,12 +10,12 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME, PLATFORM_ALL } from './constants/constants'
 import { METHOD_NOT_SUPPORT } from './constants/error'
-import {ICurrentUser, ILoginWithParams} from './types'
+import {ICurrentUser, ILoginWithParams} from './index'
 //
 function fetchLoginWith(...data: [any, ILoginWithParams]): Promise<ICurrentUser>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  return new Promise<ICurrentUser>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     switch(minapp){
       case PLATFORM_NAME.ZX_ALIPAY:
         BaaS_F.auth.loginWithAlipay(...data).then((user: any) => {

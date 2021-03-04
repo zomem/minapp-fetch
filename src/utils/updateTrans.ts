@@ -1,5 +1,5 @@
 import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, UPDATE_METHORD, PLATFORM_NAME_MYSQL_SERVER} from '../constants/constants'
-import {IUpdateParams} from '../types'
+import {IUpdateParams} from '../index'
 import { UPDATE_ERROR, METHOD_NOT_SUPPORT } from '../constants/error'
 import { cloneDeep, isArray, isNumber } from './utils'
 

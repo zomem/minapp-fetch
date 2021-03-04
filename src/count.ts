@@ -7,12 +7,15 @@
  * @FilePath: /@minappjs/weapp/src/count.ts
  */ 
 import fetchFind from './find'
-import {TTable, ICountParams, IFindRes, ICheckQuery} from './types'
+import {TTable, ICountParams, IFindRes, TSentence} from './index'
 import { getBaaSF } from './utils/utils'
 import {PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 import findTrans from './utils/findTrans'
 
-function fetchCount(table: TTable, params: ICountParams, query: ICheckQuery = {}): Promise<number | string>{
+
+function fetchCount(table: TTable, params: ICountParams): Promise<number>
+function fetchCount(table: TTable, params: ICountParams, query: TSentence): Promise<string>
+function fetchCount(table: TTable, params: ICountParams, query?: TSentence): Promise<number | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
   return new Promise((resolve, reject)=>{
@@ -49,12 +52,12 @@ function fetchCount(table: TTable, params: ICountParams, query: ICheckQuery = {}
       if(minapp === PLATFORM_NAME.MYSQL){
         params.limit = 1
         params.withCount = true
-        if(query.getSentence){
+        if(query === 'sentence'){
           fetchFind(table, {
             j0: ['*', 'count'],
             ...params,
             select: ['j0'],
-          }, {getSentence: true}).then((res: string) => {
+          }, 'sentence').then((res: string) => {
             resolve(res)
           }, err=>{
             reject(err)

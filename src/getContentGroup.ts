@@ -15,7 +15,7 @@ import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 function fetchGetContentGroup(contentGroupID: number): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<any>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
 
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       BaaS_F.ContentGroup.get(contentGroupID).then((res: any) => {

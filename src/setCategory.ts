@@ -7,7 +7,7 @@
  * @FilePath: /minapp-fetch/src/fetch/content/setCategory.ts
  */
 import {getBaaSF} from './utils/utils'
-import {ISetCategoryParams} from './types'
+import {ISetCategoryParams} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 
@@ -15,7 +15,7 @@ import {METHOD_NOT_SUPPORT} from './constants/error'
 function fetchSetCategory(contentGroupID: number, params: ISetCategoryParams): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  return new Promise<any>((resolve: any, reject: any)=>{
+  return new Promise((resolve: any, reject: any)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let MyContentCategory = new BaaS_F.ContentCategory(contentGroupID)

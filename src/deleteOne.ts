@@ -10,10 +10,11 @@
 import { getBaaSF, mysqlConnect } from './utils/utils'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
-import {TTable, IDeleteQuery, IDeleteRes} from './types'
+import {TTable, IDeleteRes, TSentence} from './index'
 
-
-function fetchDeleteOne(table: TTable, id: string, query: IDeleteQuery = {}): Promise<IDeleteRes | string>{
+function fetchDeleteOne(table: TTable, id: string | number): Promise<IDeleteRes>
+function fetchDeleteOne(table: TTable, id: string | number, query: TSentence): Promise<string>
+function fetchDeleteOne(table: TTable, id: string | number, query?: TSentence): Promise<IDeleteRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
   return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
@@ -35,7 +36,7 @@ function fetchDeleteOne(table: TTable, id: string, query: IDeleteQuery = {}): Pr
         BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
           if(err) throw new Error(err)
           let db = client.db(options.env)
-          let tempId = (hex.test(id)) ? BaaS_F.ObjectID(id) : id
+          let tempId = (hex.test(id as string)) ? BaaS_F.ObjectID(id) : id
           db.collection(table).deleteOne({_id: tempId}, (err, res) => {
             if(err) reject(err)
             client.close()
@@ -63,7 +64,7 @@ function fetchDeleteOne(table: TTable, id: string, query: IDeleteQuery = {}): Pr
         sql = `DELETE `
         + `FROM ${table} `
         + `WHERE id = ${id}`
-        if(query.getSentence){
+        if(query === 'sentence'){
           resolve(sql)
           return
         }

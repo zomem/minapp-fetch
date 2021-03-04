@@ -2,7 +2,7 @@
 import { getBaaSF } from './utils/utils'
 import {PLATFORM_NAME, PLATFORM_ALL} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
-import {ISubMessage} from './types'
+import {ISubMessage} from './index'
 
 
 function fetchSubscribeMessage(subscription: ISubMessage[]){

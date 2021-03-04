@@ -14,7 +14,7 @@ import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 function fetchInvoke(invokeName: string, params: any, sync: boolean): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<any>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       BaaS_F.invoke(invokeName, params, sync).then((res: any) => {
         if (res.code === 0) {

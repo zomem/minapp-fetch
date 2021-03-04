@@ -1,5 +1,5 @@
 import {PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME_MYSQL_SERVER, J_NAME_LIST} from '../constants/constants'
-import {ICheckParams} from '../types'
+import {ICheckParams} from '../index'
 import {FIND_R_ERROR, FIND_CHECKR_ERROR, FIND_P_ERROR} from '../constants/error'
 import {changeFindGeoJson, isArray, isNumber} from './utils'
 import {METHOD_NOT_SUPPORT, FIND_P_BETWEEN_ERROR, FIND_NO_PJ_ERROR} from '../constants/error'

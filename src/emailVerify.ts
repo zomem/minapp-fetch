@@ -7,7 +7,7 @@ import { METHOD_NOT_SUPPORT, WEBAPI_OPTIONS_ERROR } from './constants/error'
 //
 function fetchEmailVerify(): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
-  return new Promise<any>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     //webapi
     if(minapp === PLATFORM_NAME.ZX_WEBAPI){
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)

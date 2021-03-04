@@ -1,7 +1,7 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { METHOD_NOT_SUPPORT } from './constants/error'
-import {IUpdateManyParams} from './types'
+import {IUpdateManyParams} from './index'
 import updateTrans from './utils/updateTrans'
 import findTrans from './utils/findTrans'
 
@@ -10,7 +10,7 @@ import findTrans from './utils/findTrans'
 function fetchUpdateUserMany(params: IUpdateManyParams): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  return new Promise<any>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let User = new BaaS_F.User()

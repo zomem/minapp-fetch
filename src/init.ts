@@ -1,5 +1,5 @@
 
-import {TPlatform, IWebApiInit} from './types'
+import {TPlatform, IWebApiInit} from './index'
 import {INIT_ERROR} from './constants/error'
 import {PLATFORM_NAME_AXIOS, PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 

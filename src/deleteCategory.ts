@@ -14,7 +14,7 @@ import {METHOD_NOT_SUPPORT} from './constants/error'
 
 function fetchDeleteCategory(contentGroupID: number, categoryID: number): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
-  return new Promise<any>((resolve: any, reject: any)=>{
+  return new Promise((resolve: any, reject: any)=>{
 
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){

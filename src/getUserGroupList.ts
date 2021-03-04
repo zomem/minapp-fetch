@@ -12,7 +12,7 @@ function fetchGetUserGroupList(parentID: number | boolean, params: {
   let {BaaS_F, minapp} = getBaaSF()
 
   
-  return new Promise<any>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let userGroup = new BaaS_F.UserGroup()

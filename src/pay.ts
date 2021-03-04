@@ -8,7 +8,7 @@
  */
 
 import { getBaaSF } from './utils/utils'
-import {TPayWay, IPayParams} from './types'
+import {TPayWay, IPayParams} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import { PAY_WAY_ERROR, METHOD_NOT_SUPPORT, PAY_WAY_PLATFORM_ERROR } from './constants/error'
 
@@ -17,7 +17,7 @@ import { PAY_WAY_ERROR, METHOD_NOT_SUPPORT, PAY_WAY_PLATFORM_ERROR } from './con
 function fetchPay(way: TPayWay, params: IPayParams): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  return new Promise<any>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_WEB){
         let platform = ''

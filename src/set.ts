@@ -8,22 +8,26 @@
  */ 
 
 import { getBaaSF, changeSetParams, mysqlConnect } from './utils/utils'
-import {TTable, ISetParams, IUpdateSetRes, ISetQuery} from './types'
+import {TTable, ISetParams, ISetRes, TSentence, ISetQuery} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR} from './constants/error'
 import setTrans from './utils/setTrans'
 
 
-
-function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {}): Promise<IUpdateSetRes | string>{
+function fetchSet(table: TTable, params: ISetParams, query?: ISetQuery): Promise<ISetRes>
+function fetchSet(table: TTable, params: ISetParams, query: TSentence): Promise<string>
+function fetchSet(table: TTable, params: ISetParams = {}, query?: TSentence | ISetQuery): Promise<ISetRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
+
+  let tempQuery = query === 'sentence' ? {} : query
+
   return new Promise((resolve, reject)=>{
 
     //知晓云 BaaS端
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
       let product = Product.create()
-      product.set(changeSetParams(params)).save(query).then((res: IUpdateSetRes) => {
+      product.set(changeSetParams(params)).save(query).then((res: ISetRes) => {
         // success
         resolve(res)
       }, (err: any) => {
@@ -69,7 +73,7 @@ function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {})
       if(minapp === PLATFORM_NAME.MYSQL){
         let tempSet: any = setTrans(params, {}, minapp)
         let sql = `INSERT INTO ${table}(${tempSet.fieldsArr.toString()}) VALUES (${tempSet.valuesArr.toString()})`
-        if(query.getSentence){
+        if(query === 'sentence'){
           resolve(sql)
           return
         }
@@ -88,10 +92,10 @@ function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {})
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'post',
-        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/?expand=${(query.expand || []).toString()}`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/?expand=${(tempQuery.expand || []).toString()}`,
         headers: options.Header,
         data: changeSetParams(params)
-      }).then((res: IUpdateSetRes) => {
+      }).then((res: ISetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
@@ -100,7 +104,7 @@ function fetchSet(table: TTable, params: ISetParams = {}, query: ISetQuery = {})
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      BaaS_F.post(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/?expand=${(query.expand || []).toString()}`, changeSetParams(params)).then((res: IUpdateSetRes) => {
+      BaaS_F.post(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/?expand=${(tempQuery.expand || []).toString()}`, changeSetParams(params)).then((res: ISetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)

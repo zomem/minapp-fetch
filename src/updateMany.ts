@@ -2,7 +2,7 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME, PLATFORM_NAME_BAAS, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { METHOD_NOT_SUPPORT, WEBAPI_OPTIONS_ERROR } from './constants/error'
-import {TTable, IUpdateManyParams} from './types'
+import {TTable, IUpdateManyParams} from './index'
 import updateTrans from './utils/updateTrans'
 import findTrans from './utils/findTrans'
 
@@ -10,7 +10,7 @@ import findTrans from './utils/findTrans'
 function fetchUpdateMany(table: TTable, params: IUpdateManyParams): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<any>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyTableObject = new BaaS_F.TableObject(table)
       let QQ = findTrans(params, 1, BaaS_F, minapp)

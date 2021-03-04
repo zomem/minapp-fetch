@@ -10,13 +10,13 @@
 import { getBaaSF } from './utils/utils'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
-import {ICategoryParams} from './types'
+import {ICategoryParams} from './index'
 
 
 function fetchFindCategory(contentGroupID: number, params: ICategoryParams={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<any>((resolve: any, reject: any)=>{
+  return new Promise((resolve: any, reject: any)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let MyContentCategory = new BaaS_F.ContentCategory(contentGroupID)

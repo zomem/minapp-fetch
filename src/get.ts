@@ -7,19 +7,25 @@
  * @FilePath: /@ownpack/weapp/src/fetch/data/get.ts
  */ 
 
-import {getBaaSF, isArray, mysqlConnect} from './utils/utils'
-import {IUpdateSetRes, TTable, IGetParams} from './types'
+import {getBaaSF, isArray, mysqlConnect, isNumber} from './utils/utils'
+import {IGetRes, TTable, IGetQuery, TSentence} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME, PLATFORM_NAME_MYSQL_SERVER, J_NAME_LIST} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR} from './constants/error'
 
-function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUpdateSetRes | string>{
+
+function fetchGet(table: TTable, id: string | number, query?: IGetQuery): Promise<IGetRes>
+function fetchGet(table: TTable, id: string | number, query: TSentence): Promise<string>
+function fetchGet(table: TTable, id: string | number, query?: IGetQuery | TSentence): Promise<IGetRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
+
+  let tempQuery = query === 'sentence' ? {} : query
+
   return new Promise((resolve, reject)=>{
 
     //BaaS
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let Product = new BaaS_F.TableObject(table)
-      Product.select(params.select || []).expand(params.expand || []).get(id).then((res: IUpdateSetRes) => {
+      Product.select(tempQuery.select || []).expand(tempQuery.expand || []).get(id).then((res: IGetRes) => {
         // success
         resolve(res)
       }, (err: any) => {
@@ -35,7 +41,8 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
         BaaS_F.MongoClient.connect(options.host, {useUnifiedTopology: true}, (err, client) => {
           if(err) throw new Error(err)
           let db = client.db(options.env)
-          let tempId = (hex.test(id)) ? BaaS_F.ObjectID(id) : id
+          let tempID = id as string
+          let tempId = (hex.test(tempID)) ? BaaS_F.ObjectID(tempID) : tempID
           db.collection(table).findOne({_id: tempId}, (err, res) => {
             if(err) reject(err)
             client.close()
@@ -69,12 +76,12 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
     if(PLATFORM_NAME_MYSQL_SERVER.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.MYSQL){
         let selectArr = []
-        if(params.select){
-          if (isArray(params.select)){
-            let tempPa = params.select as string[]
+        if(tempQuery.select){
+          if (isArray(tempQuery.select)){
+            let tempPa = tempQuery.select as string[]
             selectArr = tempPa.length > 0 ? tempPa : ['*']
           }else{
-            let tempPa2 = params.select as string
+            let tempPa2 = tempQuery.select as string
             selectArr = [tempPa2]
           }
         }else{
@@ -84,8 +91,8 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
         let sql = ''
         sql = `SELECT ${selectArr.length > 0 ? selectArr.toString() + ' ' : '* '}`
         + `FROM ${table} `
-        + `WHERE id = ${id}`
-        if(params.getSentence){
+        + `WHERE id = ${isNumber(id) ? id : `'${id}'`}`
+        if(query === 'sentence'){
           resolve(sql)
           return
         }
@@ -108,10 +115,10 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
         url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/${id}/`,
         headers: options.Header,
         params: {
-          expand: (params.expand || []).toString(),
-          keys: (params.select || []).toString(),
+          expand: (tempQuery.expand || []).toString(),
+          keys: (tempQuery.select || []).toString(),
         }
-      }).then((res: IUpdateSetRes) => {
+      }).then((res: IGetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)
@@ -122,10 +129,10 @@ function fetchGet(table: TTable, id: string, params: IGetParams={}): Promise<IUp
     if(minapp === PLATFORM_NAME.ZX_OP){
       BaaS_F.get(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/${id}/`, {
         params: {
-          expand: (params.expand || []).toString(),
-          keys: (params.select || []).toString(),
+          expand: (tempQuery.expand || []).toString(),
+          keys: (tempQuery.select || []).toString(),
         }
-      }).then((res: IUpdateSetRes) => {
+      }).then((res: IGetRes) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)

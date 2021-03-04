@@ -2,7 +2,7 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME, PLATFORM_ALL } from './constants/constants'
 import { METHOD_NOT_SUPPORT } from './constants/error'
-import {TLoginThirdProvider, ILoginParams} from './types'
+import {TLoginThirdProvider, ILoginParams} from './index'
 
 
 function fetchLoginThirdParty(provider: TLoginThirdProvider, authPageUrl: string, params: ILoginParams){

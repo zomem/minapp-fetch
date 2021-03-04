@@ -7,13 +7,13 @@
  * @FilePath: /@ownpack/weapp/src/fetch/file/countFile.ts
  */ 
 import fetchFindFile from './findFile'
-import {ICountFileParams, IFindRes} from './types'
+import {ICountFileParams, IFindRes} from './index'
 import {PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 import { getBaaSF } from './utils/utils'
 
 function fetchCountFile(params: ICountFileParams): Promise<number>{
-  return new Promise<number>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     let {minapp} = getBaaSF()
     params.limit = 1
     params.withCount = true

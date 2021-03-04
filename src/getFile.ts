@@ -10,13 +10,13 @@
 import { getBaaSF } from './utils/utils'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
-import {IGetFileRes} from './types'
+import {IGetFileRes} from './index'
 
 //
 function fetchGetFile(fileID: string): Promise<IGetFileRes>{
   let { BaaS_F, minapp, options } = getBaaSF()
 
-  return new Promise<IGetFileRes>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyFile = new BaaS_F.File()
       MyFile.get(fileID).then((res: IGetFileRes) => {

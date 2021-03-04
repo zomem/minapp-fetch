@@ -10,13 +10,13 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
-import {ICurrentUser} from './types'
+import {ICurrentUser} from './index'
 
 
 //
 function fetchCurrentUser(): Promise<ICurrentUser>{
   let {BaaS_F, minapp} = getBaaSF()
-  return new Promise<ICurrentUser>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       //CLOUD
       if(minapp === PLATFORM_NAME.ZX_CLOUD){

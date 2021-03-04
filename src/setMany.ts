@@ -8,19 +8,23 @@
  */ 
 
 import { getBaaSF, changeSetManyParams, mysqlConnect, isArray } from './utils/utils'
-import {TTable, ISetParams, ISetManyQuery} from './types'
+import {TTable, ISetParams, ISetManyQuery, TSentence} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER, PLATFORM_NAME_MYSQL_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT, SET_MANY_PARAMS_ARR_ERROR} from './constants/error'
 import setTrans from './utils/setTrans'
 
 
-function fetchSetMany(table: TTable, params: ISetParams[], query: ISetManyQuery = {}): Promise<any>{
+function fetchSetMany(table: TTable, params: ISetParams[], query?: ISetManyQuery): Promise<any>
+function fetchSetMany(table: TTable, params: ISetParams[], query: TSentence): Promise<string>
+function fetchSetMany(table: TTable, params: ISetParams[], query?: ISetManyQuery | TSentence): Promise<any | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
   if(!isArray(params)) throw new Error(SET_MANY_PARAMS_ARR_ERROR)
-  return new Promise<any>((resolve, reject)=>{
+
+  let tempQuery = query === 'sentence' ? {} : query
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyTableObject = new BaaS_F.TableObject(table)
-      MyTableObject.createMany(changeSetManyParams(params), {enableTrigger: query.enableTrigger === undefined ? true : query.enableTrigger}).then((res: any) => {
+      MyTableObject.createMany(changeSetManyParams(params), {enableTrigger: tempQuery.enableTrigger === undefined ? true : tempQuery.enableTrigger}).then((res: any) => {
         resolve(res.data.succeed)
       }, (err: any) => {
         //err 为 HError 对象
@@ -61,7 +65,7 @@ function fetchSetMany(table: TTable, params: ISetParams[], query: ISetManyQuery 
         }
 
         let sql = `INSERT INTO ${table}(${fields.toString()}) VALUES ${values.toString()}`
-        if(query.getSentence){
+        if(query === 'sentence'){
           resolve(sql)
           return
         }
@@ -82,7 +86,7 @@ function fetchSetMany(table: TTable, params: ISetParams[], query: ISetManyQuery 
       if(!options) throw new Error(WEBAPI_OPTIONS_ERROR)
       BaaS_F({
         method: 'post',
-        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/?enable_trigger=${query.enableTrigger === undefined ? true : query.enableTrigger}`,
+        url: `${options.RequestBase}/hserve/v2.4/table/${table}/record/?enable_trigger=${tempQuery.enableTrigger === undefined ? true : tempQuery.enableTrigger}`,
         headers: options.Header,
         data: changeSetManyParams(params)
       }).then((res: any) => {
@@ -94,7 +98,7 @@ function fetchSetMany(table: TTable, params: ISetParams[], query: ISetManyQuery 
 
     //op 运营后台
     if(minapp === PLATFORM_NAME.ZX_OP){
-      BaaS_F.post(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/?enable_trigger=${query.enableTrigger === undefined ? true : query.enableTrigger}`, changeSetManyParams(params)).then((res: any) => {
+      BaaS_F.post(`https://cloud.minapp.com/userve/v2.4/table/${table}/record/?enable_trigger=${tempQuery.enableTrigger === undefined ? true : tempQuery.enableTrigger}`, changeSetManyParams(params)).then((res: any) => {
         resolve(res)
       }).catch((err: any) => {
         reject(err)

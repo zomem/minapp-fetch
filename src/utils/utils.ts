@@ -1,6 +1,6 @@
 import {PLATFORM_NAME} from '../constants/constants'
 import {PLATFORM_ERROR, WEBAPI_OPTIONS_ERROR, GEO_POLYGON_ERROR} from '../constants/error'
-import {IGetBaaSF, THeader} from '../types'
+import {IGetBaaSF, THeader} from '../index'
 
 //根据平台，返回请求方式， BaaS/axios
 export function getBaaSF():IGetBaaSF{

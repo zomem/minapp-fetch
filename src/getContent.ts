@@ -8,14 +8,14 @@
  */
 
 import { getBaaSF } from './utils/utils'
-import {IGetParams} from './types'
+import {IGetQuery} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
 
-function fetchGetContent(contentGroupID: number, richTextID: number, params: IGetParams={}): Promise<any>{
+function fetchGetContent(contentGroupID: number, richTextID: number, params: IGetQuery={}): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<any>((resolve: any, reject: any)=>{
+  return new Promise((resolve: any, reject: any)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       if(minapp === PLATFORM_NAME.ZX_CLOUD){
         let MyContent = new BaaS_F.Content(contentGroupID)

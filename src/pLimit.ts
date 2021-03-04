@@ -3,7 +3,7 @@ const pLimit = require('./utils/pLimit')
 
 
 function fetchPLimit(pArray: Promise<any>[], plimit: number = 10): Promise<any[]>{
-  return new Promise<number[]>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     let limit = pLimit(plimit)
     let input = []
 

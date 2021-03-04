@@ -2,14 +2,14 @@
 import { getBaaSF } from './utils/utils'
 import { PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER } from './constants/constants'
 import { METHOD_NOT_SUPPORT, WEBAPI_OPTIONS_ERROR } from './constants/error'
-import {ICheckParams} from './types'
+import {ICheckParams} from './index'
 import findTrans from './utils/findTrans'
 
 
 function fetchFindUser(params: ICheckParams): Promise<any>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<any>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let QQ = findTrans(params, 1, BaaS_F, minapp)
   

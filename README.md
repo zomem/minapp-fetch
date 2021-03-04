@@ -47,7 +47,7 @@ minapp.find('tableName', {
 1. **跨平台性**：各服务平台写法一致，一处写，处处用  
 2. **调用简单**：简化官方复杂的概念，查错、修改更加方便  
 3. **易迁移性**：可以很方便的把一个平台的项目迁移到其他平台  
-4. **代码提示**：支持代码提示，类型定义文件`types.d.ts`  
+4. **代码提示**：支持代码提示，可直接引入定义的类型    
   
 > 下面就以知晓云平台的最简单的and、or复杂组合查寻为例：
   
@@ -80,7 +80,13 @@ minapp.find(tableName, {
   
 ### 更新日志  
 
-[更新日志](https://minapp-fetch.com/log/changeLog)
+[更新日志](https://minapp-fetch.com/log/changeLog)   
+  
+- 3.3.3
+- 优化类型定义文件，且可直接引入。  
+- 如：`import {ISetRes} from 'minapp-fetch'`  
+- 获取sql语句修改为传递参数`sentence`  
+- 如：`minapp.get('users', 1, 'sentence')`  
 
    
 ### 加入讨论    

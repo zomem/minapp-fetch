@@ -8,14 +8,14 @@
  */ 
 
 import { getBaaSF } from './utils/utils'
-import {IRequestParams} from './types'
+import {IRequestParams} from './index'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {METHOD_NOT_SUPPORT} from './constants/error'
 
 function fetchRequest(params: IRequestParams): Promise<any>{
   let {BaaS_F, minapp} = getBaaSF()
 
-  return new Promise<any>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       //CLOUD
       if(minapp === PLATFORM_NAME.ZX_WEB || minapp === PLATFORM_NAME.ZX_RN){

@@ -2,13 +2,13 @@
 import { getBaaSF } from './utils/utils'
 import {PLATFORM_NAME_BAAS, PLATFORM_NAME, PLATFORM_ALL, PLATFORM_NAME_MONGO_SERVER} from './constants/constants'
 import {WEBAPI_OPTIONS_ERROR, METHOD_NOT_SUPPORT} from './constants/error'
-import {ICheckParams, IFindRes} from './types'
+import {ICheckParams, IFindRes} from './index'
 import findTrans from './utils/findTrans'
 
 function fetchFindContent(contentGroupID: number, params: ICheckParams): Promise<IFindRes>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  return new Promise<IFindRes>((resolve, reject)=>{
+  return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let QQ = findTrans(params, 1, BaaS_F, minapp)
       let MyContentGroup: any = null
