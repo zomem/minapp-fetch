@@ -18,7 +18,7 @@ function fetchGet(table: TTable, id: string | number, query: TSentence): Promise
 function fetchGet(table: TTable, id: string | number, query?: IGetQuery | TSentence): Promise<IGetRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  let tempQuery = query === 'sentence' ? {} : query
+  let tempQuery = (query === 'sentence' || !query) ? {} : query
 
   return new Promise((resolve, reject)=>{
 

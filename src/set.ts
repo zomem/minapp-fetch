@@ -19,7 +19,7 @@ function fetchSet(table: TTable, params: ISetParams, query: TSentence): Promise<
 function fetchSet(table: TTable, params: ISetParams = {}, query?: TSentence | ISetQuery): Promise<ISetRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  let tempQuery = query === 'sentence' ? {} : query
+  let tempQuery = (query === 'sentence' || !query) ? {} : query
 
   return new Promise((resolve, reject)=>{
 

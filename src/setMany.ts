@@ -20,7 +20,7 @@ function fetchSetMany(table: TTable, params: ISetParams[], query?: ISetManyQuery
   let {BaaS_F, minapp, options} = getBaaSF()
   if(!isArray(params)) throw new Error(SET_MANY_PARAMS_ARR_ERROR)
 
-  let tempQuery = query === 'sentence' ? {} : query
+  let tempQuery = (query === 'sentence' || !query) ? {} : query
   return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
       let MyTableObject = new BaaS_F.TableObject(table)

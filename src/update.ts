@@ -19,7 +19,7 @@ function fetchUpdate(table: TTable, id: string | number, params: IUpdateParams, 
 function fetchUpdate(table: TTable, id: string | number, params: IUpdateParams = {}, query?: IUpdateQuery | TSentence): Promise<IUpdateRes | string>{
   let {BaaS_F, minapp, options} = getBaaSF()
 
-  let tempQuery = query === 'sentence' ? {} : query
+  let tempQuery = (query === 'sentence' || !query) ? {} : query
 
   return new Promise((resolve, reject)=>{
     if(PLATFORM_NAME_BAAS.indexOf(minapp) > -1){
