@@ -81,13 +81,6 @@ minapp.find(tableName, {
 ### 更新日志  
 
 [更新日志](https://minapp-fetch.com/log/changeLog)   
-  
-- 3.3.3
-- 优化类型定义文件，且可直接引入。  
-- 如：`import {ISetRes} from 'minapp-fetch'`  
-- 获取sql语句修改为传递参数`sentence`  
-- 如：`minapp.get('users', 1, 'sentence')`  
-
    
 ### 加入讨论    
 欢迎加**官方微信：`Fishbone_app`**，会拉大家进入讨论群。有什么问题，也可以第一时间反馈哦。  
