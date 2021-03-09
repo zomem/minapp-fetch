@@ -79,8 +79,10 @@ minapp.find(tableName, {
 ```
   
 ### 更新日志  
-
-[更新日志](https://minapp-fetch.com/log/changeLog)   
+  
+[更新记录，请看日志](https://minapp-fetch.com/log/changeLog)   
+- 修复mysql数据库查寻时，`matches`方法不正确的问题。(以js正则为参数)  
+- 其他bug修复  
    
 ### 加入讨论    
 欢迎加**官方微信：`Fishbone_app`**，会拉大家进入讨论群。有什么问题，也可以第一时间反馈哦。  

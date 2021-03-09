@@ -354,6 +354,13 @@ export default function findTrans(params: ICheckParams, r_num: number, BaaS_F, m
             tempParam = `(${params[ps[i]][2]})`
           }else if(isNumber(params[ps[i]][2])){
             tempParam = params[ps[i]][2]
+          }else if(params[ps[i]][1] === 'matches'){
+            let tempReg = params[ps[i]][2].toString()
+            if(tempReg[0] === '/'){
+              tempParam = `'${tempReg.replace(/^\//ig, '').replace(/\/$/ig, '').replace(/\\/ig, '\\\\')}'`
+            }else{
+              tempParam = `'${tempReg}'`
+            }
           }else if(params[ps[i]][2].toString().indexOf('.') > -1){
             let tempPl = params[ps[i]][2].split('.')
             if(BaaS_F.table.indexOf(tempPl[0]) > -1){

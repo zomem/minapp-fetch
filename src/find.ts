@@ -504,7 +504,7 @@ function fetchFind(table: TTable, params: ICheckParams, query?: TSentence): Prom
         + (groupArr.length > 0 ? `GROUP BY ${groupArr.toString()} ` : ' ')
         + (QQ2 ? `HAVING ${QQ2} ` : ' ')
         + (orderArr.length > 0 ? `ORDER BY ${orderArr.toString()} ` : ' ')
-        + (params.limit ? `LIMIT ${params.limit} ` : ' ')
+        + ((params.limit || params.page) ? `LIMIT ${params.limit || 20} ` : ' ')
         + (params.page ? `OFFSET ${(params.limit || 20) * ((params.page || 1) - 1)}` : '')
         
         if(jUniqueTable.length > 0){
