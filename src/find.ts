@@ -505,7 +505,7 @@ function fetchFind(table: TTable, params: ICheckParams, query?: TSentence): Prom
         + (QQ2 ? `HAVING ${QQ2} ` : ' ')
         + (orderArr.length > 0 ? `ORDER BY ${orderArr.toString()} ` : ' ')
         + ((params.limit || params.page) ? `LIMIT ${params.limit || 20} ` : ' ')
-        + (params.page ? `OFFSET ${(params.limit || 20) * ((params.page || 1) - 1)}` : '')
+        + ((params.page || params.limit) ? `OFFSET ${(params.limit || 20) * ((params.page || 1) - 1)}` : '')
         
         if(jUniqueTable.length > 0){
           //去掉重复命令的，以父查寻命名为准

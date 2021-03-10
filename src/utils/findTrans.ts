@@ -357,7 +357,7 @@ export default function findTrans(params: ICheckParams, r_num: number, BaaS_F, m
           }else if(params[ps[i]][1] === 'matches'){
             let tempReg = params[ps[i]][2].toString()
             if(tempReg[0] === '/'){
-              tempParam = `'${tempReg.replace(/^\//ig, '').replace(/\/$/ig, '').replace(/\\/ig, '\\\\')}'`
+              tempParam = `'${tempReg.replace(/^\//ig, '').replace(/(\/|\/i|\/g|\/ig|\/gi|\/m)$/ig, '').replace(/\\/ig, '\\\\')}'`
             }else{
               tempParam = `'${tempReg}'`
             }
