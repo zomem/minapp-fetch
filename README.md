@@ -9,7 +9,6 @@
 
 ### 统一各类[数据库]和[后台云服务]接口的 JavaScript 库    
    
-官方网站：[minapp-fetch.com](https://minapp-fetch.com)  
     
 目前支持的后台服务和数据库有：  
 1. **知晓云**：运营后台、云函数、小程序、webapi等     
@@ -77,17 +76,6 @@ minapp.find(tableName, {
   // success
 })
 ```
-  
-### 更新日志  
-  
-[更新记录，请看日志](https://minapp-fetch.com/log/changeLog)   
 
-   
-### 加入讨论    
-欢迎加**官方微信：`Fishbone_app`**，会拉大家进入讨论群。有什么问题，也可以第一时间反馈哦。  
-   
-   
-### 案例    
-[Fishbone资讯web](https://wefishbone.com)   
   
   
