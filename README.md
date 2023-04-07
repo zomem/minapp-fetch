@@ -38,9 +38,6 @@ minapp.find('tableName', {
 }, err => {})
 ```  
   
-### 文档  
-最新接口文档，可在[minapp-fetch官方文档](https://minapp-fetch.com)里查看  
-按需加载配置：[按需加载配置文档](https://wefishbone.com/detail/5ed5ae7b899abe7b80d67a5f)
   
 ### 优点  
 1. **跨平台性**：各服务平台写法一致，一处写，处处用  
